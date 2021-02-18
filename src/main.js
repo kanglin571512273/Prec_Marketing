@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import '@/utils/importFile'
 
 // 引入UI组件样式
 import "element-ui/lib/theme-chalk/index.css";
