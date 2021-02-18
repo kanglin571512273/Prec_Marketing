@@ -7,13 +7,12 @@
         prop="date"
         label="日期"
         sortable
-        width="180"
         column-key="date"
         :filters="[{text: '2016-05-01', value: '2016-05-01'}, {text: '2016-05-02', value: '2016-05-02'}, {text: '2016-05-03', value: '2016-05-03'}, {text: '2016-05-04', value: '2016-05-04'}]"
         :filter-method="filterHandler"
       ></el-table-column>
-      <el-table-column prop="name" label="姓名" width="180"></el-table-column>
-      <el-table-column prop="address" label="地址" :formatter="formatter"></el-table-column>
+      <el-table-column prop="name" label="姓名"></el-table-column>
+      <el-table-column prop="address" label="地址"></el-table-column>
       <el-table-column prop="address" label="地址" :formatter="formatter"></el-table-column>
       <el-table-column prop="address" label="地址" :formatter="formatter"></el-table-column>
       <el-table-column
@@ -32,6 +31,15 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="plainBtn">分配客户</div>
+    <div class="plainBtn plainBtn_primary">分配客户</div>
+    <div class="plainBtn plainBtn_primary myBtn_primary">分配客户</div>
+    <div class="myBtn myBtn_primary">跟进</div>
+    <div class="myBtn myBtn_warning">继续跟进</div>
+    <div class="fatBtn">信用卡</div>
+    <div class="fatBtn fatBtn_primary">理财</div>
+    <div class="sureBtn">确认</div>
+    <div class="cancelBtn">取消</div>
   </div>
 </template>
 
@@ -75,6 +83,7 @@ export default {
       this.$refs.filterTable.clearFilter();
     },
     formatter(row, column) {
+      // console.log(row);
       return row.address;
     },
     filterTag(value, row) {
