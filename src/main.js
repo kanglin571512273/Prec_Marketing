@@ -7,6 +7,9 @@ import router from './router'
 // 引入UI组件样式
 import "element-ui/lib/theme-chalk/index.css";
 
+// 移动端适配
+import 'amfe-flexible/index.js'
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
