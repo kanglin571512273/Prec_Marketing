@@ -33,7 +33,7 @@ exports.cssLoaders = function(options) {
   const px2remLoader = {
     loader: "px2rem-loader",
     options: {
-      remUnit: 256 //默认换算为1rem为75px，可根据你的原型图修改
+      remUnit: 128 //默认换算为1rem为75px，可根据你的原型图修改
     }
   };
   function generateLoaders(loader, loaderOptions) {
