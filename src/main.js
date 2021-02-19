@@ -5,6 +5,7 @@ import App from './App'
 import router from './router'
 import '@/utils/importFile'
 import '@/assets/css/base.css'
+import '@/assets/iconfont/iconfont.css'
 
 // 引入UI组件样式
 import "element-ui/lib/theme-chalk/index.css";

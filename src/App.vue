@@ -6,16 +6,17 @@
 
 <script>
 export default {
-  name: "App"
+  name: "App",
 };
 </script>
-<style lang="less" scoped>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style lang="less" >
+// html,
+// body,
+// #app {
+//   width: 100%;
+//   height: 100%;
+//   box-sizing: border-box;
+//   padding: 0;
+//   margin: 0;
+// }
 </style>
