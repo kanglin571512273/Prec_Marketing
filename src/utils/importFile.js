@@ -1,5 +1,6 @@
 import Vue from "vue";
 import {
+  Avatar,
   Button,
   ColorPicker,
   Cascader,
@@ -34,6 +35,7 @@ import {
   InputNumber
 } from "element-ui";
 Vue.use(Input);
+Vue.use(Avatar);
 Vue.use(Dropdown);
 Vue.use(DropdownItem);
 Vue.use(DropdownMenu);
