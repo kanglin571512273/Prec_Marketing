@@ -57,9 +57,16 @@ export default new Router({
           meta: {
             name: '分析历史'
           },
-          // component: () => import(/* webpackChunkName: 'analysisHistory' */ "@/views/D/analysisHistory"),
+          component: () => import(/* webpackChunkName: 'analysisHistory' */ "@/views/D/analysisHistory"),
+        },
+        {
+          path: 'a',
+          name: 'a',
+          meta: {
+            name: 'a'
+          },
           component: () => import(/* webpackChunkName: 'analysisHistory' */ "@/components/HelloWorld"),
-        }
+        },
       ]
     },
     {

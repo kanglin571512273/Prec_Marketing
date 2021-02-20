@@ -71,20 +71,6 @@ export default {
         path: "/analysisResoult",
       });
     },
-    // 推荐产品的列的样式
-    changeCellStyle(row, column, rowIndex, columnIndex) {
-      if (row.column.label === "推荐产品") {
-        return "color: #18B979"; // 修改的样式
-      } else {
-        return "";
-      }
-    },
-    resetDateFilter() {
-      this.$refs.filterTable.clearFilter("date");
-    },
-    clearFilter() {
-      this.$refs.filterTable.clearFilter();
-    },
   },
 };
 </script>
@@ -102,20 +88,6 @@ export default {
     justify-content: space-between;
     margin-bottom: 10px;
   }
-  .customName {
-    span {
-      font-size: 14px;
-      font-family: PingFangSC-Semibold, PingFang SC;
-      font-weight: 700;
-      color: #0060ff;
-    }
-    img {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 22px;
-      height: 25px;
-    }
-  }
+  
 }
 </style>

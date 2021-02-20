@@ -70,7 +70,7 @@ html, body, #app {
 
 .sureBtn {
     display: inline-block;
-    line-height: 30px;
+    line-height: 31px;
     width: 82px;
     height: 30px;
     background: #0060FF;
@@ -112,4 +112,16 @@ html, body, #app {
     height: 100%;
     overflow: auto;
     box-sizing: border-box;
+}
+
+/* element的按钮颜色 */
+
+.el-button--success {
+    background-color: #18B979!important;
+    border-color: #18B979!important;
+}
+
+.el-button [class*="el-icon-"]+span {
+    font-size: 14px;
+    font-weight: 700;
 }

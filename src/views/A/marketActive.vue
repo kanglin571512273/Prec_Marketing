@@ -1,10 +1,10 @@
 <template>
-  <div class="marketActive">marketActive</div>
+  <div class="marketActive"></div>
 </template>
 
 <script>
 export default {};
 </script>
 
-<style>
+<style lang="less" scoped>
 </style>

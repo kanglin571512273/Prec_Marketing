@@ -45,13 +45,13 @@ export default {
         },
         {
           id: 2,
-          icon: "iconkehuguanli1",
+          icon: "iconkehuguanli",
           path: "/marketManage",
           name: "营销管理",
         },
         {
           id: 3,
-          icon: "iconkehuguanli",
+          icon: "iconkehuguanli1",
           path: "/customManage",
           name: "客户管理",
         },

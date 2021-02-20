@@ -104,12 +104,6 @@ export default {
     resetForm() {
       this.$refs.childRef.resetForm();
     },
-    resetDateFilter() {
-      this.$refs.filterTable.clearFilter("date");
-    },
-    clearFilter() {
-      this.$refs.filterTable.clearFilter();
-    },
   },
 };
 </script>
