@@ -1,5 +1,5 @@
 <template>
-  <div class="marketActive">marketActive</div>
+  <div class="marketManage">marketManage</div>
 </template>
 
 <script>
