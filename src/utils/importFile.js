@@ -5,6 +5,7 @@ import {
   ColorPicker,
   Cascader,
   Container,
+  Col,
   Dropdown,
   DropdownItem,
   DropdownMenu,
@@ -31,6 +32,7 @@ import {
   Card,
   Pagination,
   RadioGroup,
+  Row,
   Radio,
   InputNumber
 } from "element-ui";
@@ -49,6 +51,8 @@ Vue.use(Table);
 Vue.use(TableColumn);
 Vue.use(Select);
 Vue.use(Button);
+Vue.use(Row);
+Vue.use(Col);
 Vue.use(Option);
 Vue.use(Upload);
 Vue.use(Header);
