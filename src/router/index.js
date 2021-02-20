@@ -17,7 +17,7 @@ export default new Router({
           meta: {
             name: '营销活动'
           },
-          component: () => import(/* webpackChunkName: 'marketActive' */ "@/views/marketActive"),
+          component: () => import(/* webpackChunkName: 'marketActive' */ "@/views/A/marketActive"),
         },
         {
           path: 'marketManage',
@@ -25,7 +25,7 @@ export default new Router({
           meta: {
             name: '营销管理'
           },
-          component: () => import(/* webpackChunkName: 'marketManage' */ "@/views/marketManage"),
+          component: () => import(/* webpackChunkName: 'marketManage' */ "@/views/B/marketManage"),
         },
         {
           path: 'customManage',
@@ -33,7 +33,23 @@ export default new Router({
           meta: {
             name: '客户管理'
           },
-          component: () => import(/* webpackChunkName: 'customManage' */ "@/views/customManage"),
+          component: () => import(/* webpackChunkName: 'customManage' */ "@/views/C/customManage"),
+        },
+        {
+          path: 'customAnalysis',
+          name: 'customAnalysis',
+          meta: {
+            name: '客户管理'//客户分析
+          },
+          component: () => import(/* webpackChunkName: 'customAnalysis' */ "@/views/C/customAnalysis"),
+        },
+        {
+          path: 'analysisResoult',
+          name: 'analysisResoult',
+          meta: {
+            name: '客户管理'//客户分析结果
+          },
+          component: () => import(/* webpackChunkName: 'analysisResoult' */ "@/views/C/analysisResoult"),
         },
         {
           path: 'analysisHistory',
@@ -41,7 +57,7 @@ export default new Router({
           meta: {
             name: '分析历史'
           },
-          // component: () => import(/* webpackChunkName: 'analysisHistory' */ "@/views/analysisHistory"),
+          // component: () => import(/* webpackChunkName: 'analysisHistory' */ "@/views/D/analysisHistory"),
           component: () => import(/* webpackChunkName: 'analysisHistory' */ "@/components/HelloWorld"),
         }
       ]

@@ -1,36 +1,5 @@
 <template>
   <div class="hello">
-    <el-button @click="resetDateFilter">清除日期过滤器</el-button>
-    <el-button @click="clearFilter">清除所有过滤器</el-button>
-    <el-table ref="filterTable" border :data="tableData" style="width: 100%">
-      <el-table-column
-        prop="date"
-        label="日期"
-        sortable
-        column-key="date"
-        :filters="[{text: '2016-05-01', value: '2016-05-01'}, {text: '2016-05-02', value: '2016-05-02'}, {text: '2016-05-03', value: '2016-05-03'}, {text: '2016-05-04', value: '2016-05-04'}]"
-        :filter-method="filterHandler"
-      ></el-table-column>
-      <el-table-column prop="name" label="姓名"></el-table-column>
-      <el-table-column prop="address" label="地址"></el-table-column>
-      <el-table-column prop="address" label="地址" :formatter="formatter"></el-table-column>
-      <el-table-column prop="address" label="地址" :formatter="formatter"></el-table-column>
-      <el-table-column
-        prop="tag"
-        label="标签"
-        width="100"
-        :filters="[{ text: '家', value: '家' }, { text: '公司', value: '公司' }]"
-        :filter-method="filterTag"
-        filter-placement="bottom-end"
-      >
-        <template slot-scope="scope">
-          <el-tag
-            :type="scope.row.tag === '家' ? 'primary' : 'success'"
-            disable-transitions
-          >{{scope.row.tag}}</el-tag>
-        </template>
-      </el-table-column>
-    </el-table>
     <div class="plainBtn">分配客户</div>
     <div class="plainBtn plainBtn_primary">分配客户</div>
     <div class="plainBtn plainBtn_primary myBtn_primary">分配客户</div>
@@ -40,6 +9,7 @@
     <div class="fatBtn fatBtn_primary">理财</div>
     <div class="sureBtn">确认</div>
     <div class="cancelBtn">取消</div>
+    <el-button type="warning" icon="el-icon-edit" round size="mini">编辑</el-button>
   </div>
 </template>
 

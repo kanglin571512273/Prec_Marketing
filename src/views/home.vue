@@ -23,7 +23,7 @@
     </div>
     <div class="footer">
       <div v-for="item in navMenu" :key="item.id" class="menuItem">
-        <router-link tag="div" class="menu_item" :to="item.path">
+        <router-link class="menu_item" :to="item.path">
           <span :class="['iconfont',item.icon ]"></span>
           <span>{{item.name}}</span>
         </router-link>
