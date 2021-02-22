@@ -20,6 +20,14 @@ export default new Router({
           component: () => import(/* webpackChunkName: 'marketActive' */ "@/views/A/marketActive"),
         },
         {
+          path: 'activeList',
+          name: 'activeList',
+          meta: {
+            name: '营销活动'
+          },
+          component: () => import(/* webpackChunkName: 'activeList' */ "@/views/A/activeList"),
+        },
+        {
           path: 'marketManage',
           name: 'marketManage',
           meta: {

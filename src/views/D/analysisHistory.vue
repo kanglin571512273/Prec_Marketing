@@ -45,6 +45,28 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-dialog :visible.sync="dialogFormVisible">
+      <div class="dialogContainer">
+        <img src="@/assets/image/close.png" alt @click="dialogFormVisible = false " />
+        <div class="analysisItem" v-for="item in 6" :key="item">
+          <div class="time">
+            <div class="label">分析时间：</div>
+            <span>2021-1-2 09:00:00</span>
+          </div>
+          <div class="time">
+            <div class="label">分析结果：</div>
+            <span>网易云联名卡/付费卡/爱奇艺信用卡</span>
+          </div>
+          <div class="time">
+            <div class="label">客户标签：</div>
+            <span>
+              <el-tag size>标签二</el-tag>
+              <el-tag size>标签二</el-tag>
+            </span>
+          </div>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -87,6 +109,7 @@ export default {
           tag: "公司",
         },
       ],
+      dialogFormVisible: false,
     };
   },
   methods: {
@@ -100,6 +123,7 @@ export default {
     },
     // 编辑
     edit(row) {
+      this.dialogFormVisible = true;
       console.log(row);
     },
     // 推荐产品的列的样式
@@ -129,7 +153,7 @@ export default {
     justify-content: space-between;
     margin-bottom: 10px;
     .right > div {
-      margin-right: 10px;
+      margin-right: 20px;
     }
   }
   .customName {
@@ -145,6 +169,34 @@ export default {
       right: 0;
       width: 22px;
       height: 25px;
+    }
+  }
+  .dialogContainer {
+    height: 100%;
+    overflow: auto;
+    // position: relative;
+    img {
+      width: 25px;
+      height: 25px;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+    .analysisItem {
+      border-bottom: 1px solid #979797;
+      padding: 10px 0;
+      .time {
+        text-align: left;
+        line-height: 40px;
+        font-size: 23px;
+        color: #666666;
+        .label {
+          display: inline-block;
+        }
+        .el-tag {
+          margin-right: 10px;
+        }
+      }
     }
   }
 }

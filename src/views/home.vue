@@ -117,7 +117,7 @@ export default {
     background: rgba(238, 240, 255, 0.3);
     width: 100%;
     height: 100%;
-    padding: 15px 20px 30px;
+    padding: 15px 20px 15px;
     box-sizing: border-box;
   }
   .footer {
