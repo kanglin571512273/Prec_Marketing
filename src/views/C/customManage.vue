@@ -121,7 +121,7 @@ export default {
     justify-content: space-between;
     margin-bottom: 10px;
     .right > div {
-      margin-right: 10px;
+      margin-right: 20px;
     }
   }
 }

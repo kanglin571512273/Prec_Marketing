@@ -31,6 +31,7 @@ import {
   Switch,
   Card,
   Pagination,
+  Progress,
   RadioGroup,
   Row,
   Radio,
@@ -69,6 +70,7 @@ Vue.use(RadioGroup);
 Vue.use(Radio);
 Vue.use(Tree);
 Vue.use(InputNumber);
+Vue.use(Progress);
 Vue.use(Tooltip);
 Vue.use(Tag);
 Vue.use(Steps);
