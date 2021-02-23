@@ -192,6 +192,9 @@ export default {
 <style lang="less" scoped>
 //  dialog表单
 .diaContainer {
+  .title {
+    text-align: left;
+  }
   .formContainer {
     border-radius: 5px;
     box-shadow: 0px 0px 4px 2px rgba(0, 74, 196, 0.07);

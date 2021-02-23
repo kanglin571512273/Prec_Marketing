@@ -22,11 +22,15 @@
       <router-view />
     </div>
     <div class="footer">
-      <div v-for="item in navMenu" :key="item.id" class="menuItem">
-        <router-link class="menu_item" :to="item.path">
+      <div v-for="item in navMenu" :key="item.id" class="menuItem" @click="navClick(item.path)">
+        <div :class="{menu_item:true,'link-active':$route.meta.name == item.name}">
           <span :class="['iconfont',item.icon ]"></span>
           <span>{{item.name}}</span>
-        </router-link>
+        </div>
+        <!--    <router-link class="menu_item" :to="item.path">
+          <span :class="['iconfont',item.icon ]"></span>
+          <span>{{item.name}}</span>
+        </router-link>-->
       </div>
     </div>
   </div>
@@ -65,6 +69,9 @@ export default {
     };
   },
   methods: {
+    navClick(path) {
+      this.$router.push(path);
+    },
     logout() {
       console.log("退出");
     },
@@ -134,12 +141,13 @@ export default {
       text-align: center;
       font-size: 15px;
       .menu_item {
+        // height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: space-around;
         color: #999;
         text-decoration: none;
-        &.router-link-active {
+        &.link-active {
           color: #0060ff;
         }
         span:nth-child(1) {

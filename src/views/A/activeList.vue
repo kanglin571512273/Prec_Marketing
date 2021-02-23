@@ -132,3 +132,8 @@ export default {
   }
 }
 </style>
+<style lang="less">
+.activeList .el-input__suffix {
+  height: auto;
+}
+</style>
