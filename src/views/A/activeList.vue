@@ -105,7 +105,8 @@ export default {
     justify-content: space-between;
     margin-bottom: 10px;
     .right {
-      padding-top: 13px;
+      padding-top: 18px;
+      box-sizing: border-box;
       display: flex;
       .el-input {
         width: 220px;

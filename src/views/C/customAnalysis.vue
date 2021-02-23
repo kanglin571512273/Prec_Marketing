@@ -3,6 +3,7 @@
     <div class="btnContainer">
       <div class="left"></div>
       <div class="right">
+        <el-input placeholder="请输入客户姓名" size="mini" v-model="keyWord" clearable></el-input>
         <div class="sureBtn" @click="toAnalysisResoult">确认</div>
         <div class="cancelBtn" @click="$router.back()">取消</div>
       </div>
@@ -20,6 +21,7 @@ export default {
   },
   data() {
     return {
+      keyWord:'',
       tableData: [
         {
           date: "2016-05-02",
@@ -88,6 +90,21 @@ export default {
     justify-content: space-between;
     margin-bottom: 10px;
   }
-  
+  .right {
+    padding-top: 18px;
+    display: flex;
+    box-sizing: border-box;
+    .el-input {
+      width: 220px;
+    }
+    div {
+      margin-right: 10px;
+    }
+  }
+}
+</style>
+<style lang="less">
+.customAnalysis .el-input__suffix {
+  height: auto;
 }
 </style>

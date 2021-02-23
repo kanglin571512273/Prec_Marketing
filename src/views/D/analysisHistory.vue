@@ -3,6 +3,7 @@
     <div class="btnContainer">
       <div class="left"></div>
       <div class="right">
+        <el-input placeholder="请输入客户姓名" size="mini" v-model="keyWord" clearable></el-input>
         <div
           v-for="item in customTypeBtn"
           :key="item.id"
@@ -76,6 +77,7 @@ export default {
   components: { customTable },
   data() {
     return {
+      keyWord: "",
       customTypeId: 1,
       customTypeBtn: [
         { id: 1, name: "所有客户" },
@@ -152,8 +154,16 @@ export default {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
-    .right > div {
-      margin-right: 20px;
+    .right {
+      padding-top: 18px;
+      display: flex;
+      box-sizing: border-box;
+      .el-input {
+        width: 220px;
+      }
+      div {
+        margin-right: 10px;
+      }
     }
   }
   .customName {
@@ -199,5 +209,10 @@ export default {
       }
     }
   }
+}
+</style>
+<style lang="less">
+.analysisHistory .el-input__suffix {
+  height: auto;
 }
 </style>

@@ -66,10 +66,13 @@ export default {
           name: "分析历史",
         },
       ],
+      currentMenu: "/marketActive",
     };
   },
   methods: {
     navClick(path) {
+      if (path == this.$route.path) return false;
+      this.currentMenu = path;
       this.$router.push(path);
     },
     logout() {
