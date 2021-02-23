@@ -35,7 +35,9 @@ import {
   RadioGroup,
   Row,
   Radio,
-  InputNumber
+  InputNumber,
+  Steps,
+  Step
 } from "element-ui";
 Vue.use(Input);
 Vue.use(Avatar);
@@ -71,4 +73,6 @@ Vue.use(InputNumber);
 Vue.use(Progress);
 Vue.use(Tooltip);
 Vue.use(Tag);
+Vue.use(Steps);
+Vue.use(Step);
 export { MessageBox, Message };
