@@ -16,11 +16,11 @@
             label-width="100px"
             class="demo-ruleForm"
           >
-            <el-form-item label="用户名" prop="name">
-              <el-input v-model="ruleForm.name" autocomplete="on"></el-input>
+            <el-form-item label="用户名" prop="userName">
+              <el-input v-model="ruleForm.userName" clearable></el-input>
             </el-form-item>
-            <el-form-item label="密码" prop="pass">
-              <el-input type="password" v-model="ruleForm.pass"></el-input>
+            <el-form-item label="密码" prop="password">
+              <el-input type="password" v-model="ruleForm.password"></el-input>
             </el-form-item>
 
             <el-form-item>
@@ -37,39 +37,51 @@
 </template>
 
 <script>
-// import { labelData, customData } from "../utils/data";
-// import Vue from "vue";
-// import { Form, Input, Icon, Button, Checkbox } from "ant-design-vue";
-// Vue.use(Form);
-// Vue.use(Input);
-// Vue.use(Icon);
-// Vue.use(Button);
-// Vue.use(Checkbox);
+import { encrypt } from "@/utils/jsencrypt";
+import { addLogin } from "@/api/marketing";
+import { MessageBox, Message } from "@/utils/importFile";
+
 export default {
   data() {
     return {
       name: "admin",
       ruleForm: {
-        name: "admin",
-        pass: ""
+        userName: "li",
+        password: ""
       },
       rules: {
-        name: [
+        userName: [
           { required: true, message: "请输入用户名", trigger: "blur" },
-          { min: 3, max: 15, message: "长度在 3 到 15 个字符", trigger: "blur" }
+          { min: 2, max: 15, message: "长度在 2 到 15 个字符", trigger: "blur" }
         ],
-        pass: [
+        password: [
           { required: true, message: "请输入密码", trigger: "blur" },
           { min: 3, max: 15, message: "长度在 3 到 15 个字符", trigger: "blur" }
         ]
       }
     };
   },
+  mounted() {
+    var abs = encrypt("admin123");
+  },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$router.push("/");
+          var password = encrypt(this.ruleForm.password);
+          addLogin({
+            userName: this.ruleForm.userName,
+            password: password
+          }).then(res => {
+            if (res.code == 200) {
+              localStorage.setItem("token", res.data);
+              // localStorage.setItem("effectToken", true);
+              Message.success("登录成功~");
+              this.$router.push("/");
+            } else if (res.code == 500) {
+              Message.error(res.msg);
+            }
+          });
         } else {
           console.log("error submit!!");
           return false;
@@ -99,6 +111,19 @@ export default {
         }
       });
     }
+
+    // encryptedData(data) {
+    //   //私钥 和后端沟通写死了
+    //   var publicKey =
+    //     "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDi/qESOZ9EQXAnCv/NKSuqgpIQ/liNNusXssoASF74pyoP3NqCdJusB7o1yCGfsFxb71NcLn03wXFbDiuhfd6GEp6s5Iy0hnMAsdfhsdzaetGxXg9xiHXeEhJ2ih0Eivmz6ZlhAdI+c3EODj6tpMRDkVHVx8Xb/vNFXKuQPYfNEQIDAQAB";
+    //   // 新建JSEncrypt对象
+    //   let encryptor = new JSEncrypt();
+    //   console.log(JSEncrypt(), 8888);
+    //   // 设置公钥
+    //   encryptor.setPublicKey(publicKey);
+    //   // 加密数据
+    //   return encryptor.encrypt(data);
+    // }
   }
 };
 </script>

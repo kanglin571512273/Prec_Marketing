@@ -3,13 +3,20 @@
     <div class="btnContainer">
       <div class="left"></div>
       <div class="right">
-        <el-input placeholder="请输入客户姓名" size="mini" v-model="keyWord" clearable></el-input>
+        <el-input
+          placeholder="请输入客户姓名"
+          size="mini"
+          v-model="keyWord"
+          clearable
+        ></el-input>
         <div
           v-for="item in customTypeBtn"
           :key="item.id"
-          :class="{plainBtn:true, plainBtn_primary:customTypeId == item.id}"
+          :class="{ plainBtn: true, plainBtn_primary: customTypeId == item.id }"
           @click="customType(item.id)"
-        >{{item.name}}</div>
+        >
+          {{ item.name }}
+        </div>
       </div>
     </div>
     <el-table
@@ -48,7 +55,8 @@
             round
             size="mini"
             @click="edit(scope.row)"
-          >查看</el-button>
+            >查看</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -176,8 +184,8 @@ export default {
       } else {
         return "";
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
