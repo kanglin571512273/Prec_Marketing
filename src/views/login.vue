@@ -8,7 +8,28 @@
       <div class="right-login">
         <div class="login-font">登录</div>
         <div class="login-input">
-         
+          <el-form
+            :model="ruleForm"
+            status-icon
+            :rules="rules"
+            ref="ruleForm"
+            label-width="100px"
+            class="demo-ruleForm"
+          >
+            <el-form-item label="用户名" prop="name">
+              <el-input v-model="ruleForm.name" autocomplete="on"></el-input>
+            </el-form-item>
+            <el-form-item label="密码" prop="pass">
+              <el-input type="password" v-model="ruleForm.pass"></el-input>
+            </el-form-item>
+
+            <el-form-item>
+              <el-button type="primary" @click="submitForm('ruleForm')"
+                >登录</el-button
+              >
+              <el-button @click="resetForm('ruleForm')">重置</el-button>
+            </el-form-item>
+          </el-form>
         </div>
       </div>
     </div>
@@ -28,9 +49,36 @@ export default {
   data() {
     return {
       name: "admin",
+      ruleForm: {
+        name: "admin",
+        pass: ""
+      },
+      rules: {
+        name: [
+          { required: true, message: "请输入用户名", trigger: "blur" },
+          { min: 3, max: 15, message: "长度在 3 到 15 个字符", trigger: "blur" }
+        ],
+        pass: [
+          { required: true, message: "请输入密码", trigger: "blur" },
+          { min: 3, max: 15, message: "长度在 3 到 15 个字符", trigger: "blur" }
+        ]
+      }
     };
   },
   methods: {
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.$router.push("/");
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+    },
     handleSubmit(e) {
       e.preventDefault();
       this.form.validateFields((err, values) => {
@@ -46,12 +94,12 @@ export default {
           localStorage.setItem("labelData", JSON.stringify(label));
 
           this.$router.push({
-            path: "/marketingManage",
+            path: "/marketingManage"
           });
         }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -86,11 +134,13 @@ export default {
       font-size: 36px;
       color: #333333;
       line-height: 50px;
-      font-weight: 600;
-      margin-bottom: 80px;
+      font-weight: 900;
+      margin-bottom: 40px;
     }
     .login-input {
-      width: 580px;
+      width: 460px;
+      height: 350px;
+      margin-left: 20px;
     }
   }
 }
@@ -120,31 +170,15 @@ export default {
 </style>
 
 <style lang="less">
-.right-login .ant-form-explain {
-  text-align: left;
-  margin-top: 5px;
-}
-.login-box {
-  .ant-input {
-    font-size: 24px;
-    height: 62px;
-    padding: 6px 50px !important;
+.login-input {
+  .el-form-item {
+    margin-bottom: 40px;
   }
-  .ant-input-clear-icon,
-  .ant-input-password-icon,
-  .anticon-lock,
-  .anticon-user,
-  .ant-checkbox-wrapper,
-  .ant-form-explain {
-    font-size: 24px;
+  .el-form-item__label {
+    font-size: 16px;
   }
-  .ant-checkbox-inner {
-    width: 24px;
-    height: 24px;
-  }
-  .ant-checkbox-inner::after {
-    width: 12px;
-    height: 12px;
+  .el-button {
+    width: 160px;
   }
 }
 </style>

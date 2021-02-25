@@ -37,7 +37,8 @@ import {
   Radio,
   InputNumber,
   Steps,
-  Step
+  Step,
+  Drawer
 } from "element-ui";
 Vue.use(Input);
 Vue.use(Avatar);
@@ -75,4 +76,5 @@ Vue.use(Tooltip);
 Vue.use(Tag);
 Vue.use(Steps);
 Vue.use(Step);
+Vue.use(Drawer);
 export { MessageBox, Message };

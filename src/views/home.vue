@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import { MessageBox, Message } from "@/utils/importFile";
 export default {
   data() {
     return {
@@ -45,19 +46,19 @@ export default {
           id: 1,
           icon: "iconyingxiaoguanli",
           path: "/marketActive",
-          name: "营销活动",
+          name: "营销活动"
         },
         {
           id: 2,
           icon: "iconkehuguanli",
           path: "/marketManage",
-          name: "营销管理",
+          name: "营销管理"
         },
         {
           id: 3,
           icon: "iconkehuguanli1",
           path: "/customManage",
-          name: "客户管理",
+          name: "客户管理"
         },
         {
           id: 4,
@@ -76,9 +77,27 @@ export default {
       this.$router.push(path);
     },
     logout() {
-      console.log("退出");
-    },
-  },
+      MessageBox.confirm("确定退出登录, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          // localStorage.removeItem("token");
+          this.$router.push("/login");
+          Message({
+            type: "success",
+            message: "退出成功!"
+          });
+        })
+        .catch(() => {
+          Message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
+    }
+  }
 };
 </script>
 
@@ -118,6 +137,7 @@ export default {
       width: 300px;
       text-align: right;
       padding: 0 20px;
+      font-size: 10px;
       .icontuichu {
         color: #0060ff;
       }

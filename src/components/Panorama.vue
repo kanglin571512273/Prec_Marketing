@@ -1,181 +1,282 @@
 <template>
-  <div class="Panorama-box">
-    <div class="Panorama-left">
-      <div>
-        <div class="label" @click="showDrawer">增加标签</div>
+  <div class="background-box">
+    <div class="background">
+      <div class="bubbles">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
       </div>
     </div>
-    <div class="Panorama-right">
-      <div class="label-cont">
-        <ul>
-          <li
-            class="bot-label"
-            @click="num = 0"
-            :class="{ 'bot-label-active': num == 0 }"
+    <div class="Panorama-box">
+      <div class="Panorama-left">
+        <div>
+          <el-drawer
+            :visible.sync="visible"
+            :direction="direction"
+            :before-close="handleClose"
+            custom-class="drawerclass"
+            size="39.7%"
+            :modal="false"
           >
-            推荐产品
-          </li>
-          <li
-            class="bot-label"
-            @click="num = 1"
-            :class="{ 'bot-label-active': num == 1 }"
-          >
-            客户资料
-          </li>
-          <li
-            class="bot-label"
-            @click="num = 2"
-            :class="{ 'bot-label-active': num == 2 }"
-          >
-            本行业务办理
-          </li>
-          <li
-            class="bot-label"
-            @click="num = 3"
-            :class="{ 'bot-label-active': num == 3 }"
-          >
-            跟进结果
-          </li>
-        </ul>
-      </div>
-      <div class="contentarea" v-show="num == 0">
-        <el-table
-          ref="filterTable"
-          border
-          :data="tableData"
-          :row-style="{ height: '10px' }"
-          :cell-style="{ padding: '10px 0' }"
-          :style="{ width: '100%' }"
-          height="400"
-        >
-          <el-table-column type="index" label="序号"></el-table-column>
-          <el-table-column
-            show-overflow-tooltip
-            prop="name"
-            label="产品类型"
-          ></el-table-column>
-          <el-table-column
-            show-overflow-tooltip
-            prop="name"
-            label="产品名称"
-          ></el-table-column>
-          <el-table-column
-            show-overflow-tooltip
-            prop="name"
-            label="最近跟进时间"
-          ></el-table-column>
-          <el-table-column
-            show-overflow-tooltip
-            prop="name"
-            label="跟进结果"
-          ></el-table-column>
-        </el-table>
-      </div>
-      <div class="contentarea" v-show="num == 1">
-        <div class="table-box">
-          <table class="gridtablse">
-            <tr>
-              <th>客户姓名：</th>
-              <td>{{ datas.customerName }}</td>
-            </tr>
-            <tr>
-              <th>教育程度：</th>
-              <td>本科</td>
-            </tr>
-            <tr>
-              <th>住房贷款：</th>
-              <td>5151</td>
-            </tr>
-            <tr>
-              <th>账户余额：</th>
-              <td>599</td>
-            </tr>
-          </table>
-
-          <table class="gridtablse">
-            <tr>
-              <th>性别：</th>
-              <td>男</td>
-            </tr>
-            <tr>
-              <th>婚姻状况:</th>
-              <td>1500万</td>
-            </tr>
-            <tr>
-              <th>个人贷款：</th>
-              <td>599</td>
-            </tr>
-            <tr>
-              <th>信用情况：</th>
-              <td>599</td>
-            </tr>
-          </table>
-
-          <table class="gridtablse">
-            <tr>
-              <th>身份证号：</th>
-              <td>{{ datas.identifyNum }}</td>
-            </tr>
-            <tr>
-              <th>工作单位：</th>
-              <td>{{ datas.addr }}</td>
-            </tr>
-            <tr>
-              <th>定期存款：</th>
-              <td>否</td>
-            </tr>
-          </table>
+            <div class="outer-box">
+              <div class="outer">
+                <div class="inner">
+                  <ul class="labelbox">
+                    <li
+                      class="labelson"
+                      :class="{
+                        'labelson-active': labelDatas.indexOf(index) > -1
+                      }"
+                      @click="active(index)"
+                      v-for="(item, index) in labelData"
+                      :key="index"
+                    >
+                      {{ item }}
+                    </li>
+                  </ul>
+                  <div class="button-box">
+                    <div class="button-item" @click="onClose">确定</div>
+                    <div class="button-item" @click="onClose1">取消</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </el-drawer>
+          <div class="tags-box">
+            <div class="tag">
+              <div class="big">
+                <div class="medium">
+                  <div class="small">
+                    <span>
+                      爱旅游
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tag">
+              <div class="big">
+                <div class="medium">
+                  <div class="small">
+                    <span>
+                      爱旅游
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tag">
+              <div class="big">
+                <div class="medium">
+                  <div class="small">
+                    <span>
+                      爱旅游
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tag">
+              <div class="big">
+                <div class="medium">
+                  <div class="small">
+                    <span>
+                      爱旅游
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tag">
+              <div class="big">
+                <div class="medium">
+                  <div class="small">
+                    <span>
+                      爱旅游
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="label" @click="showDrawer">增加标签</div>
         </div>
-        <div class="pone-label">
-          <span>个人标签：</span>
-          <div class="label-box">
-            <span class="label-info">爱旅游</span>
-            <span class="label-info">浙江杭州</span>
-            <span class="label-info">高收入</span>
-            <span class="label-info">年龄：25</span>
+      </div>
+      <div class="Panorama-right">
+        <div class="label-cont">
+          <ul>
+            <li
+              class="bot-label"
+              @click="num = 0"
+              :class="{ 'bot-label-active': num == 0 }"
+            >
+              推荐产品
+            </li>
+            <li
+              class="bot-label"
+              @click="num = 1"
+              :class="{ 'bot-label-active': num == 1 }"
+            >
+              客户资料
+            </li>
+            <li
+              class="bot-label"
+              @click="num = 2"
+              :class="{ 'bot-label-active': num == 2 }"
+            >
+              本行业务办理
+            </li>
+            <li
+              class="bot-label"
+              @click="num = 3"
+              :class="{ 'bot-label-active': num == 3 }"
+            >
+              跟进结果
+            </li>
+          </ul>
+        </div>
+        <div class="contentarea" v-show="num == 0">
+          <el-table
+            ref="filterTable"
+            border
+            :data="tableData"
+            :row-style="{ height: '10px' }"
+            :cell-style="{ padding: '10px 0' }"
+            :style="{ width: '100%' }"
+          >
+            <el-table-column type="index" label="序号"></el-table-column>
+            <el-table-column
+              show-overflow-tooltip
+              prop="name"
+              label="产品类型"
+            ></el-table-column>
+            <el-table-column
+              show-overflow-tooltip
+              prop="name"
+              label="产品名称"
+            ></el-table-column>
+            <el-table-column
+              show-overflow-tooltip
+              prop="name"
+              label="最近跟进时间"
+            ></el-table-column>
+            <el-table-column
+              show-overflow-tooltip
+              prop="name"
+              label="跟进结果"
+            ></el-table-column>
+          </el-table>
+        </div>
+        <div class="contentarea" v-show="num == 1">
+          <div class="table-box">
+            <table class="gridtablse">
+              <tr>
+                <th>客户姓名：</th>
+                <td></td>
+              </tr>
+              <tr>
+                <th>教育程度：</th>
+                <td>本科</td>
+              </tr>
+              <tr>
+                <th>住房贷款：</th>
+                <td>5151</td>
+              </tr>
+              <tr>
+                <th>账户余额：</th>
+                <td>599</td>
+              </tr>
+            </table>
+
+            <table class="gridtablse">
+              <tr>
+                <th>性别：</th>
+                <td>男</td>
+              </tr>
+              <tr>
+                <th>婚姻状况:</th>
+                <td>1500万</td>
+              </tr>
+              <tr>
+                <th>个人贷款：</th>
+                <td>599</td>
+              </tr>
+              <tr>
+                <th>信用情况：</th>
+                <td>599</td>
+              </tr>
+            </table>
+
+            <table class="gridtablse">
+              <tr>
+                <th>身份证号：</th>
+                <td></td>
+              </tr>
+              <tr>
+                <th>工作单位：</th>
+                <td></td>
+              </tr>
+              <tr>
+                <th>定期存款：</th>
+                <td>否</td>
+              </tr>
+            </table>
+          </div>
+          <div class="pone-label">
+            <span>个人标签：</span>
+            <div class="label-box">
+              <span class="label-info">爱旅游</span>
+              <span class="label-info">浙江杭州</span>
+              <span class="label-info">高收入</span>
+              <span class="label-info">年龄：25</span>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="contentarea" v-show="num == 2">
-        <el-table
-          ref="filterTable"
-          border
-          :data="tableData"
-          :row-style="{ height: '10px' }"
-          :cell-style="{ padding: '10px 0' }"
-          :style="{ width: '100%' }"
-          :header-cell-style="{ background: '#E8E8E8', opacity: 0.5 }"
-          height="400"
-        >
-          <el-table-column type="index" label="序号"></el-table-column>
-          <el-table-column
-            show-overflow-tooltip
-            prop="name"
-            label="产品名称"
-          ></el-table-column>
-          <el-table-column
-            show-overflow-tooltip
-            prop="name"
-            label="是否办理"
-          ></el-table-column>
-        </el-table>
-      </div>
-      <div class="contentarea" v-show="num == 3">
-        <div class="time-cont">
-          <el-steps direction="vertical" :active="1">
-            <el-step
-              title="步骤 1"
-              description="这是一段很长很长很长的描述性文字"
-            ></el-step>
-            <el-step
-              title="步骤 2"
-              description="这是一段很长很长很长的描述性文字"
-            ></el-step>
-            <el-step
-              title="步骤 3"
-              description="这是一段很长很长很长的描述性文字"
-            ></el-step>
-          </el-steps>
+        <div class="contentarea" v-show="num == 2">
+          <el-table
+            ref="filterTable"
+            border
+            :data="tableData"
+            :row-style="{ height: '10px' }"
+            :cell-style="{ padding: '10px 0' }"
+            :style="{ width: '100%' }"
+            :header-cell-style="{ background: '#E8E8E8', opacity: 0.5 }"
+            height="400"
+          >
+            <el-table-column type="index" label="序号"></el-table-column>
+            <el-table-column
+              show-overflow-tooltip
+              prop="name"
+              label="产品名称"
+            ></el-table-column>
+            <el-table-column
+              show-overflow-tooltip
+              prop="name"
+              label="是否办理"
+            ></el-table-column>
+          </el-table>
+        </div>
+        <div class="contentarea" v-show="num == 3">
+          <div class="time-cont">
+            <el-steps direction="vertical" :active="1">
+              <el-step
+                title="步骤 1"
+                description="这是一段很长很长很长的描述性文字"
+              ></el-step>
+              <el-step
+                title="步骤 2"
+                description="这是一段很长很长很长的描述性文字"
+              ></el-step>
+              <el-step
+                title="步骤 3"
+                description="这是一段很长很长很长的描述性文字"
+              ></el-step>
+            </el-steps>
+          </div>
         </div>
       </div>
     </div>
@@ -195,6 +296,7 @@ export default {
       isShow: 0,
       labelData: [],
       labelDatas: [],
+      direction: "ltr",
       tableData: [
         {
           date: "2016-05-02",
@@ -225,7 +327,7 @@ export default {
     };
   },
   mounted() {
-    this.labelData = JSON.parse(localStorage.getItem("labelData"));
+    this.labelData = ["123", "123wwww"];
   },
   methods: {
     afterVisibleChange(val) {
@@ -300,6 +402,9 @@ export default {
       console.log(this.labelDatas, 2222);
       // this.isShow = index;
       // console.log(index,2222)
+    },
+    handleClose(done) {
+      done();
     }
   }
 };
@@ -307,6 +412,7 @@ export default {
 
 <style lang="less" scoped>
 .Panorama-box {
+  position: relative;
   width: 100%;
   display: flex;
   .Panorama-left {
@@ -326,9 +432,9 @@ export default {
 }
 .label-info {
   display: block;
-  width: 80px;
-  height: 35px;
-  line-height: 35px;
+  padding: 0 10px;
+  height: 25px;
+  line-height: 25px;
   border-radius: 20px;
   background: rgba(34, 101, 255, 0.04);
   margin-left: 20px;
@@ -353,6 +459,7 @@ export default {
 }
 .contentarea {
   margin: 10px 0 0 11px;
+  opacity: .8;
 }
 .label-cont {
   margin-top: 20px;
@@ -409,7 +516,7 @@ export default {
 
 .outer {
   height: 560px;
-  width: 555px;
+  width: 510px;
   margin: auto 0;
   z-index: 1;
 }
@@ -423,42 +530,34 @@ export default {
   filter: blur(90px);
   background: url(../assets/image/Snipaste.png) no-repeat 50% 50%;
   background-size: 50%;
-  z-index: -1;
 }
 .inner {
   height: 100%;
-  width: 600px;
-  padding-top: 40px;
-  .inner-font {
-    font-size: 33px;
-    font-weight: 600;
-    color: #333333;
-    line-height: 50px;
-    text-align: left;
-  }
+  width: 510px;
 }
 .outer-box {
-  height: 950px;
-  width: 555px;
+  height: 250px;
+  width: 510px;
   position: relative;
 }
 .labelbox {
+  position: relative;
+  z-index: 22;
   width: 100%;
-  height: 600px;
+  height: 450px;
   display: flex;
   flex-wrap: wrap;
-  margin-top: 30px;
   .labelson {
-    width: 118px;
-    height: 50px;
-    line-height: 50px;
+    width: 79px;
+    height: 25px;
+    line-height: 25px;
+    border-radius: 13px;
+    border: 1px solid #ced0d7;
     background: #ffffff;
-    border-radius: 25px;
-    border: 2px dashed #ced0d7;
-    margin: 10px 30px 31px 0;
+    margin: 10px;
   }
   .labelson-active {
-    border: 2px solid #0060ff;
+    border: 1px solid #0060ff;
   }
 }
 .button-box {
@@ -467,17 +566,20 @@ export default {
   align-items: center;
   height: 250px;
   .button-item {
-    width: 112px;
-    height: 43px;
-    line-height: 43px;
+    width: 66px;
+    height: 25px;
+    line-height: 25px;
     background: #0060ff;
-    border-radius: 30px;
+    border-radius: 15px;
     color: #fff;
-    font-size: 22px;
+    font-size: 15px;
   }
   .button-item:nth-child(2) {
+    width: 64px;
+    height: 23px;
+    line-height: 25px;
     background: rgba(8, 0, 0, 0);
-    border: 2px solid #ced0d7;
+    border: 1px solid #ced0d7;
     margin-left: 30px;
     color: #999999;
   }
@@ -487,6 +589,195 @@ export default {
     font-size: 24px;
   }
 }
+.tags-box {
+  width: 100%;
+  height: 600px;
+  position: relative;
+  .tag {
+    .big {
+      width: 107px;
+      height: 107px;
+      background: rgba(0, 96, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .medium {
+        width: 94px;
+        height: 94px;
+        background: rgba(0, 96, 255, 0.5);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .small {
+          width: 79px;
+          height: 79px;
+          background: #0060ff;
+          border-radius: 50%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          span {
+            color: #fff;
+            font-size: 15px;
+          }
+        }
+      }
+    }
+  }
+}
+.background-box {
+  width: 100%;
+  height: 88%;
+  position: relative;
+}
+.background {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+// 背景气泡
+
+.bubble {
+  position: absolute;
+  bottom: 0;
+  background: rgba(0, 96, 255, 0.2);
+  border-radius: 50%;
+  opacity: 0.5;
+  animation: flying 10s infinite ease-in;
+}
+
+.bubble:nth-child(7) {
+  width: 40px;
+  height: 40px;
+  left: 35%;
+  animation-duration: 10s;
+  animation-delay: 8s;
+}
+
+.bubble:nth-child(2) {
+  width: 20px;
+  height: 20px;
+  left: 20%;
+  animation-duration: 13s;
+  animation-delay: 9s;
+}
+.bubble:nth-child(3) {
+  width: 50px;
+  height: 50px;
+  left: 0%;
+  animation-duration: 15s;
+  animation-delay: 2s;
+}
+
+.bubble:nth-child(4) {
+  width: 60px;
+  height: 60px;
+  left: 40%;
+  animation-duration: 14s;
+  animation-delay: 6s;
+}
+
+.bubble:nth-child(5) {
+  width: 35px;
+  height: 35px;
+  left: 55%;
+  animation-duration: 17s;
+  animation-delay: 7s;
+}
+
+.bubble:nth-child(6) {
+  width: 80px;
+  height: 80px;
+  left: 65%;
+  animation-duration: 8s;
+  animation-delay: 3s;
+}
+
+.bubble:nth-child(1) {
+  width: 80px;
+  height: 80px;
+  left: 5%;
+  animation-duration: 12s;
+  animation-delay: 5s;
+}
+
+.bubble:nth-child(8) {
+  width: 40px;
+  height: 40px;
+  left: 10%;
+  animation-duration: 8s;
+}
+
+.bubble:nth-child(9) {
+  width: 15px;
+  height: 15px;
+  left: 70%;
+  animation-duration: 9s;
+  animation-delay: 0s;
+}
+
+.bubble:nth-child(10) {
+  width: 50px;
+  height: 50px;
+  left: 95%;
+  animation-duration: 9s;
+  animation-delay: 3s;
+}
+
+@keyframes flying {
+  0% {
+    bottom: -100px;
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(100px);
+  }
+
+  100% {
+    bottom: 1080px;
+    transform: translateX(-200px);
+  }
+}
+@keyframes floating {
+  50% {
+    transform: translateY(-10px);
+  }
+}
+.tag:nth-child(1) {
+  animation: floating 3s infinite ease-in-out;
+  position: absolute;
+  top: 50px;
+  left: 50px;
+}
+.tag:nth-child(2) {
+  animation: floating 3s infinite ease-in-out;
+  position: absolute;
+  top: 100px;
+  left: 260px;
+}
+.tag:nth-child(3) {
+  animation: floating 3s infinite ease-in-out;
+  position: absolute;
+  top: 240px;
+  left: 60px;
+}
+.tag:nth-child(4) {
+  animation: floating 3s infinite ease-in-out;
+  position: absolute;
+  top: 300px;
+  left: 300px;
+}
+.tag:nth-child(5) {
+  animation: floating 3s infinite ease-in-out;
+  position: absolute;
+  top: 410px;
+  left: 150px;
+}
 </style>
 <style>
 .ant-modal-body {
@@ -495,5 +786,10 @@ export default {
 .ant-drawer-content {
   box-shadow: 0px 2px 10px 0px rgba(0, 74, 196, 0.07);
   border-radius: 10px;
+}
+.drawerclass {
+  height: 95% !important;
+  margin: 10px 0 0 32px;
+  border-radius: 5px;
 }
 </style>
