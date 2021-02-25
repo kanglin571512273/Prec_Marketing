@@ -3,13 +3,20 @@
     <div class="btnContainer">
       <div class="left"></div>
       <div class="right">
-        <el-input placeholder="请输入客户姓名" size="mini" v-model="keyWord" clearable></el-input>
+        <el-input
+          placeholder="请输入客户姓名"
+          size="mini"
+          v-model="keyWord"
+          clearable
+        ></el-input>
         <div
           v-for="item in customTypeBtn"
           :key="item.id"
-          :class="{plainBtn:true, plainBtn_primary:customTypeId == item.id}"
+          :class="{ plainBtn: true, plainBtn_primary: customTypeId == item.id }"
           @click="customType(item.id)"
-        >{{item.name}}</div>
+        >
+          {{ item.name }}
+        </div>
       </div>
     </div>
     <el-table
@@ -21,19 +28,39 @@
       height="400"
     >
       <el-table-column type="index" label="序号"></el-table-column>
-      <el-table-column show-overflow-tooltip prop="name" label="客户号"></el-table-column>
+      <el-table-column
+        show-overflow-tooltip
+        prop="name"
+        label="客户号"
+      ></el-table-column>
       <el-table-column show-overflow-tooltip prop="name" label="客户姓名">
         <template slot-scope="scope">
           <div class="customName" @click="customDetail(scope.row)">
-            <span>{{scope.row.name}}</span>
+            <span>{{ scope.row.name }}</span>
             <img src="@/assets/image/newPeople.png" alt />
           </div>
         </template>
       </el-table-column>
-      <el-table-column show-overflow-tooltip prop="name" label="联系电话"></el-table-column>
-      <el-table-column show-overflow-tooltip prop="name" label="推荐产品"></el-table-column>
-      <el-table-column show-overflow-tooltip prop="name" label="客户类别"></el-table-column>
-      <el-table-column show-overflow-tooltip prop="name" label="分析时间"></el-table-column>
+      <el-table-column
+        show-overflow-tooltip
+        prop="name"
+        label="联系电话"
+      ></el-table-column>
+      <el-table-column
+        show-overflow-tooltip
+        prop="name"
+        label="推荐产品"
+      ></el-table-column>
+      <el-table-column
+        show-overflow-tooltip
+        prop="name"
+        label="客户类别"
+      ></el-table-column>
+      <el-table-column
+        show-overflow-tooltip
+        prop="name"
+        label="分析时间"
+      ></el-table-column>
       <el-table-column show-overflow-tooltip label="操作">
         <template slot-scope="scope">
           <el-button
@@ -42,13 +69,18 @@
             round
             size="mini"
             @click="edit(scope.row)"
-          >查看</el-button>
+            >查看</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
     <el-dialog :visible.sync="dialogFormVisible">
       <div class="dialogContainer">
-        <img src="@/assets/image/close.png" alt @click="dialogFormVisible = false " />
+        <img
+          src="@/assets/image/close.png"
+          alt
+          @click="dialogFormVisible = false"
+        />
         <div class="analysisItem" v-for="item in 6" :key="item">
           <div class="time">
             <div class="label">分析时间：</div>
@@ -84,40 +116,40 @@ export default {
         { id: 1, name: "所有客户" },
         { id: 2, name: "分配客户" },
         { id: 3, name: "私有客户" },
-        { id: 4, name: "公有客户" },
+        { id: 4, name: "公有客户" }
       ],
       tableData: [
         {
           date: "2016-05-02",
           name: "王小虎",
           address: "上海市普陀区金沙江路 1518 弄",
-          tag: "家",
+          tag: "家"
         },
         {
           date: "2016-05-04",
           name: "王小虎1",
           address: "上海市普陀区金沙江路 1517 弄",
-          tag: "公司",
+          tag: "公司"
         },
         {
           date: "2016-05-01",
           name: "王小虎",
           address: "上海市普陀区金沙江路 1519 弄",
-          tag: "家",
+          tag: "家"
         },
         {
           date: "2016-05-03",
           name: "王小虎",
           address: "上海市普陀区金沙江路 1516 弄",
-          tag: "公司",
-        },
+          tag: "公司"
+        }
       ],
-      dialogFormVisible: false,
+      dialogFormVisible: false
     };
   },
   methods: {
-    getList(){
-      const res = await getAnalyList()
+    async getList() {
+      const res = await getAnalyList();
     },
     // 切换客户类型
     customType(ind) {
@@ -141,8 +173,8 @@ export default {
       } else {
         return "";
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

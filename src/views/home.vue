@@ -22,10 +22,20 @@
       <router-view />
     </div>
     <div class="footer">
-      <div v-for="item in navMenu" :key="item.id" class="menuItem" @click="navClick(item.path)">
-        <div :class="{menu_item:true,'link-active':$route.meta.name == item.name}">
-          <span :class="['iconfont',item.icon ]"></span>
-          <span>{{item.name}}</span>
+      <div
+        v-for="item in navMenu"
+        :key="item.id"
+        class="menuItem"
+        @click="navClick(item.path)"
+      >
+        <div
+          :class="{
+            menu_item: true,
+            'link-active': $route.meta.name == item.name
+          }"
+        >
+          <span :class="['iconfont', item.icon]"></span>
+          <span>{{ item.name }}</span>
         </div>
         <!--    <router-link class="menu_item" :to="item.path">
           <span :class="['iconfont',item.icon ]"></span>
@@ -64,10 +74,10 @@ export default {
           id: 4,
           icon: "iconbiaoqianguanli",
           path: "/analysisHistory",
-          name: "分析历史",
-        },
+          name: "分析历史"
+        }
       ],
-      currentMenu: "/marketActive",
+      currentMenu: "/marketActive"
     };
   },
   methods: {
@@ -83,7 +93,7 @@ export default {
         type: "warning"
       })
         .then(() => {
-          // localStorage.removeItem("token");
+          localStorage.removeItem("token");
           this.$router.push("/login");
           Message({
             type: "success",
