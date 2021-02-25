@@ -14,6 +14,7 @@
 
 <script>
 import customTable from "./customTable";
+import { analysisCustom } from "@/api/customApi";
 export default {
   components: { customTable },
   data() {
@@ -47,7 +48,18 @@ export default {
       ],
     };
   },
+  mounted() {
+    this.analysisCustom();
+  },
   methods: {
+    async analysisCustom() {
+      try {
+        const res = await analysisCustom(this.$route.params.nos);
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
+    },
     // 点击客户姓名
     customDetail(row) {
       console.log(row);

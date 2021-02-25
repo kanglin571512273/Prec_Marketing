@@ -15,43 +15,48 @@
 <script>
 import { Message } from "@/utils/importFile";
 import customTable from "./customTable";
+import {
+  getCustomList,
+  getCustomDetail,
+  getDictList,
+  addCustom,
+  editCustom,
+} from "@/api/customApi";
 export default {
   components: {
     customTable,
   },
   data() {
     return {
-      keyWord:'',
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-          tag: "家",
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-          tag: "公司",
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-          tag: "家",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-          tag: "公司",
-        },
-      ],
+      keyWord: "",
+      tableData: [],
       multipleSelection: [], //多选结果
     };
   },
+  mounted() {
+    this.getList();
+    // this.getDictList();
+  },
   methods: {
+    async getList() {
+      let param = this.keyWord ? { param: this.keyWord } : {};
+      try {
+        const res = await getCustomList(param);
+        if (res.code !== 200) return Message.error(res.msg);
+        res.rows.map((item) => {
+          let arr = [];
+          const { custProductRecordList } = item;
+          if (!custProductRecordList) return "";
+          custProductRecordList.map((child) => {
+            arr.push(child.productName);
+          });
+          item.custProductRecordList = arr.toString().replace(/\,/g, " / ");
+        });
+        this.tableData = res.rows;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     // 点击客户姓名
     customDetail(row) {
       console.log(row);
@@ -62,7 +67,9 @@ export default {
     },
     //多选
     handleSelectionChange(val) {
-      this.multipleSelection = val;
+      this.multipleSelection = val.map((item) => {
+        return item.id;
+      });
     },
     toAnalysisResoult() {
       if (!this.multipleSelection.length) {
@@ -71,6 +78,8 @@ export default {
       }
       this.$router.push({
         path: "/analysisResoult",
+        name: "analysisResoult",
+        params: { nos: this.multipleSelection },
       });
     },
   },

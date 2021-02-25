@@ -73,6 +73,7 @@
 
 <script>
 import customTable from "../C/customTable";
+import { getAnalyList } from "@/api/customApi";
 export default {
   components: { customTable },
   data() {
@@ -115,6 +116,9 @@ export default {
     };
   },
   methods: {
+    getList(){
+      const res = await getAnalyList()
+    },
     // 切换客户类型
     customType(ind) {
       this.customTypeId = ind;

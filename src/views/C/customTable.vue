@@ -1,29 +1,37 @@
 <template>
   <el-table
-    ref="filterTable"
     border
+    ref="filterTable"
     :data="data"
     style="width: 100%"
     :cell-style="changeCellStyle"
+    empty-text="暂无"
     height="400"
     @selection-change="handleSelectionChange"
+    :fit="true"
   >
     <el-table-column v-if="$route.name == 'customAnalysis'" type="selection" width="35"></el-table-column>
     <el-table-column type="index" label="序号"></el-table-column>
-    <el-table-column show-overflow-tooltip prop="name" label="客户号"></el-table-column>
-    <el-table-column show-overflow-tooltip prop="name" label="客户姓名">
+    <el-table-column show-overflow-tooltip prop="custNo" label="客户号"></el-table-column>
+    <el-table-column show-overflow-tooltip prop="custName" label="客户姓名">
       <template slot-scope="scope">
         <div class="customName" @click="customDetail(scope.row)">
-          <span>{{scope.row.name}}</span>
-          <img src="@/assets/image/newPeople.png" alt />
+          <span>{{scope.row.custName}}</span>
+          <img v-if="scope.row.followUpTimes" src="@/assets/image/newPeople.png" alt />
         </div>
       </template>
     </el-table-column>
-    <el-table-column show-overflow-tooltip prop="name" label="联系电话"></el-table-column>
-    <el-table-column show-overflow-tooltip prop="name" label="推荐产品"></el-table-column>
-    <el-table-column show-overflow-tooltip prop="name" label="客户类别"></el-table-column>
-    <el-table-column show-overflow-tooltip prop="name" label="客户经理"></el-table-column>
-    <el-table-column show-overflow-tooltip label="操作">
+    <el-table-column show-overflow-tooltip prop="telNo" label="联系电话"></el-table-column>
+    <el-table-column show-overflow-tooltip prop="custProductRecordList" label="推荐产品" width="200"></el-table-column>
+    <el-table-column show-overflow-tooltip prop="custType" label="客户类别">
+      <template slot-scope="scope">
+        <div>
+          <span>{{scope.row.custType == '0' ? '分配客户' : scope.row.custType == '1' ? '私有客户' : scope.row.custType == '2' ? '共有客户' :'所有客户' }}</span>
+        </div>
+      </template>
+    </el-table-column>
+    <el-table-column show-overflow-tooltip prop="custManagerName" label="客户经理"></el-table-column>
+    <el-table-column label="操作">
       <template slot-scope="scope">
         <el-button type="warning" icon="el-icon-edit" round size="mini" @click="edit(scope.row)">编辑</el-button>
       </template>
@@ -35,6 +43,9 @@
 export default {
   props: {
     data: { type: Array, default: () => {} },
+  },
+  data() {
+    return {};
   },
   methods: {
     // 编辑
