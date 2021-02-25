@@ -6,7 +6,7 @@
     style="width: 100%"
     :cell-style="changeCellStyle"
     empty-text="暂无"
-    height="400"
+    height="300"
     @selection-change="handleSelectionChange"
     :fit="true"
   >

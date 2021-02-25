@@ -18,22 +18,28 @@
       :data="tableData"
       style="width: 100%"
       :cell-style="changeCellStyle"
-      height="400"
+      height="470"
     >
       <el-table-column type="index" label="序号"></el-table-column>
-      <el-table-column show-overflow-tooltip prop="name" label="客户号"></el-table-column>
-      <el-table-column show-overflow-tooltip prop="name" label="客户姓名">
+      <el-table-column show-overflow-tooltip prop="custNo" label="客户号"></el-table-column>
+      <el-table-column show-overflow-tooltip prop="custName" label="客户姓名">
         <template slot-scope="scope">
           <div class="customName" @click="customDetail(scope.row)">
-            <span>{{scope.row.name}}</span>
-            <img src="@/assets/image/newPeople.png" alt />
+            <span>{{scope.row.custName}}</span>
+            <img v-if="scope.row.followUpTimes" src="@/assets/image/newPeople.png" alt />
           </div>
         </template>
       </el-table-column>
-      <el-table-column show-overflow-tooltip prop="name" label="联系电话"></el-table-column>
-      <el-table-column show-overflow-tooltip prop="name" label="推荐产品"></el-table-column>
-      <el-table-column show-overflow-tooltip prop="name" label="客户类别"></el-table-column>
-      <el-table-column show-overflow-tooltip prop="name" label="分析时间"></el-table-column>
+      <el-table-column show-overflow-tooltip prop="telNo" label="联系电话"></el-table-column>
+      <el-table-column prop="custProductRecordList" label="推荐产品" width="200"></el-table-column>
+      <el-table-column show-overflow-tooltip prop="custType" label="客户类别">
+        <template slot-scope="scope">
+          <div>
+            <span>{{scope.row.custType == '0' ? '分配客户' : scope.row.custType == '1' ? '私有客户' : scope.row.custType == '2' ? '共有客户' :'所有客户' }}</span>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column show-overflow-tooltip prop="recordTime" label="分析时间"></el-table-column>
       <el-table-column show-overflow-tooltip label="操作">
         <template slot-scope="scope">
           <el-button
@@ -46,13 +52,13 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog :visible.sync="dialogFormVisible">
+    <el-dialog :visible.sync="dialogFormVisible" @close="analysisList = [] ">
       <div class="dialogContainer">
         <img src="@/assets/image/close.png" alt @click="dialogFormVisible = false " />
-        <div class="analysisItem" v-for="item in 6" :key="item">
+        <div class="analysisItem" v-for="item in analysisList" :key="item">
           <div class="time">
             <div class="label">分析时间：</div>
-            <span>2021-1-2 09:00:00</span>
+            <span>{{item.analysisTime}}</span>
           </div>
           <div class="time">
             <div class="label">分析结果：</div>
@@ -73,64 +79,93 @@
 
 <script>
 import customTable from "../C/customTable";
-import { getAnalyList } from "@/api/customApi";
+import { Message } from "@/utils/importFile";
+import {
+  getAnalyList,
+  getCustomList,
+  getOneAnalyHistory,
+} from "@/api/customApi";
 export default {
   components: { customTable },
   data() {
     return {
       keyWord: "",
-      customTypeId: 1,
+      customTypeId: 999,
       customTypeBtn: [
-        { id: 1, name: "所有客户" },
-        { id: 2, name: "分配客户" },
-        { id: 3, name: "私有客户" },
-        { id: 4, name: "公有客户" },
+        { id: 999, name: "所有客户" },
+        { id: 0, name: "分配客户" },
+        { id: 1, name: "私有客户" },
+        { id: 2, name: "公有客户" },
       ],
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-          tag: "家",
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎1",
-          address: "上海市普陀区金沙江路 1517 弄",
-          tag: "公司",
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-          tag: "家",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-          tag: "公司",
-        },
-      ],
+      tableData: [],
       dialogFormVisible: false,
+      analysisList: [],
     };
   },
+  mounted() {
+    this.getList();
+  },
   methods: {
-    getList(){
-      const res = await getAnalyList()
+    async getList() {
+      let type = this.customTypeId > 5 ? {} : { type: this.customTypeId };
+      let param = this.keyWord ? { param: this.keyWord } : {};
+      try {
+        const res = await getCustomList(Object.assign(type, param));
+        if (res.code !== 200) return Message.error(res.msg);
+        res.rows.map((item) => {
+          let arr = [];
+          const { custProductRecordList } = item;
+          if (!custProductRecordList) return "";
+          custProductRecordList.map((child) => {
+            arr.push(child.productName);
+          });
+          item.custProductRecordList = arr.toString().replace(/\,/g, " / ");
+        });
+        this.tableData = res.rows;
+      } catch (error) {
+        console.log(error);
+      }
     },
+    // async getList() {
+    //   let type = this.customTypeId > 5 ? {} : { type: this.customTypeId };
+    //   let param = this.keyWord ? { param: this.keyWord } : {};
+    //   try {
+    //     const res = await getAnalyList(Object.assign(type, param));
+    //     if (res.code !== 200) Message.error(res.msg);
+    //     res.rows.map((item) => {
+    //       let arr = [];
+    //       const { custProductRecordList } = item;
+    //       if (!custProductRecordList) return "";
+    //       custProductRecordList.map((child) => {
+    //         arr.push(child.productName);
+    //       });
+    //       item.custProductRecordList = arr.toString().replace(/\,/g, " / ");
+    //     });
+    //     this.tableData = res.rows;
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
     // 切换客户类型
     customType(ind) {
       this.customTypeId = ind;
+      this.getList();
     },
     // 点击客户姓名
     customDetail(row) {
       console.log(row);
     },
     // 编辑
-    edit(row) {
+    async edit(row) {
       this.dialogFormVisible = true;
-      console.log(row);
+      try {
+        const res = await getOneAnalyHistory(row.custNo);
+        if (res.code !== 200) return Message.error(res.msg);
+        this.analysisList = res.rows;
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
     },
     // 推荐产品的列的样式
     changeCellStyle(row, column, rowIndex, columnIndex) {
@@ -154,6 +189,7 @@ export default {
   padding: 0 15px 15px;
   height: 100%;
   overflow: hidden;
+  box-sizing: border-box;
   .btnContainer {
     display: flex;
     justify-content: space-between;

@@ -14,7 +14,7 @@
         >{{item.name}}</div>
       </div>
     </div>
-    <el-table ref="filterTable" border :data="tableData" style="width: 100%" height="400">
+    <el-table ref="filterTable" border :data="tableData" style="width: 100%" height="470">
       <el-table-column type="index" label="序号"></el-table-column>
       <el-table-column show-overflow-tooltip prop="name" label="客户号"></el-table-column>
       <el-table-column show-overflow-tooltip prop="name" label="客户姓名">
@@ -99,6 +99,7 @@ export default {
   border-radius: 5px;
   padding: 0 15px 15px;
   height: 100%;
+  box-sizing: border-box;
   overflow: hidden;
   .btnContainer {
     display: flex;

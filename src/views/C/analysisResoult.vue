@@ -53,8 +53,9 @@ export default {
   },
   methods: {
     async analysisCustom() {
+      console.log(this.$route.params.nos.toString());
       try {
-        const res = await analysisCustom(this.$route.params.nos);
+        const res = await analysisCustom(this.$route.params.nos.toString());
         console.log(res);
       } catch (error) {
         console.log(error);
@@ -83,6 +84,7 @@ export default {
   border-radius: 5px;
   padding: 0 15px 15px;
   height: 100%;
+  box-sizing: border-box;
   overflow: hidden;
   .btnContainer {
     display: flex;

@@ -56,3 +56,10 @@ export const getAnalyList = (params) => {
         params
     })
 }
+// 分析历史列表
+export const getOneAnalyHistory = (params) => {
+    return axios.request({
+        url: `/v1/app/customer/getAnalysisList/${params}`,
+        method: 'get',
+    })
+}

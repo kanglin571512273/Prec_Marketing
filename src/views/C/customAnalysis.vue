@@ -68,7 +68,7 @@ export default {
     //多选
     handleSelectionChange(val) {
       this.multipleSelection = val.map((item) => {
-        return item.id;
+        return item.custNo;
       });
     },
     toAnalysisResoult() {
@@ -93,6 +93,7 @@ export default {
   border-radius: 5px;
   padding: 0 15px 15px;
   height: 100%;
+  box-sizing: border-box;
   overflow: hidden;
   .btnContainer {
     display: flex;

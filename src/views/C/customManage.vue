@@ -184,6 +184,7 @@ export default {
   border-radius: 5px;
   padding: 0 15px 15px;
   height: 100%;
+  box-sizing: border-box;
   overflow: hidden;
   .btnContainer {
     display: flex;
