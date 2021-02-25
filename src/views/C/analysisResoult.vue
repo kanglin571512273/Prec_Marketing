@@ -4,7 +4,9 @@
       <div class="left">
         <div class="sureBtn" @click="reBack">返回</div>
       </div>
-      <div class="right"></div>
+      <div class="right">
+        <el-input placeholder="请输入客户姓名" size="mini" v-model="keyWord" clearable></el-input>
+      </div>
     </div>
     <customTable :data="tableData" @edit="edit" @customDetail="customDetail"></customTable>
   </div>
@@ -16,6 +18,7 @@ export default {
   components: { customTable },
   data() {
     return {
+      keyWord: "",
       tableData: [
         {
           date: "2016-05-02",
@@ -74,5 +77,21 @@ export default {
     justify-content: space-between;
     margin-bottom: 10px;
   }
+  .right {
+    padding-top: 18px;
+    display: flex;
+    box-sizing: border-box;
+    .el-input {
+      width: 220px;
+    }
+    div {
+      margin-right: 10px;
+    }
+  }
+}
+</style>
+<style lang="less">
+.customAnalysis .el-input__suffix {
+  height: auto;
 }
 </style>

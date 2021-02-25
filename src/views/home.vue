@@ -22,11 +22,15 @@
       <router-view />
     </div>
     <div class="footer">
-      <div v-for="item in navMenu" :key="item.id" class="menuItem">
-        <router-link class="menu_item" :to="item.path">
-          <span :class="['iconfont', item.icon]"></span>
-          <span>{{ item.name }}</span>
-        </router-link>
+      <div v-for="item in navMenu" :key="item.id" class="menuItem" @click="navClick(item.path)">
+        <div :class="{menu_item:true,'link-active':$route.meta.name == item.name}">
+          <span :class="['iconfont',item.icon ]"></span>
+          <span>{{item.name}}</span>
+        </div>
+        <!--    <router-link class="menu_item" :to="item.path">
+          <span :class="['iconfont',item.icon ]"></span>
+          <span>{{item.name}}</span>
+        </router-link>-->
       </div>
     </div>
   </div>
@@ -60,12 +64,18 @@ export default {
           id: 4,
           icon: "iconbiaoqianguanli",
           path: "/analysisHistory",
-          name: "分析历史"
-        }
-      ]
+          name: "分析历史",
+        },
+      ],
+      currentMenu: "/marketActive",
     };
   },
   methods: {
+    navClick(path) {
+      if (path == this.$route.path) return false;
+      this.currentMenu = path;
+      this.$router.push(path);
+    },
     logout() {
       MessageBox.confirm("确定退出登录, 是否继续?", "提示", {
         confirmButtonText: "确定",
@@ -154,12 +164,13 @@ export default {
       text-align: center;
       font-size: 15px;
       .menu_item {
+        // height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: space-around;
         color: #999;
         text-decoration: none;
-        &.router-link-active {
+        &.link-active {
           color: #0060ff;
         }
         span:nth-child(1) {
