@@ -116,19 +116,33 @@
             ></el-table-column>
             <el-table-column show-overflow-tooltip prop="address" label="操作">
               <template slot-scope="scope">
-                <el-button
-                  type="primary"
-                  round
-                  size="mini"
-                  @click="edit(scope.row)"
-                  >跟进</el-button
+                <div
+                  v-show="customTypeId === 1"
+                  class="sureBtn"
+                  @click="followUp(scope.row)"
                 >
-              </template></el-table-column
+                  跟进
+                </div>
+                <div
+                  v-show="[2, 4].includes(customTypeId)"
+                  class="myBtn myBtn_warning"
+                >
+                  继续跟进
+                </div> </template
+              >a</el-table-column
             >
           </el-table>
         </div>
         <el-dialog :visible.sync="dialogFormVisible">
+          <div class="close" @click="close"></div>
           <Panorama :datas="name"></Panorama>
+          <!-- <dialogForm :data="ruleForm" ref="childRef" @closeDia="dialogFormVisible = false"></dialogForm> -->
+        </el-dialog>
+        <el-dialog :visible.sync="dialogFormVisible1">
+          <div class="close" @click="close1"></div>
+          <followUpFeedback
+            @closeModel="dialogFormVisible1 = false"
+          ></followUpFeedback>
           <!-- <dialogForm :data="ruleForm" ref="childRef" @closeDia="dialogFormVisible = false"></dialogForm> -->
         </el-dialog>
       </div>
@@ -162,18 +176,22 @@ echarts.use([
   PieChart
 ]);
 import Panorama from "@/components/Panorama.vue";
+import followUpFeedback from "@/components/followUpFeedback.vue";
 export default {
   components: {
-    Panorama
+    Panorama,
+    followUpFeedback
   },
   data() {
     return {
       isCusAnalysis: false,
+      customTypeId: 1,
       currentBtn: 0,
       active: 0,
       username: "",
       dialogFormVisible: false,
-      name: 2,
+      dialogFormVisible1: false,
+      name: { id: 1 },
       customers: { total: 300, new: 100, followed: 120 },
       customers1: { total: 300, new: 100, followed: 120 },
       customers2: { total: 600, new: 200, followed: 302 },
@@ -377,6 +395,16 @@ export default {
     },
     clearFilter() {
       this.$refs.filterTable.clearFilter();
+    },
+    close() {
+      this.dialogFormVisible = false;
+    },
+    close1() {
+      this.dialogFormVisible1 = false;
+    },
+    followUp(row) {
+      console.log(row);
+      this.dialogFormVisible1 = true;
     }
   }
 };
@@ -520,7 +548,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   .fatBtn {
-    margin-bottom: 15px;
+    margin: 0px 15px 15px 0;
   }
 }
 #container {
@@ -531,12 +559,20 @@ export default {
   height: 100%;
   width: 100%;
 }
+.close {
+  width: 25px;
+  height: 25px;
+  background: url(../../assets/image/close.png) no-repeat 100% 100%;
+  background-size: 100%;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
 </style>
 
 <style>
-.el-tooltip {
-  text-align: center;
-}
+/* .el-tooltip {
+} */
 .el-button > span {
   font-weight: bold;
 }
