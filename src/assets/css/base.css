@@ -96,18 +96,18 @@ html, body, #app {
 
 /* element的弹框 */
 
-.el-dialog {
+.bigDia .el-dialog {
     width: 95% !important;
     height: 95%;
     margin-top: 10px !important;
     margin-bottom: 10px !important;
 }
 
-.el-dialog__header {
+.bigDia .el-dialog__header {
     display: none;
 }
 
-.el-dialog__body {
+.bigDia .el-dialog__body {
     width: 100%;
     height: 100%;
     overflow: auto;
@@ -121,7 +121,17 @@ html, body, #app {
     border-color: #18B979!important;
 }
 
+.el-button--success.is-disabled {
+    color: #FFF;
+    background-color: #18b97966!important;
+    border-color: #fff !important;
+}
+
 .el-button [class*="el-icon-"]+span {
     font-size: 14px;
     font-weight: 700;
+}
+
+.el-tooltip {
+    width: 100%!important;
 }

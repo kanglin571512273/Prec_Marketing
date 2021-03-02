@@ -8,15 +8,15 @@
           size="mini"
           v-model="keyWord"
           clearable
+          @change="getList()"
+          @clear="getList()"
         ></el-input>
         <div
           v-for="item in customTypeBtn"
           :key="item.id"
           :class="{ plainBtn: true, plainBtn_primary: customTypeId == item.id }"
           @click="customType(item.id)"
-        >
-          {{ item.name }}
-        </div>
+        >{{ item.name }}</div>
       </div>
     </div>
     <el-table
@@ -24,8 +24,8 @@
       border
       :data="tableData"
       style="width: 100%"
-      :cell-style="changeCellStyle"
       height="470"
+      :cell-style="changeCellStyle"
     >
       <el-table-column type="index" label="序号"></el-table-column>
       <el-table-column show-overflow-tooltip prop="custNo" label="客户号"></el-table-column>
@@ -33,12 +33,12 @@
         <template slot-scope="scope">
           <div class="customName" @click="customDetail(scope.row)">
             <span>{{scope.row.custName}}</span>
-            <img v-if="scope.row.followUpTimes" src="@/assets/image/newPeople.png" alt />
+            <img v-if="!scope.row.flag" src="@/assets/image/newPeople.png" alt />
           </div>
         </template>
       </el-table-column>
       <el-table-column show-overflow-tooltip prop="telNo" label="联系电话"></el-table-column>
-      <el-table-column prop="custProductRecordList" label="推荐产品" width="200"></el-table-column>
+      <el-table-column show-overflow-tooltip prop="custProductRecordList" label="推荐产品" width="200"></el-table-column>
       <el-table-column show-overflow-tooltip prop="custType" label="客户类别">
         <template slot-scope="scope">
           <div>
@@ -55,31 +55,32 @@
             round
             size="mini"
             @click="edit(scope.row)"
-            >查看</el-button
-          >
+          >查看</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog :visible.sync="dialogFormVisible" @close="analysisList = [] ">
+    <el-dialog class="bigDia" :visible.sync="dialogFormVisible" @close="analysisList = [] ">
       <div class="dialogContainer">
         <img src="@/assets/image/close.png" alt @click="dialogFormVisible = false " />
-        <div class="analysisItem" v-for="item in analysisList" :key="item">
-          <div class="time">
-            <div class="label">分析时间：</div>
-            <span>{{item.analysisTime}}</span>
-          </div>
-          <div class="time">
-            <div class="label">分析结果：</div>
-            <span>网易云联名卡/付费卡/爱奇艺信用卡</span>
-          </div>
-          <div class="time">
-            <div class="label">客户标签：</div>
-            <span>
-              <el-tag size>标签二</el-tag>
-              <el-tag size>标签二</el-tag>
-            </span>
+        <div class="container" v-if="analysisList.length">
+          <div class="analysisItem" v-for="(item,index) in analysisList" :key="index">
+            <div class="time">
+              <div class="label">分析时间：</div>
+              <span>{{item.analysisTime}}</span>
+            </div>
+            <div class="time">
+              <div class="label">分析结果：</div>
+              <span>{{item.analysisContent}}</span>
+            </div>
+            <div class="time">
+              <div class="label">客户标签：</div>
+              <span>
+                <el-tag size v-for="(child,ind) in item.analysisTagList" :key="ind">{{child}}</el-tag>
+              </span>
+            </div>
           </div>
         </div>
+        <div v-else class="container empty">暂无</div>
       </div>
     </el-dialog>
   </div>
@@ -87,11 +88,12 @@
 
 <script>
 import customTable from "../C/customTable";
-import { Message } from "@/utils/importFile";
+import { Message, MessageBox } from "@/utils/importFile";
 import {
-  getAnalyList,
   getCustomList,
   getOneAnalyHistory,
+  isUpdata,
+  getNewHisList,
 } from "@/api/customApi";
 export default {
   components: { customTable },
@@ -111,6 +113,7 @@ export default {
     };
   },
   mounted() {
+    // this.isUpdata();
     this.getList();
   },
   methods: {
@@ -128,28 +131,48 @@ export default {
             arr.push(child.productName);
           });
           item.custProductRecordList = arr.toString().replace(/\,/g, " / ");
+          item.flag =
+            new Date().getTime() - new Date(item.createTime).getTime() >
+            86400000;
         });
         this.tableData = res.rows;
       } catch (error) {
         console.log(error);
       }
     },
-    // async getList() {
-    //   let type = this.customTypeId > 5 ? {} : { type: this.customTypeId };
-    //   let param = this.keyWord ? { param: this.keyWord } : {};
+    // 判断是否更新
+    // async isUpdata() {
     //   try {
-    //     const res = await getAnalyList(Object.assign(type, param));
-    //     if (res.code !== 200) Message.error(res.msg);
-    //     res.rows.map((item) => {
-    //       let arr = [];
-    //       const { custProductRecordList } = item;
-    //       if (!custProductRecordList) return "";
-    //       custProductRecordList.map((child) => {
-    //         arr.push(child.productName);
-    //       });
-    //       item.custProductRecordList = arr.toString().replace(/\,/g, " / ");
-    //     });
-    //     this.tableData = res.rows;
+    //     const res = await isUpdata();
+    //     if (res.code !== 200) return Message.error(res.msg);
+    //     console.log(res);
+    //     if (res.data > 0) {
+    //       // 弹框
+    //       MessageBox.confirm("列表已更新，是否刷新列表", "提示", {
+    //         confirmButtonText: "确定",
+    //         cancelButtonText: "取消",
+    //         type: "warning",
+    //       })
+    //         .then(() => {
+    //           // Message.success("刷新成功");
+    //           this.getNewHisList();
+    //         })
+    //         .catch(() => {
+    //           Message.info("已取消刷新");
+    //         });
+    //     }
+    //     console.log(res);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
+    // // 客户点了更新之后调用的接口
+    // async getNewHisList() {
+    //   try {
+    //     const res = await getNewHisList();
+    //     if (res.code !== 200) return Message.error(res.msg);
+    //     this.getList();
+    //     // console.log(res);
     //   } catch (error) {
     //     console.log(error);
     //   }
@@ -179,13 +202,13 @@ export default {
     changeCellStyle(row, column, rowIndex, columnIndex) {
       // 分析结果
       if (row.column.label === "推荐产品") {
-        let color = row.row.name == "王小虎1" ? "#FFA400" : "#18B979";
+        let color = row.row.recordStatus == "1" ? "#FFA400" : "#18B979"; //橙 绿
         return `color: ${color}`; // 修改的样式
       } else {
         return "";
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -256,6 +279,9 @@ export default {
         }
       }
     }
+  }
+  .empty {
+    margin-top: 130px;
   }
 }
 </style>

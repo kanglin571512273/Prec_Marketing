@@ -4,9 +4,7 @@
       <div class="left">
         <div class="sureBtn" @click="reBack">返回</div>
       </div>
-      <div class="right">
-        <el-input placeholder="请输入客户姓名" size="mini" v-model="keyWord" clearable></el-input>
-      </div>
+      <div class="right"></div>
     </div>
     <customTable :data="tableData" @edit="edit" @customDetail="customDetail"></customTable>
   </div>
@@ -19,33 +17,7 @@ export default {
   components: { customTable },
   data() {
     return {
-      keyWord: "",
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-          tag: "家",
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎1",
-          address: "上海市普陀区金沙江路 1517 弄",
-          tag: "公司",
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-          tag: "家",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-          tag: "公司",
-        },
-      ],
+      tableData: [],
     };
   },
   mounted() {
@@ -53,9 +25,21 @@ export default {
   },
   methods: {
     async analysisCustom() {
-      console.log(this.$route.params.nos.toString());
+      // console.log(this.$route.params.nos.toString());
       try {
         const res = await analysisCustom(this.$route.params.nos.toString());
+        if (res.code !== 200) return Message.error(res.msg);
+        res.data.map((item) => {
+          let arr = [];
+          const { custProductRecordList } = item;
+          if (!custProductRecordList) return "";
+          custProductRecordList.map((child) => {
+            arr.push(child.productName);
+          });
+          item.custProductRecordList = arr.toString().replace(/\,/g, " / ");
+        });
+        this.tableData = res.data;
+
         console.log(res);
       } catch (error) {
         console.log(error);

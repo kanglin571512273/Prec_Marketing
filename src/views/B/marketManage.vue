@@ -133,12 +133,12 @@
             >
           </el-table>
         </div>
-        <el-dialog :visible.sync="dialogFormVisible">
+        <el-dialog class="bigDia" :visible.sync="dialogFormVisible">
           <div class="close" @click="close"></div>
           <Panorama :datas="name"></Panorama>
           <!-- <dialogForm :data="ruleForm" ref="childRef" @closeDia="dialogFormVisible = false"></dialogForm> -->
         </el-dialog>
-        <el-dialog :visible.sync="dialogFormVisible1">
+        <el-dialog class="bigDia" :visible.sync="dialogFormVisible1">
           <div class="close" @click="close1"></div>
           <followUpFeedback
             @closeModel="dialogFormVisible1 = false"
