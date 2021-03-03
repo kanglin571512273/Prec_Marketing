@@ -38,7 +38,9 @@ import {
   InputNumber,
   Steps,
   Step,
-  Drawer
+  Drawer,
+  Timeline,
+  TimelineItem
 } from "element-ui";
 Vue.use(Input);
 Vue.use(Avatar);
@@ -77,4 +79,6 @@ Vue.use(Tag);
 Vue.use(Steps);
 Vue.use(Step);
 Vue.use(Drawer);
+Vue.use(Timeline);
+Vue.use(TimelineItem);
 export { MessageBox, Message };

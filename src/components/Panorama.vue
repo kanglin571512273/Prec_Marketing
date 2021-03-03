@@ -262,20 +262,15 @@
         </div>
         <div class="contentarea" v-show="num == 3">
           <div class="time-cont">
-            <el-steps direction="vertical" :active="1">
-              <el-step
-                title="步骤 1"
-                description="这是一段很长很长很长的描述性文字"
-              ></el-step>
-              <el-step
-                title="步骤 2"
-                description="这是一段很长很长很长的描述性文字"
-              ></el-step>
-              <el-step
-                title="步骤 3"
-                description="这是一段很长很长很长的描述性文字"
-              ></el-step>
-            </el-steps>
+            <el-timeline :reverse="reverse">
+              <el-timeline-item
+                v-for="(activity, index) in activities"
+                :key="index"
+                :timestamp="activity.timestamp"
+              >
+                {{ activity.content }}
+              </el-timeline-item>
+            </el-timeline>
           </div>
         </div>
       </div>
@@ -284,6 +279,7 @@
 </template>
 
 <script>
+import { getCustomDetail } from "@/api/marketing";
 export default {
   props: {
     datas: Object
@@ -297,6 +293,21 @@ export default {
       labelData: [],
       labelDatas: [],
       direction: "ltr",
+      reverse: true,
+      activities: [
+        {
+          content: "活动按期开始",
+          timestamp: "2018-04-15"
+        },
+        {
+          content: "通过审核",
+          timestamp: "2018-04-13"
+        },
+        {
+          content: "创建成功",
+          timestamp: "2018-04-11"
+        }
+      ],
       tableData: [
         {
           date: "2016-05-02",
@@ -328,8 +339,21 @@ export default {
   },
   mounted() {
     this.labelData = ["123", "123wwww"];
+    this.getDetail();
   },
   methods: {
+    async getDetail() {
+      try {
+        const res = await getCustomDetail(this.datas.id);
+        if (res.code == 200) {
+          console.log(res);
+          // this.dictionary = res.data;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
     afterVisibleChange(val) {
       console.log("visible", val);
     },
@@ -459,7 +483,7 @@ export default {
 }
 .contentarea {
   margin: 10px 0 0 11px;
-  opacity: .8;
+  opacity: 0.8;
 }
 .label-cont {
   margin-top: 20px;
@@ -474,9 +498,10 @@ export default {
   margin-left: 30px;
 }
 .time-cont {
-  width: 50%;
+  padding-left: 10%;
+  width: 28%;
   height: 200px;
-  margin-top: 60px;
+  margin-top: 40px;
 }
 .table-box {
   display: flex;
