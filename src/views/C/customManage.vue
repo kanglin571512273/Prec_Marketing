@@ -1,12 +1,10 @@
 <template>
   <div class="customManage">
-    <div class="btnContainer">
+    <div class="btnContainer" v-show="checkAble == 1">
       <div class="left">
         <div class="plainBtn plainBtn_primary myBtn_primary" @click="dialogFormVisible = true">新增客户</div>
-        <div
-          class="plainBtn plainBtn_primary myBtn_primary"
-          @click="$router.push('/customAnalysis')"
-        >客户分析</div>
+        <div class="plainBtn plainBtn_primary myBtn_primary" @click="checkAble = 2">客户分析</div>
+        <!-- @click="$router.push('/customAnalysis')" -->
       </div>
       <div class="right">
         <el-input
@@ -25,10 +23,37 @@
         >{{item.name}}</div>
       </div>
     </div>
+    <div class="btnContainer" v-show="checkAble == 2">
+      <div class="left"></div>
+      <div class="right">
+        <el-input
+          placeholder="请输入客户姓名"
+          size="mini"
+          v-model="keyWord"
+          clearable
+          @change="getList()"
+          @clear="getList()"
+        ></el-input>
+        <div class="sureBtn" @click="toAnalysisResoult">确认</div>
+        <div class="cancelBtn" @click="checkAble = 1">取消</div>
+      </div>
+    </div>
+    <div class="btnContainer" v-show="checkAble == 3">
+      <div class="left">
+        <div class="sureBtn" @click="reback">返回</div>
+      </div>
+      <div class="right"></div>
+    </div>
     <!--  table -->
-    <customTable :data="tableData" @edit="edit" @customDetail="customDetail"></customTable>
+    <customTable
+      :data="tableData"
+      :checkAble="checkAble"
+      @edit="edit"
+      @customDetail="customDetail"
+      @handleSelectionChange="handleSelectionChange"
+    ></customTable>
     <!-- 添加客户 -->
-    <el-dialog :visible.sync="dialogFormVisible" @close="resetForm">
+    <el-dialog class="bigDia" :visible.sync="dialogFormVisible" @close="resetForm">
       <dialogForm
         :data="ruleForm"
         ref="childRef"
@@ -44,17 +69,23 @@
 import customTable from "./customTable";
 import dialogForm from "./dialogForm";
 import { Message } from "@/utils/importFile";
+import { Loading } from "element-ui";
 import {
   getCustomList,
   getCustomDetail,
   getDictList,
   addCustom,
   editCustom,
+  analysisCustomByIds,
+  analysisCustom,
 } from "@/api/customApi";
 export default {
   components: { customTable, dialogForm },
   data() {
     return {
+      loading: null,
+      checkAble: 1,
+      multipleSelection: [], //多选结果
       addOrEdit: "add",
       keyWord: "",
       customTypeId: 999,
@@ -89,6 +120,7 @@ export default {
       try {
         const res = await getCustomList(Object.assign(type, param));
         if (res.code !== 200) return Message.error(res.msg);
+        // 推荐列表 处理
         res.rows.map((item) => {
           let arr = [];
           const { custProductRecordList } = item;
@@ -97,8 +129,55 @@ export default {
             arr.push(child.productName);
           });
           item.custProductRecordList = arr.toString().replace(/\,/g, " / ");
+          item.flag =
+            new Date().getTime() - new Date(item.createTime).getTime() >
+            86400000;
         });
+        //
         this.tableData = res.rows;
+        console.log(this.tableData);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // 发起分析
+    async analysisCustom() {
+      // this.loading = true;
+      // 添加加载样式
+      try {
+        const res = await analysisCustom(this.multipleSelection.toString());
+        if (res.code !== 200) return Message.error(res.msg);
+        this.analysisCustomByIds();
+        this.checkAble = 3;
+        this.loading.close();
+        Message.success(res.msg);
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // 获取分析历史
+    async analysisCustomByIds() {
+      try {
+        const res = await analysisCustomByIds(
+          this.multipleSelection.toString()
+        );
+        if (res.code !== 200) return Message.error(res.msg);
+        res.data.map((item) => {
+          let arr = [];
+          const { custProductRecordList } = item;
+          if (!custProductRecordList) return "";
+          custProductRecordList.map((child) => {
+            arr.push(child.productName);
+          });
+          item.custProductRecordList = arr.toString().replace(/\,/g, " / ");
+          item.flag =
+            new Date().getTime() - new Date(item.createTime).getTime() >
+            86400000;
+        });
+        this.tableData = res.data;
+
+        console.log(res);
       } catch (error) {
         console.log(error);
       }
@@ -156,8 +235,30 @@ export default {
         console.log(error);
       }
     },
-    // 搜索
-    search() {
+    //多选
+    handleSelectionChange(val) {
+      this.multipleSelection = val.map((item) => {
+        return item.custNo;
+      });
+    },
+    toAnalysisResoult() {
+      if (!this.multipleSelection.length) {
+        Message.error("请先选择要分析的客户");
+        return false;
+      }
+      this.loading = Loading.service({ fullscreen: true });
+      // 发起分析
+      this.analysisCustom();
+      // this.analysisCustomByIds();
+      // this.$router.push({
+      //   path: "/analysisResoult",
+      //   name: "analysisResoult",
+      //   params: { nos: this.multipleSelection },
+      // });
+    },
+    // 返回
+    reback() {
+      this.checkAble = 1;
       this.getList();
     },
     // 切换客户类型

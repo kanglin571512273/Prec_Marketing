@@ -1,12 +1,18 @@
 <template>
   <div class="marketActive">
-    <div class="activeItem" v-for="item in 8" :key="item" @click="goOther(item)">
-      <div class="activeName">办理信用卡业务</div>
-      <div class="time">2021.1.30-2021.5.09</div>
+    <div class="activeItem" v-for="item in tableList" :key="item.id" @click="goOther(item.id)">
+      <div :class="{activeName:true,grey:item.status == '1'}">{{item.actName}}</div>
+      <div class="time">{{item.beginTime + ' ' + item.endTime}}</div>
       <div class="progressBar">
-        <el-progress :text-inside="true" :stroke-width="18" :percentage="70"></el-progress>
+        <el-progress
+          :text-inside="true"
+          :stroke-width="18"
+          :percentage="item.actRate"
+          :format="format"
+        ></el-progress>
+        <span v-if="item.status == '1'">未开始</span>
       </div>
-      <div class="mark" v-if="false">
+      <div class="mark" v-if="item.status == '3'" @click="over">
         <span>已结束</span>
       </div>
     </div>
@@ -14,11 +20,27 @@
 </template>
 
 <script>
+import { Message } from "@/utils/importFile";
+import { getActiveList } from "@/api/customApi";
 export default {
   data() {
-    return {};
+    return {
+      tableList: [],
+    };
+  },
+  mounted() {
+    this.getList();
   },
   methods: {
+    async getList() {
+      try {
+        const res = await getActiveList();
+        if (res.code !== 200) return Message.error(res.msg);
+        this.tableList = res.rows;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     goOther(id) {
       this.$router.push({
         path: "/activeList",
@@ -27,7 +49,19 @@ export default {
           id,
         },
       });
-      console.log(id);
+    },
+    // 阻止默认行为
+    over(e) {
+      Message.error("活动已结束");
+      e.stopPropagation();
+    },
+    // 进度条
+    format(val) {
+      if (val > 0) {
+        return val;
+      } else {
+        return "";
+      }
     },
   },
 };
@@ -74,7 +108,17 @@ export default {
       width: calc(100% - 20px);
       position: absolute;
       bottom: 10px;
+      span {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 15px;
+        font-weight: 700;
+        color: #999;
+      }
     }
+
     .activeName {
       margin-top: 85px;
       font-size: 25px;
@@ -97,6 +141,9 @@ export default {
       .activeName {
         color: #18b979;
       }
+    }
+    .grey {
+      color: #999 !important;
     }
   }
 }
