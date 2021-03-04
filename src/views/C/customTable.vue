@@ -45,11 +45,10 @@ export default {
   props: {
     data: { type: Array, default: () => {} },
     checkAble: { type: Number, default: 1 },
+    pages: { type: Object, default: () => {} },
   },
   data() {
-    return {
-      loading: false,
-    };
+    return {};
   },
   methods: {
     // 编辑
@@ -81,6 +80,22 @@ export default {
       } else {
         return "";
       }
+    },
+    // 下拉获取下一页数据
+    loadMore(refName, callback) {
+      let box = refName ? this.$refs[refName].bodyWrapper : document.body; //获取监听元素
+      box.addEventListener("scroll", () => {
+        // 监听滑动
+        const scrollTop = box.scrollTop; // 滑动距离
+        const scrollHeight = box.scrollHeight; // 滑动高度
+        const clientHeight = box.offsetHeight; // 元素视口高度
+        if (
+          scrollTop + clientHeight >= scrollHeight - 20 &&
+          this.pages.pageNum < Math.ceil(this.pages.total / this.pages.pageSize)
+        ) {
+          callback && callback();
+        }
+      });
     },
   },
 };

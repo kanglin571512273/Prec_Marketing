@@ -10,6 +10,9 @@
     <div class="sureBtn">确认</div>
     <div class="cancelBtn">取消</div>
     <el-button type="warning" icon="el-icon-edit" round size="mini">编辑</el-button>
+    <ul class="infinite-list" v-infinite-scroll="load" style="overflow:auto">
+      <li v-for="(item,index ) in count" :key="index" class="infinite-list-item">{{ item }}</li>
+    </ul>
   </div>
 </template>
 
@@ -17,55 +20,21 @@
 export default {
   data() {
     return {
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-          tag: "家",
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-          tag: "公司",
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-          tag: "家",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-          tag: "公司",
-        },
-      ],
+      count: [1, 2, 3, 4, 5, 6, 7],
     };
   },
+  mounted() {},
   methods: {
-    resetDateFilter() {
-      this.$refs.filterTable.clearFilter("date");
-    },
-    clearFilter() {
-      this.$refs.filterTable.clearFilter();
-    },
-    formatter(row, column) {
-      // console.log(row);
-      return row.address;
-    },
-    filterTag(value, row) {
-      return row.tag === value;
-    },
-    filterHandler(value, row, column) {
-      const property = column["property"];
-      return row[property] === value;
+    load() {
+      this.count.push(...[8, 9, 10, 11, 12]);
     },
   },
 };
 </script>
 
 <style scoped>
+.infinite-list {
+  height: 100px;
+  overflow: auto;
+}
 </style>

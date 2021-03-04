@@ -22,6 +22,10 @@ Vue.prototype.selectDictLabel = selectDictLabel;
 // 移动端适配
 import "amfe-flexible/index.js";
 
+/* // 无限加载
+import infiniteScroll from "vue-infinite-scroll";
+Vue.use(infiniteScroll); */
+
 Vue.config.productionTip = false;
 /* eslint-disable no-new */
 new Vue({
