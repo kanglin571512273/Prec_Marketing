@@ -12,16 +12,8 @@ module.exports = {
     proxyTable: {
       // 配置跨域
       "/api": {
-<<<<<<< HEAD
-        target: "http://192.168.2.180:8090/",
-=======
         // target: "http://192.168.2.180:8090/",
-<<<<<<< HEAD
         target: "http://192.168.1.244:8090",
-=======
-        target: "http://192.168.2.180:8090",
->>>>>>> 8930cbc62f84e5fcbdfc00aebd0e5134f5d31db8
->>>>>>> c0dfd3ab52f71cf9cb9fac86debac8cc5401f38c
         // ws: true,
         changOrigin: true,
         pathRewrite: {
@@ -32,7 +24,7 @@ module.exports = {
 
     // Various Dev Server settings
     // host: "localhost", // can be overwritten by process.env.HOST
-    host: "192.168.2.93", // can be overwritten by process.env.HOST
+    host: "192.168.2.106", // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
