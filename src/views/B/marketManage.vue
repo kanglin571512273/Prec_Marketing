@@ -55,9 +55,11 @@
 
           <div class="right" v-show="!isCusAnalysis">
             <el-input
-              placeholder="请输入内容"
+              placeholder="请输入客户姓名"
               size="mini"
               v-model="username"
+              @change="getList()"
+              @clear="getList()"
               clearable
             >
             </el-input>
@@ -224,7 +226,7 @@ export default {
       username: "",
       dialogFormVisible: false,
       dialogFormVisible1: false,
-      name: { id: 1245 },
+      name: {},
       customers: {},
       barr: ["信用卡", "贷款", "理财"],
       btnArr: ["所有客户", "分配客户", "私有客户"],
@@ -243,7 +245,6 @@ export default {
     async getList() {
       let type = this.customTypeId === 0 ? {} : { type: this.customTypeId };
       let param = this.username ? { param: this.username } : {};
-      console.log(Object.assign(type, param));
       try {
         const res = await getCustomList(Object.assign(type, param));
         if (res.code !== 200) return Message.error(res.msg);
@@ -288,7 +289,6 @@ export default {
       try {
         const res = await getDailyOverview({ productType: productType });
         if (res.code == 200) {
-          console.log(res);
           this.overview = res.data;
           this.overviewCharts(res.data);
         }
@@ -372,7 +372,6 @@ export default {
       var newArray = distribution.map(function(i) {
         return i.name;
       });
-      console.log(newArray);
       myChart.setOption({
         tooltip: {
           trigger: "item"
@@ -450,7 +449,8 @@ export default {
     // 点击客户姓名
     customDetail(row) {
       this.dialogFormVisible = true;
-      console.log(row);
+      this.name = row;
+      console.log(this.name, 123);
     },
     resetDateFilter() {
       this.$refs.filterTable.clearFilter("date");

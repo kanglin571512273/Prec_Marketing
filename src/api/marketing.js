@@ -56,3 +56,25 @@ export const getCustomDetail = params => {
     method: "get"
   });
 };
+// // 获取客户推荐产品列表
+export const getAnalysisDetail = params => {
+  return axios.request({
+    url: `/v1/app/customer/getAnalysisDetail/${params}`,
+    method: "get"
+  });
+};
+// // 获取本行业务办理
+export const getOurBankBuss = params => {
+  return axios.request({
+    url: `/v1/app/customer/getOurBankBuss/${params}`,
+    method: "get"
+  });
+};
+// // 获取本行业务办理
+export const getCustomStatusHistory = params => {
+  return axios.request({
+    url: `/v1/app/marketing/custom/getCustomStatusHistory/`,
+    method: "get",
+    params
+  });
+};
