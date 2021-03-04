@@ -1,5 +1,6 @@
 <template>
   <div class="customManage">
+    <loading :loading="loading"></loading>
     <div class="btnContainer" v-show="checkAble == 1">
       <div class="left">
         <div class="plainBtn plainBtn_primary myBtn_primary" @click="dialogFormVisible = true">新增客户</div>
@@ -46,8 +47,10 @@
     </div>
     <!--  table -->
     <customTable
+      ref="fatherTable"
       :data="tableData"
       :checkAble="checkAble"
+      :pages="pages"
       @edit="edit"
       @customDetail="customDetail"
       @handleSelectionChange="handleSelectionChange"
@@ -67,6 +70,7 @@
 
 <script>
 import customTable from "./customTable";
+import loading from "@/components/loading";
 import dialogForm from "./dialogForm";
 import { Message } from "@/utils/importFile";
 import { Loading } from "element-ui";
@@ -80,10 +84,15 @@ import {
   analysisCustom,
 } from "@/api/customApi";
 export default {
-  components: { customTable, dialogForm },
+  components: { customTable, dialogForm, loading },
   data() {
     return {
-      loading: null,
+      pages: {
+        pageSize: 20,
+        pageNum: 1,
+        total: 0,
+      },
+      loading: false,
       checkAble: 1,
       multipleSelection: [], //多选结果
       addOrEdit: "add",
@@ -94,16 +103,7 @@ export default {
         { id: 0, name: "分配客户" },
         { id: 1, name: "私有客户" },
       ],
-      options: {
-        sys_user_sex: [],
-        id_card_type: [],
-        edu_level: [],
-        housing_loan: [],
-        individual_loan: [],
-        credit_situation: [],
-        time_deposit: [],
-        marriage: [],
-      },
+      options: {},
       tableData: [],
       dialogFormVisible: false,
       ruleForm: {},
@@ -112,14 +112,27 @@ export default {
   mounted() {
     this.getList();
     this.getDictList();
+    this.$refs.fatherTable.loadMore("filterTable", () => {
+      this.pages.pageNum++;
+      this.getList();
+    });
   },
   methods: {
     async getList() {
       let type = this.customTypeId > 5 ? {} : { type: this.customTypeId };
       let param = this.keyWord ? { param: this.keyWord } : {};
+      this.loading = true;
       try {
-        const res = await getCustomList(Object.assign(type, param));
-        if (res.code !== 200) return Message.error(res.msg);
+        const res = await getCustomList(
+          Object.assign(type, param, {
+            pageNum: this.pages.pageNum,
+            pageSize: this.pages.pageSize,
+          })
+        );
+        if (res.code !== 200) {
+          this.loading = false;
+          return Message.error(res.msg);
+        }
         // 推荐列表 处理
         res.rows.map((item) => {
           let arr = [];
@@ -133,35 +146,35 @@ export default {
             new Date().getTime() - new Date(item.createTime).getTime() >
             86400000;
         });
-        //
-        this.tableData = res.rows;
-        console.log(this.tableData);
+        this.loading = false;
+        this.tableData.push(...res.rows);
+        this.pages.total = res.total;
       } catch (error) {
         console.log(error);
       }
     },
+
     // 发起分析
     async analysisCustom() {
-      // this.loading = true;
+      this.loading = true;
       // 添加加载样式
       try {
-        const res = await analysisCustom(this.multipleSelection.toString());
+        let multipleSelection = this.multipleSelection.toString();
+        const res = await analysisCustom(multipleSelection);
         if (res.code !== 200) return Message.error(res.msg);
-        this.analysisCustomByIds();
+        this.analysisCustomByIds(multipleSelection);
         this.checkAble = 3;
-        this.loading.close();
-        Message.success(res.msg);
-        console.log(res);
+        // this.loading = false;
+        // Message.success(res.msg);
       } catch (error) {
         console.log(error);
       }
     },
     // 获取分析历史
-    async analysisCustomByIds() {
+    async analysisCustomByIds(multipleSelection) {
+      this.loading = true;
       try {
-        const res = await analysisCustomByIds(
-          this.multipleSelection.toString()
-        );
+        const res = await analysisCustomByIds(multipleSelection);
         if (res.code !== 200) return Message.error(res.msg);
         res.data.map((item) => {
           let arr = [];
@@ -175,9 +188,8 @@ export default {
             new Date().getTime() - new Date(item.createTime).getTime() >
             86400000;
         });
+        this.loading = false;
         this.tableData = res.data;
-
-        console.log(res);
       } catch (error) {
         console.log(error);
       }
@@ -195,14 +207,21 @@ export default {
       信用情况： credit_situation
       定期存款： time_deposit
       */
-      let optionKeys = Object.keys(this.options);
-      for (let i = 0; i < optionKeys.length; i++) {
-        let res = await getDictList(optionKeys[i]);
-        if (res.code !== 200) return Message.error(res.msg);
-        this.options[optionKeys[i]] = res.data.map((item) => {
-          return { dictLabel: item.dictLabel, dictValue: item.dictValue };
-        });
-      }
+
+      let arr = [
+        "sys_user_sex",
+        "id_card_type",
+        "edu_level",
+        "housing_loan",
+        "individual_loan",
+        "credit_situation",
+        "time_deposit",
+        "marriage",
+      ];
+      let option = arr.toString();
+      let res = await getDictList(option);
+      if (res.code !== 200) return Message.error(res.msg);
+      this.options = res.data;
     },
     // 新增  /  编辑 客户
     async addCustom() {
@@ -246,7 +265,11 @@ export default {
         Message.error("请先选择要分析的客户");
         return false;
       }
-      this.loading = Loading.service({ fullscreen: true });
+      this.pages = {
+        pageSize: 20,
+        pageNum: 1,
+      };
+      this.tableData = [];
       // 发起分析
       this.analysisCustom();
       // this.analysisCustomByIds();
@@ -263,7 +286,13 @@ export default {
     },
     // 切换客户类型
     customType(ind) {
+      this.tableData = [];
       this.customTypeId = ind;
+      this.pages = {
+        pageNum: 1,
+        pageSize: 20,
+        total: 0,
+      };
       this.getList();
     },
     // 点击客户姓名

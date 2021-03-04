@@ -1,5 +1,6 @@
 <template>
-  <div class="marketActive">
+  <div class="marketActive" ref="marketActive">
+    <loading :loading="loading"></loading>
     <div class="activeItem" v-for="item in tableList" :key="item.id" @click="goOther(item.id)">
       <div :class="{activeName:true,grey:item.status == '1'}">{{item.actName}}</div>
       <div class="time">{{item.beginTime + ' ' + item.endTime}}</div>
@@ -21,25 +22,62 @@
 
 <script>
 import { Message } from "@/utils/importFile";
+import loading from "@/components/loading";
 import { getActiveList } from "@/api/customApi";
 export default {
+  components: { loading },
   data() {
     return {
       tableList: [],
+      pages: {
+        pageNum: 1,
+        pageSize: 24,
+        total: 0,
+      },
+      loading: false,
     };
   },
   mounted() {
     this.getList();
+    this.loadMore("marketActive", () => {
+      this.pages.pageNum++;
+      this.getList();
+    });
   },
   methods: {
     async getList() {
+      this.loading = true;
       try {
-        const res = await getActiveList();
-        if (res.code !== 200) return Message.error(res.msg);
-        this.tableList = res.rows;
+        const res = await getActiveList({
+          pageNum: this.pages.pageNum,
+          pageSize: this.pages.pageSize,
+        });
+        if (res.code !== 200) {
+          this.loading = false;
+          return Message.error(res.msg);
+        }
+        this.loading = false;
+        this.tableList.push(...res.rows);
+        this.pages.total = res.total;
       } catch (error) {
         console.log(error);
       }
+    },
+    // 下拉获取下一页数据
+    loadMore(refName, callback) {
+      let box = refName ? this.$refs[refName] : document.body; //获取监听元素
+      box.addEventListener("scroll", () => {
+        // 监听滑动
+        const scrollTop = box.scrollTop; // 滑动距离
+        const scrollHeight = box.scrollHeight; // 滑动高度
+        const clientHeight = box.offsetHeight; // 元素视口高度
+        if (
+          scrollTop + clientHeight >= scrollHeight - 20 &&
+          this.pages.pageNum < Math.ceil(this.pages.total / this.pages.pageSize)
+        ) {
+          callback && callback();
+        }
+      });
     },
     goOther(id) {
       this.$router.push({

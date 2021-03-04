@@ -14,6 +14,7 @@ import {
   FormItem,
   Header,
   Input,
+  Loading,
   MessageBox,
   Message,
   Main,
@@ -41,6 +42,7 @@ import {
   Drawer
 } from "element-ui";
 Vue.use(Input);
+Vue.use(Loading);
 Vue.use(Avatar);
 Vue.use(Dropdown);
 Vue.use(DropdownItem);

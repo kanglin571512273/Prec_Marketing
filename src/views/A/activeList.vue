@@ -1,5 +1,6 @@
 <template>
   <div class="activeList">
+    <loading :loading="loading"></loading>
     <div class="btnContainer">
       <div class="left">
         <div class="sureBtn" @click="$router.back()">返回</div>
@@ -96,11 +97,18 @@
 </template>
 
 <script>
-import { getActiveCusList, followUp, continueFollowUp } from "@/api/customApi";
-import { Message, MessageBox } from "@/utils/importFile";
+import { getActiveCusList, continueFollowUp } from "@/api/customApi";
+import loading from "@/components/loading";
+import { Message } from "@/utils/importFile";
 export default {
+  components: { loading },
   data() {
     return {
+      pages: {
+        pageNum: 1,
+        pageSize: 20,
+        total: 0,
+      },
       dialogFormVisible: false,
       customTypeId: 0,
       customTypeBtn: [
@@ -113,6 +121,8 @@ export default {
       status: 0,
       keyWord: "",
       tableData: [],
+      ribaoScroll: false,
+      loading: false,
     };
   },
   mounted() {
@@ -121,29 +131,62 @@ export default {
       this.$router.replace("/marketActive");
     }
     this.getList(id);
+    this.loadMore("filterTable", () => {
+      this.pages.pageNum++;
+      this.getList();
+    });
   },
   methods: {
     async getList(id) {
+      this.loading = true;
       try {
         const res = await getActiveCusList({
           actId: id || this.$route.params.id,
           status: this.customTypeId,
-          custName: this.keyWord,
+          pageNum: this.pages.pageNum,
+          pageSize: this.pages.pageSize,
         });
-        if (res.code !== 200) return Message.error(res.msg);
-        res.data.map((item) => {
+        if (res.code !== 200) {
+          this.loading = false;
+          return Message.error(res.msg);
+        }
+        res.rows.map((item) => {
           item.flag =
             new Date().getTime() - new Date(item.createTime).getTime() >
             86400000;
         });
-        this.tableData = res.data;
+        this.loading = false;
+        this.tableData.push(...res.rows);
+        this.pages.total = res.total;
       } catch (error) {
         console.log(error);
       }
     },
+    // 下拉获取下一页数据
+    loadMore(refName, callback) {
+      let box = refName ? this.$refs[refName].bodyWrapper : document.body; //获取监听元素
+      box.addEventListener("scroll", () => {
+        // 监听滑动
+        const scrollTop = box.scrollTop; // 滑动距离
+        const scrollHeight = box.scrollHeight; // 滑动高度
+        const clientHeight = box.offsetHeight; // 元素视口高度
+        if (
+          scrollTop + clientHeight >= scrollHeight - 20 &&
+          this.pages.pageNum < Math.ceil(this.pages.total / this.pages.pageSize)
+        ) {
+          callback && callback();
+        }
+      });
+    },
+    // 点击表格上面的按钮
     customType(ind) {
+      this.tableData = [];
       this.customTypeId = ind;
-      // console.log(ind);
+      this.pages = {
+        pageNum: 1,
+        pageSize: 20,
+        total: 0,
+      };
       this.getList();
     },
     // 跟进

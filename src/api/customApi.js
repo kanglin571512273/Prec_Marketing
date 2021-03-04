@@ -71,10 +71,11 @@ export const isUpdata = () => {
     })
 }
 //查询营销活动列表
-export const getActiveList = () => {
+export const getActiveList = (params) => {
     return axios.request({
         url: `/v1/app/marketing/act/getActive`,
         method: 'get',
+        params
     })
 }
 // 查看活动客户信息

@@ -1,5 +1,6 @@
 <template>
   <div class="analysisHistory">
+    <loading :loading="loading"></loading>
     <div class="btnContainer">
       <div class="left"></div>
       <div class="right">
@@ -88,6 +89,7 @@
 
 <script>
 import customTable from "../C/customTable";
+import loading from "@/components/loading";
 import { Message, MessageBox } from "@/utils/importFile";
 import {
   getCustomList,
@@ -96,9 +98,14 @@ import {
   getNewHisList,
 } from "@/api/customApi";
 export default {
-  components: { customTable },
+  components: { customTable, loading },
   data() {
     return {
+      pages: {
+        pageSize: 20,
+        pageNum: 1,
+        total: 0,
+      },
       keyWord: "",
       customTypeId: 999,
       customTypeBtn: [
@@ -110,19 +117,33 @@ export default {
       tableData: [],
       dialogFormVisible: false,
       analysisList: [],
+      loading: false,
     };
   },
   mounted() {
     // this.isUpdata();
     this.getList();
+    this.loadMore("filterTable", () => {
+      this.pages.pageNum++;
+      this.getList();
+    });
   },
   methods: {
     async getList() {
       let type = this.customTypeId > 5 ? {} : { type: this.customTypeId };
       let param = this.keyWord ? { param: this.keyWord } : {};
+      this.loading = true;
       try {
-        const res = await getCustomList(Object.assign(type, param));
-        if (res.code !== 200) return Message.error(res.msg);
+        const res = await getCustomList(
+          Object.assign(type, param, {
+            pageNum: this.pages.pageNum,
+            pageSize: this.pages.pageSize,
+          })
+        );
+        if (res.code !== 200) {
+          this.loading = false;
+          return Message.error(res.msg);
+        }
         res.rows.map((item) => {
           let arr = [];
           const { custProductRecordList } = item;
@@ -135,10 +156,28 @@ export default {
             new Date().getTime() - new Date(item.createTime).getTime() >
             86400000;
         });
-        this.tableData = res.rows;
+        this.loading = false;
+        this.tableData.push(...res.rows);
+        this.pages.total = res.total;
       } catch (error) {
         console.log(error);
       }
+    },
+    // 下拉获取下一页数据
+    loadMore(refName, callback) {
+      let box = refName ? this.$refs[refName].bodyWrapper : document.body; //获取监听元素
+      box.addEventListener("scroll", () => {
+        // 监听滑动
+        const scrollTop = box.scrollTop; // 滑动距离
+        const scrollHeight = box.scrollHeight; // 滑动高度
+        const clientHeight = box.offsetHeight; // 元素视口高度
+        if (
+          scrollTop + clientHeight >= scrollHeight - 20 &&
+          this.pages.pageNum < Math.ceil(this.pages.total / this.pages.pageSize)
+        ) {
+          callback && callback();
+        }
+      });
     },
     // 判断是否更新
     // async isUpdata() {
@@ -179,7 +218,13 @@ export default {
     // },
     // 切换客户类型
     customType(ind) {
+      this.tableData = [];
       this.customTypeId = ind;
+      this.pages = {
+        pageNum: 1,
+        pageSize: 20,
+        total: 0,
+      };
       this.getList();
     },
     // 点击客户姓名
