@@ -77,6 +77,7 @@
         <div class="labelManage">
           <el-table
             ref="filterTable"
+            v-loading="loading"
             border
             :data="tableData"
             style="width: 100%"
@@ -231,7 +232,8 @@ export default {
       barr: ["信用卡", "贷款", "理财"],
       btnArr: ["所有客户", "分配客户", "私有客户"],
       tableData: [],
-      overview: {}
+      overview: {},
+      loading: true
     };
   },
   mounted() {
@@ -248,6 +250,7 @@ export default {
       try {
         const res = await getCustomList(Object.assign(type, param));
         if (res.code !== 200) return Message.error(res.msg);
+        this.loading = false;
         res.rows.map(item => {
           let arr = [];
           const { custProductRecordList } = item;
@@ -381,11 +384,14 @@ export default {
           // orient: "vertical",
           // left: "2%", //图例距离左的距离
           // x: "center", //图例上下居中
-          data: ["搜索引擎", "直接访问", "邮件营销", "联盟广告", "视频广告"],
+          data: newArray,
           itemWidth: 10, // 设置大小
           itemHeight: 10,
           itemGap: 10, // 设置间距,
-          right: "right"
+          right: "right",
+          formatter: function(name) {
+            return name.length > 5 ? name.substr(0, 5) + "..." : name;
+          }
         },
         series: [
           {

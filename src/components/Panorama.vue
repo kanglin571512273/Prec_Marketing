@@ -31,11 +31,11 @@
                       :class="{
                         'labelson-active': labelDatas.indexOf(index) > -1
                       }"
-                      @click="active(index)"
+                      @click="active(item, index)"
                       v-for="(item, index) in labelData"
                       :key="index"
                     >
-                      {{ item }}
+                      {{ item.tagName }}
                     </li>
                   </ul>
                   <div class="button-box">
@@ -49,7 +49,7 @@
           <div class="tags-box">
             <div
               class="tag"
-              v-for="(item, index) in datas.custTagRecordList.slice(0, 5)"
+              v-for="(item, index) in detail.custTagRecordList"
               :key="index"
             >
               <div class="big">
@@ -107,6 +107,7 @@
             :row-style="{ height: '10px' }"
             :cell-style="{ padding: '10px 0' }"
             :style="{ width: '100%' }"
+            height="290"
           >
             <el-table-column type="index" label="序号"></el-table-column>
             <el-table-column
@@ -193,7 +194,7 @@
             <div class="label-box">
               <span
                 class="label-info"
-                v-for="(item, index) in datas.custTagRecordList"
+                v-for="(item, index) in detail.custTagRecordList"
                 :key="index"
                 >{{ item.tagName }}</span
               >
@@ -249,7 +250,9 @@ import {
   getDictList,
   getAnalysisDetail,
   getOurBankBuss,
-  getCustomStatusHistory
+  getCustomStatusHistory,
+  tagList,
+  setCustTags
 } from "@/api/marketing";
 export default {
   props: {
@@ -262,6 +265,7 @@ export default {
       visible: false,
       isShow: 0,
       detail: {},
+      addlabel: [],
       labelData: [],
       labelDatas: [],
       dictionary: [],
@@ -281,7 +285,6 @@ export default {
     };
   },
   mounted() {
-    this.labelData = ["123", "123wwww"];
     this.getDictList();
   },
   methods: {
@@ -354,7 +357,6 @@ export default {
         const res = await getCustomDetail(this.datas.id);
         if (res.code == 200) {
           this.detail = res.data;
-          console.log(this.detail);
           this.sex = this.selectDictLabel(
             this.status.sys_user_sex,
             this.detail.sex
@@ -391,75 +393,98 @@ export default {
     afterVisibleChange(val) {
       console.log("visible", val);
     },
+    // 增加标签
     showDrawer() {
       this.visible = true;
+      this.tagList();
+    },
+    // 查询标签
+    async tagList() {
+      try {
+        const res = await tagList();
+        if (res.code == 200) {
+          console.log(res);
+          this.labelData = res.data;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // 添加标签
+    async setCustTags() {
+      try {
+        const res = await setCustTags({
+          custNo: this.datas.custNo,
+          tags: this.addlabel
+        });
+        if (res.code == 200) {
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
     onClose() {
       this.visible = false;
-      this.key = !this.key;
-      console.log(this.key);
-      if (this.key == true) {
-        this.fitstData = [];
-        this.fitstData.push(
-          {
-            key: "1",
-            productType: "理财",
-            productName: "'安心得利'理财",
-            updateTime: "2020/11/30 13:20",
-            resoult: "有意向"
-          },
-          {
-            key: "2",
-            productType: "信用卡",
-            productName: "网易云音乐联名卡",
-            updateTime: "2020/10/15 12:20",
-            resoult: "有意向"
-          }
-        );
-      } else {
-        this.fitstData = [];
-        this.fitstData.push(
-          {
-            key: "3",
-            productType: "理财",
-            productName: "'安心得利'理财",
-            updateTime: "2020/11/30 13:20",
-            resoult: "有意向"
-          },
-          {
-            key: "4",
-            productType: "信用卡",
-            productName: "音乐联名卡",
-            updateTime: "2020/10/15 13:20",
-            resoult: "有意向"
-          },
-          {
-            key: "5",
-            productType: "贷款",
-            productName: "个人汽车贷款",
-            updateTime: "2020/11/12  8:20:00",
-            resoult: "无意向"
-          }
-        );
-      }
-
-      console.log(this.fitstData, 2222);
+      this.setCustTags();
+      // this.key = !this.key;
+      // console.log(this.key);
+      // if (this.key == true) {
+      //   this.fitstData = [];
+      //   this.fitstData.push(
+      //     {
+      //       key: "1",
+      //       productType: "理财",
+      //       productName: "'安心得利'理财",
+      //       updateTime: "2020/11/30 13:20",
+      //       resoult: "有意向"
+      //     },
+      //     {
+      //       key: "2",
+      //       productType: "信用卡",
+      //       productName: "网易云音乐联名卡",
+      //       updateTime: "2020/10/15 12:20",
+      //       resoult: "有意向"
+      //     }
+      //   );
+      // } else {
+      //   this.fitstData = [];
+      //   this.fitstData.push(
+      //     {
+      //       key: "3",
+      //       productType: "理财",
+      //       productName: "'安心得利'理财",
+      //       updateTime: "2020/11/30 13:20",
+      //       resoult: "有意向"
+      //     },
+      //     {
+      //       key: "4",
+      //       productType: "信用卡",
+      //       productName: "音乐联名卡",
+      //       updateTime: "2020/10/15 13:20",
+      //       resoult: "有意向"
+      //     },
+      //     {
+      //       key: "5",
+      //       productType: "贷款",
+      //       productName: "个人汽车贷款",
+      //       updateTime: "2020/11/12  8:20:00",
+      //       resoult: "无意向"
+      //     }
+      //   );
+      // }
     },
     onClose1() {
       this.visible = false;
     },
-    active(index) {
+    active(item, index) {
       let arrIndex = this.labelDatas.indexOf(index);
-      console.log(arrIndex);
-
       if (arrIndex > -1) {
         this.labelDatas.splice(arrIndex, 1);
       } else {
         this.labelDatas.push(index);
+        this.addlabel.push(item.id);
       }
-      console.log(this.labelDatas, 2222);
       // this.isShow = index;
-      // console.log(index,2222)
     },
     handleClose(done) {
       done();
@@ -598,9 +623,10 @@ export default {
 .inner {
   height: 100%;
   width: 510px;
+  position: relative;
 }
 .outer-box {
-  height: 250px;
+  height: 650px;
   width: 510px;
   position: relative;
 }
@@ -608,7 +634,6 @@ export default {
   position: relative;
   z-index: 22;
   width: 100%;
-  height: 450px;
   display: flex;
   flex-wrap: wrap;
   .labelson {
@@ -628,7 +653,9 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 250px;
+  position: absolute;
+  bottom: 0;
+  left: 30%;
   .button-item {
     width: 66px;
     height: 25px;

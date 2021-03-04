@@ -320,9 +320,6 @@ export default {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
-    .left {
-      // padding-top: 13px;
-    }
     .right {
       padding-top: 18px;
       display: flex;

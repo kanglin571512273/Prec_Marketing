@@ -78,3 +78,19 @@ export const getCustomStatusHistory = params => {
     params
   });
 };
+// // 获取所有标签
+export const tagList = params => {
+  return axios.request({
+    url: `/v1/app/customer/tagList`,
+    method: "get",
+    params
+  });
+};
+// 添加标签
+export const setCustTags = (data) => {
+  return axios.request({
+      url: `/v1/app/customer/setCustTags`,
+      method: 'put',
+      data
+  })
+}
