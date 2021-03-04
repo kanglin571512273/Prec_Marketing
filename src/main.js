@@ -13,6 +13,12 @@ import "./assets/css/reset.css";
 // 引入UI组件样式
 import "element-ui/lib/theme-chalk/index.css";
 
+// 引用公共方法
+import { selectDictLabel } from "@/utils/public";
+
+// 全局方法挂载
+Vue.prototype.selectDictLabel = selectDictLabel;
+
 // 移动端适配
 import "amfe-flexible/index.js";
 

@@ -22,21 +22,21 @@
                 <span class="round"></span>
                 <span>总客户数</span>
               </div>
-              <span class="card-bot">{{ customers.total }}</span>
+              <span class="card-bot">{{ customers.allCount }}</span>
             </li>
             <li class="card-li">
               <div class="card-font">
                 <span class="round color-1"></span>
                 <span>新增客户</span>
               </div>
-              <span class="card-bot">{{ customers.new }}</span>
+              <span class="card-bot">{{ customers.addCount }}</span>
             </li>
             <li class="card-li">
               <div class="card-font">
                 <span class="round color-2"></span>
                 <span>待跟进</span>
               </div>
-              <span class="color-bot">{{ customers.followed }}</span>
+              <span class="color-bot">{{ customers.followupCount }}</span>
             </li>
           </ul>
         </div>
@@ -55,9 +55,11 @@
 
           <div class="right" v-show="!isCusAnalysis">
             <el-input
-              placeholder="请输入内容"
+              placeholder="请输入客户姓名"
               size="mini"
               v-model="username"
+              @change="getList()"
+              @clear="getList()"
               clearable
             >
             </el-input>
@@ -88,39 +90,63 @@
             ></el-table-column>
             <el-table-column
               show-overflow-tooltip
-              prop="name"
+              prop="custNo"
               label="客户号"
             ></el-table-column>
-            <el-table-column show-overflow-tooltip prop="name" label="客户姓名">
+            <el-table-column
+              show-overflow-tooltip
+              prop="custName"
+              label="客户姓名"
+            >
               <template slot-scope="scope">
                 <div class="customName" @click="customDetail(scope.row)">
-                  <span>{{ scope.row.name }}</span>
+                  <span>{{ scope.row.custName }}</span>
                   <img src="@/assets/image/newPeople.png" alt />
                 </div>
               </template>
             </el-table-column>
             <el-table-column
               show-overflow-tooltip
-              prop="name"
+              prop="telNo"
               label="联系电话"
             ></el-table-column>
             <el-table-column
               show-overflow-tooltip
-              prop="name"
+              prop="custProductRecordList"
               label="推荐产品"
             ></el-table-column>
             <el-table-column
               show-overflow-tooltip
-              prop="name"
+              prop="custType"
               label="客户类别"
-            ></el-table-column>
+            >
+              <template slot-scope="scope">
+                <div>
+                  <span>{{
+                    scope.row.custType == "0"
+                      ? "分配客户"
+                      : scope.row.custType == "1"
+                      ? "私有客户"
+                      : scope.row.custType == "2"
+                      ? "共有客户"
+                      : "所有客户"
+                  }}</span>
+                </div>
+              </template>
+            </el-table-column>
             <el-table-column show-overflow-tooltip prop="address" label="操作">
               <template slot-scope="scope">
-                <div
-                  v-show="customTypeId === 1"
-                  class="sureBtn"
-                  @click="followUp(scope.row)"
+                <!-- <div
+                  :class="
+                    row.followUpStatus === '已跟进' ? 'orangeBtn' : 'blueBtn'
+                  "
+                  shape="round"
+                  @click="followUp(row)"
+                  size="large"
                 >
+                  {{ row.followUpStatus === "已跟进" ? "继续跟进" : "跟进" }}
+                </div> -->
+                <div class="sureBtn" @click="followUp(scope.row)">
                   跟进
                 </div>
                 <div
@@ -177,6 +203,13 @@ echarts.use([
 ]);
 import Panorama from "@/components/Panorama.vue";
 import followUpFeedback from "@/components/followUpFeedback.vue";
+import {
+  getDictList,
+  getCustomList,
+  getTodayHappen,
+  getDailyOverview,
+  getProductDistribution
+} from "@/api/marketing";
 export default {
   components: {
     Panorama,
@@ -185,76 +218,96 @@ export default {
   data() {
     return {
       isCusAnalysis: false,
-      customTypeId: 1,
+      loading: true,
+      productType: 1,
+      customTypeId: 0,
       currentBtn: 0,
       active: 0,
       username: "",
       dialogFormVisible: false,
       dialogFormVisible1: false,
-      name: { id: 1 },
-      customers: { total: 300, new: 100, followed: 120 },
-      customers1: { total: 300, new: 100, followed: 120 },
-      customers2: { total: 600, new: 200, followed: 302 },
+      name: {},
+      customers: {},
       barr: ["信用卡", "贷款", "理财"],
       btnArr: ["所有客户", "分配客户", "私有客户"],
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-          tag: "家"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-          tag: "公司"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-          tag: "家"
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-          tag: "公司"
-        },
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-          tag: "家"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-          tag: "公司"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-          tag: "家"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-          tag: "家"
-        }
-      ]
+      tableData: [],
+      overview: {}
     };
   },
   mounted() {
-    this.overviewCharts();
-    this.productsCharts();
+    this.getList();
+    // this.getDictList();
+    this.getTodayHappen(this.productType);
+    this.getDailyOverview(this.productType);
+    this.getProductDistribution(this.productType);
   },
   methods: {
-    overviewCharts() {
+    async getList() {
+      let type = this.customTypeId === 0 ? {} : { type: this.customTypeId };
+      let param = this.username ? { param: this.username } : {};
+      try {
+        const res = await getCustomList(Object.assign(type, param));
+        if (res.code !== 200) return Message.error(res.msg);
+        res.rows.map(item => {
+          let arr = [];
+          const { custProductRecordList } = item;
+          if (!custProductRecordList) return "";
+          custProductRecordList.map(child => {
+            arr.push(child.productName);
+          });
+          item.custProductRecordList = arr.toString().replace(/\,/g, " / ");
+        });
+        this.tableData = res.rows;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // 获取字典类型
+    async getDictList() {
+      let optionKeys = Object.keys(this.options);
+      for (let i = 0; i < optionKeys.length; i++) {
+        let res = await getDictList(optionKeys[i]);
+        if (res.code !== 200) return Message.error(res.msg);
+        this.options[optionKeys[i]] = res.data.map(item => {
+          return { dictLabel: item.dictLabel, dictValue: item.dictValue };
+        });
+      }
+    },
+    // 获取今日情况
+    async getTodayHappen(productType) {
+      try {
+        const res = await getTodayHappen({ productType: productType });
+        if (res.code == 200) {
+          this.customers = res.data;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // 获取每日概况
+    async getDailyOverview(productType) {
+      try {
+        const res = await getDailyOverview({ productType: productType });
+        if (res.code == 200) {
+          this.overview = res.data;
+          this.overviewCharts(res.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // 获取查看意向产品分布
+    async getProductDistribution(productType) {
+      try {
+        const res = await getProductDistribution({ productType: productType });
+        if (res.code == 200) {
+          this.productsCharts(res.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    overviewCharts(overview) {
       var myChart = echarts.init(this.$refs.container);
       myChart.setOption({
         title: {},
@@ -281,7 +334,7 @@ export default {
         xAxis: {
           type: "category",
           boundaryGap: false,
-          data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+          data: overview.name,
           axisLabel: {
             show: true,
             textStyle: {
@@ -300,22 +353,25 @@ export default {
         },
         series: [
           {
-            name: "邮件营销",
+            name: "总客户数",
             type: "line",
-            stack: "总量",
-            data: [120, 132, 101, 134, 90, 230, 210]
+            stack: "人",
+            data: overview.allValue
           },
           {
-            name: "联盟广告",
+            name: "新增客户数",
             type: "line",
-            stack: "总量",
-            data: [220, 182, 191, 234, 290, 330, 310]
+            stack: "人",
+            data: overview.addValue
           }
         ]
       });
     },
-    productsCharts() {
+    productsCharts(distribution) {
       var myChart = echarts.init(this.$refs.productscharts);
+      var newArray = distribution.map(function(i) {
+        return i.name;
+      });
       myChart.setOption({
         tooltip: {
           trigger: "item"
@@ -352,13 +408,7 @@ export default {
             labelLine: {
               show: true
             },
-            data: [
-              { value: 1048, name: "搜索引擎" },
-              { value: 735, name: "直接访问" },
-              { value: 580, name: "邮件营销" },
-              { value: 484, name: "联盟广告" },
-              { value: 300, name: "视频广告" }
-            ]
+            data: distribution
           }
         ]
       });
@@ -367,15 +417,26 @@ export default {
       this.active = index;
       switch (index) {
         case 0:
+          this.getTodayHappen(1);
+          this.getDailyOverview(1);
+          this.getProductDistribution(1);
           break;
         case 1:
+          this.getTodayHappen(2);
+          this.getDailyOverview(1);
+          this.getProductDistribution(1);
           break;
         default:
+          this.getTodayHappen(3);
+          this.getDailyOverview(3);
+          this.getProductDistribution(3);
       }
     },
     // 按钮切换
     filterDataBtn(index) {
       this.currentBtn = index;
+      this.customTypeId = index;
+      this.getList();
       // let data = JSON.parse(localStorage.getItem("customData"));
       // if (index) {
       //   this.resdata = data.filter(item => {
@@ -388,7 +449,8 @@ export default {
     // 点击客户姓名
     customDetail(row) {
       this.dialogFormVisible = true;
-      console.log(row);
+      this.name = row;
+      console.log(this.name, 123);
     },
     resetDateFilter() {
       this.$refs.filterTable.clearFilter("date");

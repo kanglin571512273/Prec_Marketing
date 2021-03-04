@@ -1,6 +1,6 @@
 import axios from "axios";
 import qs from "qs";
-// import { Message } from "@/utils/importFile";
+import { Message } from "@/utils/importFile";
 
 class HttpRequest {
   constructor(baseUrl) {
@@ -31,7 +31,7 @@ class HttpRequest {
       config => {
         //只针对get方式进行序列化
         if (config.method === "get") {
-          config.paramsSerializer = function (params) {
+          config.paramsSerializer = function(params) {
             return qs.stringify(params, { arrayFormat: "repeat" });
           };
         }
@@ -58,13 +58,12 @@ class HttpRequest {
         if (typeof data === "object") {
           // 自己处理
         }
-        /*    if (data.code === 401) {
-             Message.error("用户信息已过期，请重新登录~");
-             localStorage.setItem("effectToken", false);
-             window.location.reload();
-           } else {
-             localStorage.setItem("effectToken", true);
-           } */
+        if (data.code === 401) {
+          Message.error("用户信息已过期，请重新登录~");
+          localStorage.removeItem("token");
+          window.location.reload();
+        } else {
+        }
         return data;
       },
       error => {

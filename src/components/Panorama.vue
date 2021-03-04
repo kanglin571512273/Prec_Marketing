@@ -47,56 +47,16 @@
             </div>
           </el-drawer>
           <div class="tags-box">
-            <div class="tag">
+            <div
+              class="tag"
+              v-for="(item, index) in datas.custTagRecordList.slice(0, 5)"
+              :key="index"
+            >
               <div class="big">
                 <div class="medium">
                   <div class="small">
                     <span>
-                      爱旅游
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="tag">
-              <div class="big">
-                <div class="medium">
-                  <div class="small">
-                    <span>
-                      爱旅游
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="tag">
-              <div class="big">
-                <div class="medium">
-                  <div class="small">
-                    <span>
-                      爱旅游
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="tag">
-              <div class="big">
-                <div class="medium">
-                  <div class="small">
-                    <span>
-                      爱旅游
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="tag">
-              <div class="big">
-                <div class="medium">
-                  <div class="small">
-                    <span>
-                      爱旅游
+                      {{ item.tagName }}
                     </span>
                   </div>
                 </div>
@@ -151,23 +111,25 @@
             <el-table-column type="index" label="序号"></el-table-column>
             <el-table-column
               show-overflow-tooltip
-              prop="name"
+              prop="productType"
               label="产品类型"
+              :formatter="statusFormat"
             ></el-table-column>
             <el-table-column
               show-overflow-tooltip
-              prop="name"
+              prop="productName"
               label="产品名称"
             ></el-table-column>
             <el-table-column
               show-overflow-tooltip
-              prop="name"
+              prop="updateTime"
               label="最近跟进时间"
             ></el-table-column>
             <el-table-column
               show-overflow-tooltip
-              prop="name"
+              prop="status"
               label="跟进结果"
+              :formatter="statusCust"
             ></el-table-column>
           </el-table>
         </div>
@@ -176,15 +138,15 @@
             <table class="gridtablse">
               <tr>
                 <th>客户姓名：</th>
-                <td></td>
+                <td>{{ detail.custName }}</td>
               </tr>
               <tr>
                 <th>教育程度：</th>
-                <td>本科</td>
+                <td>{{ edu_level }}</td>
               </tr>
               <tr>
                 <th>住房贷款：</th>
-                <td>5151</td>
+                <td>{{ housing_loan }}</td>
               </tr>
               <tr>
                 <th>账户余额：</th>
@@ -195,44 +157,46 @@
             <table class="gridtablse">
               <tr>
                 <th>性别：</th>
-                <td>男</td>
+                <td>{{ sex }}</td>
               </tr>
               <tr>
                 <th>婚姻状况:</th>
-                <td>1500万</td>
+                <td>{{ marriage }}</td>
               </tr>
               <tr>
                 <th>个人贷款：</th>
-                <td>599</td>
+                <td>{{ individual_loan }}</td>
               </tr>
               <tr>
                 <th>信用情况：</th>
-                <td>599</td>
+                <td>{{ credit_situation }}</td>
               </tr>
             </table>
 
             <table class="gridtablse">
               <tr>
                 <th>身份证号：</th>
-                <td></td>
+                <td>{{ detail.idCard }}</td>
               </tr>
               <tr>
                 <th>工作单位：</th>
-                <td></td>
+                <td>{{ detail.workUnit }}</td>
               </tr>
               <tr>
                 <th>定期存款：</th>
-                <td>否</td>
+                <td>{{ time_deposit }}</td>
               </tr>
             </table>
           </div>
           <div class="pone-label">
-            <span>个人标签：</span>
+            <span class="pone-span">个人标签：</span>
             <div class="label-box">
-              <span class="label-info">爱旅游</span>
-              <span class="label-info">浙江杭州</span>
-              <span class="label-info">高收入</span>
-              <span class="label-info">年龄：25</span>
+              <span
+                class="label-info"
+                v-for="(item, index) in datas.custTagRecordList"
+                :key="index"
+                >{{ item.tagName }}</span
+              >
             </div>
           </div>
         </div>
@@ -240,7 +204,7 @@
           <el-table
             ref="filterTable"
             border
-            :data="tableData"
+            :data="business"
             :row-style="{ height: '10px' }"
             :cell-style="{ padding: '10px 0' }"
             :style="{ width: '100%' }"
@@ -250,32 +214,28 @@
             <el-table-column type="index" label="序号"></el-table-column>
             <el-table-column
               show-overflow-tooltip
-              prop="name"
+              prop="productName"
               label="产品名称"
             ></el-table-column>
             <el-table-column
               show-overflow-tooltip
-              prop="name"
+              prop="isHandled"
               label="是否办理"
+              :formatter="statusisHandled"
             ></el-table-column>
           </el-table>
         </div>
         <div class="contentarea" v-show="num == 3">
           <div class="time-cont">
-            <el-steps direction="vertical" :active="1">
-              <el-step
-                title="步骤 1"
-                description="这是一段很长很长很长的描述性文字"
-              ></el-step>
-              <el-step
-                title="步骤 2"
-                description="这是一段很长很长很长的描述性文字"
-              ></el-step>
-              <el-step
-                title="步骤 3"
-                description="这是一段很长很长很长的描述性文字"
-              ></el-step>
-            </el-steps>
+            <el-timeline :reverse="reverse">
+              <el-timeline-item
+                v-for="(activity, index) in activities"
+                :key="index"
+                :timestamp="activity.createTime"
+              >
+                {{ activity.status }}
+              </el-timeline-item>
+            </el-timeline>
           </div>
         </div>
       </div>
@@ -284,6 +244,13 @@
 </template>
 
 <script>
+import {
+  getCustomDetail,
+  getDictList,
+  getAnalysisDetail,
+  getOurBankBuss,
+  getCustomStatusHistory
+} from "@/api/marketing";
 export default {
   props: {
     datas: Object
@@ -294,42 +261,133 @@ export default {
       fitstData: [],
       visible: false,
       isShow: 0,
+      detail: {},
       labelData: [],
       labelDatas: [],
+      dictionary: [],
       direction: "ltr",
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-          tag: "家"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎1",
-          address: "上海市普陀区金沙江路 1517 弄",
-          tag: "公司"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-          tag: "家"
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-          tag: "公司"
-        }
-      ],
-      key: 1
+      reverse: true,
+      activities: [],
+      tableData: [],
+      business: [],
+      key: 1,
+      sex: "",
+      edu_level: "",
+      marriage: "",
+      housing_loan: "",
+      individual_loan: "",
+      time_deposit: "",
+      credit_situation: ""
     };
   },
   mounted() {
     this.labelData = ["123", "123wwww"];
+    this.getDictList();
   },
   methods: {
+    // 查询字典
+    async getDictList() {
+      try {
+        const res = await getDictList(
+          "product_type,cust_purpose_status,yes_no,sys_user_sex,edu_level,marriage,housing_loan,individual_loan,time_deposit,credit_situation"
+        );
+        if (res.code == 200) {
+          console.log(res);
+          this.status = res.data;
+          this.getDetail();
+          this.getOurBankBuss();
+          this.getCustomStatusHistory();
+          this.getCustomDetail();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // 岗位状态字典翻译
+    statusFormat(row, column) {
+      return this.selectDictLabel(this.status.product_type, row.productType);
+    },
+    statusCust(row, column) {
+      return this.selectDictLabel(this.status.cust_purpose_status, row.status);
+    },
+    statusisHandled(row, column) {
+      return this.selectDictLabel(this.status.yes_no, row.isHandled);
+    },
+    // 推荐产品
+    async getDetail() {
+      try {
+        const res = await getAnalysisDetail(this.datas.custNo);
+        if (res.code == 200) {
+          this.tableData = res.data;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // 本行业务办理
+    async getOurBankBuss() {
+      try {
+        const res = await getOurBankBuss(this.datas.custNo);
+        if (res.code == 200) {
+          this.business = res.data;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // 跟进结果
+    async getCustomStatusHistory() {
+      try {
+        const res = await getCustomStatusHistory({
+          id: this.datas.id
+        });
+        if (res.code == 200) {
+          this.activities = res.data;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // 客户详情
+    async getCustomDetail() {
+      try {
+        const res = await getCustomDetail(this.datas.id);
+        if (res.code == 200) {
+          this.detail = res.data;
+          console.log(this.detail);
+          this.sex = this.selectDictLabel(
+            this.status.sys_user_sex,
+            this.detail.sex
+          );
+          this.edu_level = this.selectDictLabel(
+            this.status.edu_level,
+            this.detail.eduLevel
+          );
+          this.marriage = this.selectDictLabel(
+            this.status.marriage,
+            this.detail.marriage
+          );
+          this.housing_loan = this.selectDictLabel(
+            this.status.housing_loan,
+            this.detail.housingLoan
+          );
+          this.individual_loan = this.selectDictLabel(
+            this.status.individual_loan,
+            this.detail.individualLoan
+          );
+          this.time_deposit = this.selectDictLabel(
+            this.status.time_deposit,
+            this.detail.timeDeposit
+          );
+          this.credit_situation = this.selectDictLabel(
+            this.status.credit_situation,
+            this.detail.creditSituation
+          );
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
     afterVisibleChange(val) {
       console.log("visible", val);
     },
@@ -437,7 +495,8 @@ export default {
   line-height: 25px;
   border-radius: 20px;
   background: rgba(34, 101, 255, 0.04);
-  margin-left: 20px;
+  margin-left: 10px;
+  margin-bottom: 10px;
 }
 .bot-label {
   width: 98px;
@@ -459,7 +518,7 @@ export default {
 }
 .contentarea {
   margin: 10px 0 0 11px;
-  opacity: .8;
+  opacity: 0.8;
 }
 .label-cont {
   margin-top: 20px;
@@ -474,9 +533,10 @@ export default {
   margin-left: 30px;
 }
 .time-cont {
-  width: 50%;
+  padding-left: 10%;
+  width: 28%;
   height: 200px;
-  margin-top: 60px;
+  margin-top: 40px;
 }
 .table-box {
   display: flex;
@@ -486,7 +546,7 @@ export default {
   font-size: 14px;
 }
 .gridtablse tr td {
-  width: 75px;
+  width: 140px;
   text-align: left;
   padding-left: 10px;
 }
@@ -497,11 +557,15 @@ export default {
   font-size: 14px;
   display: flex;
   align-items: center;
+  .pone-span {
+    width: 90px;
+  }
 }
 .label-box {
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: flex-start;
+  flex-wrap: wrap;
 }
 // .label-info:nth-child(2){
 //   position: absolute;
