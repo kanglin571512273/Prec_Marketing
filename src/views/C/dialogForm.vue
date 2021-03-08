@@ -84,10 +84,10 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="是否私有客户:" prop="custType">
-              <el-select v-model="data.custType" size="mini" placeholder="请选择是否私有客户">
+            <el-form-item label="是否私有客户:" prop="isPrivate">
+              <el-select v-model="data.isPrivate" size="mini" placeholder="请选择是否私有客户">
                 <el-option label="是" value="1"></el-option>
-                <el-option label="否" :value="'2' || '0' || '999'"></el-option>
+                <el-option label="否" value="2"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
