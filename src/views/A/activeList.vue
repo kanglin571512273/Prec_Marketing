@@ -11,8 +11,8 @@
           size="mini"
           v-model="keyWord"
           clearable
-          @change="getList()"
-          @clear="getList()"
+          @change="getList(null,true)"
+          @clear="getList(null,true)"
         ></el-input>
         <div
           v-for="item in customTypeBtn"
@@ -137,7 +137,7 @@ export default {
     });
   },
   methods: {
-    async getList(id) {
+    async getList(id, flag = false) {
       this.loading = true;
       try {
         const res = await getActiveCusList({
@@ -145,6 +145,7 @@ export default {
           status: this.customTypeId,
           pageNum: this.pages.pageNum,
           pageSize: this.pages.pageSize,
+          custName: this.keyWord,
         });
         if (res.code !== 200) {
           this.loading = false;
@@ -156,7 +157,11 @@ export default {
             86400000;
         });
         this.loading = false;
-        this.tableData.push(...res.rows);
+        if (flag) {
+          this.tableData = res.rows;
+        } else {
+          this.tableData.push(...res.rows);
+        }
         this.pages.total = res.total;
       } catch (error) {
         console.log(error);
@@ -209,8 +214,9 @@ export default {
         if (res.code !== 200) return Message.error(res.msg);
         Message.success("跟进成功！");
         this.dialogFormVisible = false;
-        console.log(res);
-        this.getList();
+        // console.log(res);
+        this.pages.pageNum = 1;
+        this.getList(null, true);
       } catch (error) {
         console.log(error);
       }

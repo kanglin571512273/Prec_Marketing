@@ -9,8 +9,8 @@
           size="mini"
           v-model="keyWord"
           clearable
-          @change="getList()"
-          @clear="getList()"
+          @change="getList(true)"
+          @clear="getList(true)"
         ></el-input>
         <div
           v-for="item in customTypeBtn"
@@ -129,7 +129,7 @@ export default {
     });
   },
   methods: {
-    async getList() {
+    async getList(flag = false) {
       let type = this.customTypeId > 5 ? {} : { type: this.customTypeId };
       let param = this.keyWord ? { param: this.keyWord } : {};
       this.loading = true;
@@ -157,7 +157,11 @@ export default {
             86400000;
         });
         this.loading = false;
-        this.tableData.push(...res.rows);
+        if (flag) {
+          this.tableData = res.rows;
+        } else {
+          this.tableData.push(...res.rows);
+        }
         this.pages.total = res.total;
       } catch (error) {
         console.log(error);

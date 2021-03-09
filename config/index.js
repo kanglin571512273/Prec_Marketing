@@ -13,6 +13,10 @@ module.exports = {
       // 配置跨域
       "/api": {
         target: "http://192.168.2.180:8090/",
+<<<<<<< HEAD
+=======
+        // target: "http://192.168.1.244:8090",
+>>>>>>> 472a31c6398dbc867d700c82da6e8479c21fa111
         // ws: true,
         changOrigin: true,
         pathRewrite: {

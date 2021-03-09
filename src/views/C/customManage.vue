@@ -13,8 +13,8 @@
           size="mini"
           v-model="keyWord"
           clearable
-          @change="getList()"
-          @clear="getList()"
+          @change="getList(true)"
+          @clear="getList(true)"
         ></el-input>
         <div
           v-for="item in customTypeBtn"
@@ -32,8 +32,8 @@
           size="mini"
           v-model="keyWord"
           clearable
-          @change="getList()"
-          @clear="getList()"
+          @change="getList(true)"
+          @clear="getList(true)"
         ></el-input>
         <div class="sureBtn" @click="toAnalysisResoult">确认</div>
         <div class="cancelBtn" @click="checkAble = 1">取消</div>
@@ -95,6 +95,7 @@ export default {
       loading: false,
       checkAble: 1,
       multipleSelection: [], //多选结果
+      tempMultipleSelection: [],
       addOrEdit: "add",
       keyWord: "",
       customTypeId: 999,
@@ -112,13 +113,14 @@ export default {
   mounted() {
     this.getList();
     this.getDictList();
+    // 分页加载
     this.$refs.fatherTable.loadMore("filterTable", () => {
       this.pages.pageNum++;
       this.getList();
     });
   },
   methods: {
-    async getList() {
+    async getList(flag = false) {
       let type = this.customTypeId > 5 ? {} : { type: this.customTypeId };
       let param = this.keyWord ? { param: this.keyWord } : {};
       this.loading = true;
@@ -147,7 +149,11 @@ export default {
             86400000;
         });
         this.loading = false;
-        this.tableData.push(...res.rows);
+        if (flag) {
+          this.tableData = res.rows;
+        } else {
+          this.tableData.push(...res.rows);
+        }
         this.pages.total = res.total;
       } catch (error) {
         console.log(error);
@@ -159,7 +165,10 @@ export default {
       this.loading = true;
       // 添加加载样式
       try {
-        let multipleSelection = this.multipleSelection.toString();
+        let multipleSelection =
+          this.multipleSelection.toString() ||
+          this.tempMultipleSelection.toString();
+        console.log(multipleSelection);
         const res = await analysisCustom(multipleSelection);
         if (res.code !== 200) return Message.error(res.msg);
         this.analysisCustomByIds(multipleSelection);
@@ -226,18 +235,29 @@ export default {
     // 新增  /  编辑 客户
     async addCustom() {
       try {
+        const { isPrivate, custType } = this.ruleForm;
         if (this.addOrEdit == "add") {
+          //添加
+          this.ruleForm.custType = isPrivate;
           const res = await addCustom(this.ruleForm);
-          if (res.code !== 200) Message.error(res.msg);
+          if (res.code !== 200) return Message.error(res.msg);
           Message.success("添加成功");
         } else {
+          // 编辑
+          this.ruleForm.custType = isPrivate == "1" ? "1" : custType;
           const res = await editCustom(this.ruleForm);
-          if (res.code !== 200) Message.error(res.msg);
+          if (res.code !== 200) return Message.error(res.msg);
           Message.success("修改成功");
+          if (this.checkAble === 3) {
+            this.dialogFormVisible = false;
+            this.ruleForm = {};
+            this.analysisCustom();
+            return false;
+          }
         }
         this.dialogFormVisible = false;
         this.ruleForm = {};
-        this.getList();
+        this.getList(true);
       } catch (error) {
         console.log(error);
       }
@@ -248,7 +268,8 @@ export default {
       this.dialogFormVisible = true;
       try {
         const res = await getCustomDetail(row.id);
-        if (res.code !== 200) Message.error(res.msg);
+        if (res.code !== 200) return Message.error(res.msg);
+        res.data.isPrivate = res.data.custType == "1" ? "1" : "2";
         this.ruleForm = res.data;
       } catch (error) {
         console.log(error);
@@ -259,6 +280,9 @@ export default {
       this.multipleSelection = val.map((item) => {
         return item.custNo;
       });
+      if (this.multipleSelection.length) {
+        this.tempMultipleSelection = this.multipleSelection;
+      }
     },
     toAnalysisResoult() {
       if (!this.multipleSelection.length) {
@@ -282,7 +306,7 @@ export default {
     // 返回
     reback() {
       this.checkAble = 1;
-      this.getList();
+      this.getList(true);
     },
     // 切换客户类型
     customType(ind) {
