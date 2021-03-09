@@ -147,11 +147,16 @@
                 >
                   {{ row.followUpStatus === "已跟进" ? "继续跟进" : "跟进" }}
                 </div> -->
-                <div class="sureBtn" @click="followUp(scope.row)">
+                <div
+                  class="sureBtn"
+                  v-show="scope.row.followUpTimes == 0"
+                  @click="followUp(scope.row)"
+                >
                   跟进
                 </div>
                 <div
-                  v-show="[2, 4].includes(customTypeId)"
+                  @click="followUp(scope.row)"
+                  v-show="scope.row.followUpTimes != 0"
                   class="myBtn myBtn_warning"
                 >
                   继续跟进
@@ -160,16 +165,88 @@
             >
           </el-table>
         </div>
-        <el-dialog class="bigDia" :visible.sync="dialogFormVisible">
-          <div class="close" @click="close"></div>
-          <Panorama :datas="name"></Panorama>
-          <!-- <dialogForm :data="ruleForm" ref="childRef" @closeDia="dialogFormVisible = false"></dialogForm> -->
-        </el-dialog>
+
         <el-dialog class="bigDia" :visible.sync="dialogFormVisible1">
           <div class="close" @click="close1"></div>
-          <followUpFeedback
+          <div class="followUpFeedback">
+            <div class="filtertable">
+              <el-table
+                ref="filterTable"
+                height="400"
+                v-loading="loadings"
+                border
+                :data="follow"
+              >
+                <el-table-column
+                  prop="productName"
+                  label="推荐产品"
+                  width="370"
+                ></el-table-column>
+                <el-table-column
+                  show-overflow-tooltip
+                  prop="intention"
+                  label="有意向"
+                >
+                  <template slot-scope="scope">
+                    <div class="customName" @click="edit(scope.row, 0)">
+                      <!-- <i class="el-icon-circle-check check "></i> -->
+                      <i
+                        class="el-icon-circle-check check"
+                        :class="
+                          scope.row.status == '1' ? 'activationcheck' : ''
+                        "
+                      ></i>
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  show-overflow-tooltip
+                  prop="noIntention"
+                  label="无意向"
+                >
+                  <template slot-scope="scope">
+                    <div class="customName" @click="edit(scope.row, 1)">
+                      <i
+                        class="el-icon-circle-check check"
+                        :class="
+                          scope.row.status == '2' ? 'activationcheck' : ''
+                        "
+                      ></i>
+                    </div>
+                  </template>
+                </el-table-column>
+                <!-- 编辑框 -->
+                <!-- <i
+        :class="{
+          iconfont: true,
+          'iconCheck-circle1': true,
+          'active-iconCheck-circle1': row.intention
+        }"
+        slot="intention"
+        slot-scope="row"
+        @click="edit(row, 1)"
+      ></i>
+      <i
+        :class="{
+          iconfont: true,
+          'iconCheck-circle1': true,
+          'active-iconCheck-circle1': row.noIntention
+        }"
+        slot="noIntention"
+        slot-scope="row"
+        @click="edit(row, 2)"
+      ></i> -->
+              </el-table>
+            </div>
+            <div class="btnContainer">
+              <div class=" sureBtn" @click="makeSure">确定</div>
+              <div class=" cancelBtn" @click="cancle">取消</div>
+            </div>
+          </div>
+          <!-- <followUpFeedback
             @closeModel="dialogFormVisible1 = false"
-          ></followUpFeedback>
+            :data="follow"
+          ></followUpFeedback> -->
           <!-- <dialogForm :data="ruleForm" ref="childRef" @closeDia="dialogFormVisible = false"></dialogForm> -->
         </el-dialog>
       </div>
@@ -178,6 +255,7 @@
 </template>
 
 <script>
+import { MessageBox, Message } from "@/utils/importFile";
 import * as echarts from "echarts/core";
 // 引入柱状图图表，图表后缀都为 Chart
 import { BarChart, LineChart, PieChart } from "echarts/charts";
@@ -202,20 +280,16 @@ echarts.use([
   LineChart,
   PieChart
 ]);
-import Panorama from "@/components/Panorama.vue";
-import followUpFeedback from "@/components/followUpFeedback.vue";
 import {
   getDictList,
   getCustomList,
   getTodayHappen,
   getDailyOverview,
-  getProductDistribution
+  getProductDistribution,
+  getAnalysisDetail,
+  addCustomStatus
 } from "@/api/marketing";
 export default {
-  components: {
-    Panorama,
-    followUpFeedback
-  },
   data() {
     return {
       isCusAnalysis: false,
@@ -223,6 +297,7 @@ export default {
       productType: 1,
       customTypeId: 0,
       currentBtn: 0,
+      follow: [],
       active: 0,
       username: "",
       dialogFormVisible: false,
@@ -233,7 +308,10 @@ export default {
       btnArr: ["所有客户", "分配客户", "私有客户"],
       tableData: [],
       overview: {},
-      loading: true
+      loading: true,
+      loadings: true,
+      rowdata: [],
+      status: true
     };
   },
   mounted() {
@@ -305,6 +383,29 @@ export default {
         const res = await getProductDistribution({ productType: productType });
         if (res.code == 200) {
           this.productsCharts(res.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // 查看跟进结果
+    async getAnalysisDetail(id) {
+      try {
+        const res = await getAnalysisDetail(id);
+        if (res.code == 200) {
+          this.follow = res.data;
+          this.loadings = false;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async addCustomStatus(data) {
+      try {
+        const res = await addCustomStatus({ customFollowupInfos: data });
+        if (res.code == 200) {
+          Message.success(res.msg);
+          this.getList();
         }
       } catch (error) {
         console.log(error);
@@ -454,9 +555,13 @@ export default {
     },
     // 点击客户姓名
     customDetail(row) {
-      this.dialogFormVisible = true;
-      this.name = row;
-      console.log(this.name, 123);
+      this.$router.push({
+        name: "Panorama",
+        params: {
+          id: row.id,
+          custNo: row.custNo
+        }
+      });
     },
     resetDateFilter() {
       this.$refs.filterTable.clearFilter("date");
@@ -472,7 +577,47 @@ export default {
     },
     followUp(row) {
       console.log(row);
+      this.getAnalysisDetail(row.custNo);
+      this.loadings = true;
       this.dialogFormVisible1 = true;
+    },
+    reset() {
+      // this.data = [
+      //   {
+      //     key: 1,
+      //     RecomProducts: "'安心得利'理财",
+      //     intention: false,
+      //     noIntention: false
+      //   },
+      //   {
+      //     key: 2,
+      //     RecomProducts: "网易云联名卡",
+      //     intention: false,
+      //     noIntention: false
+      //   },
+      //   {
+      //     key: 3,
+      //     RecomProducts: "个人汽车贷款",
+      //     intention: false,
+      //     noIntention: false
+      //   }
+      // ];
+    },
+    edit(row, index) {
+      if (index == 0) {
+        row.status = "1";
+        this.rowdata.push(row);
+      } else {
+        row.status = "2";
+      }
+    },
+    makeSure() {
+      this.addCustomStatus(this.follow);
+      this.status = false;
+      this.dialogFormVisible1 = false;
+    },
+    cancle() {
+      this.dialogFormVisible1 = false;
     }
   }
 };
@@ -635,6 +780,41 @@ export default {
   position: absolute;
   top: 10px;
   right: 10px;
+}
+
+.filtertable {
+  height: 540px;
+}
+.followUpFeedback {
+  padding: 20px;
+  .iconCheck-circle1 {
+    color: #e8e8e8;
+    font-size: 35px;
+  }
+  .active-iconCheck-circle1 {
+    color: #0060ff;
+  }
+  .btnContainer {
+    text-align: center;
+    .mybtn {
+      padding: 3px 34px;
+      background-color: #fff;
+      border: none;
+      border-radius: 50px;
+      font-size: 22px;
+      outline: none;
+    }
+    .cancleBtn {
+      color: #999999;
+      border: 1px solid#CED0D7;
+    }
+  }
+}
+.check {
+  font-size: 35px;
+}
+.activationcheck {
+  color: #0060ff;
 }
 </style>
 

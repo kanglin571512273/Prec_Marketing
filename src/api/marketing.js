@@ -70,6 +70,13 @@ export const getOurBankBuss = params => {
     method: "get"
   });
 };
+// // 获取客户标签
+export const getTagRecord = params => {
+  return axios.request({
+    url: `/v1/app/customer/getTagRecord/${params}`,
+    method: "get"
+  });
+};
 // // 获取本行业务办理
 export const getCustomStatusHistory = params => {
   return axios.request({
@@ -87,10 +94,26 @@ export const tagList = params => {
   });
 };
 // 添加标签
-export const setCustTags = (data) => {
+export const setCustTags = data => {
   return axios.request({
-      url: `/v1/app/customer/setCustTags`,
-      method: 'put',
-      data
-  })
-}
+    url: `/v1/app/customer/setCustTags`,
+    method: "put",
+    data
+  });
+};
+// // 查看跟进信息
+export const getCustomStatus = params => {
+  return axios.request({
+    url: `/v1/app/marketing/custom/getCustomStatus`,
+    method: "get",
+    params
+  });
+};
+// // 查看跟进信息
+export const addCustomStatus = data => {
+  return axios.request({
+    url: `/v1/app/marketing/custom/addCustomStatus`,
+    method: "post",
+    data
+  });
+};

@@ -63,53 +63,12 @@
 </template>
 
 <script>
-const columns = [
-  {
-    title: "推荐产品",
-    key: "RecomProducts",
-    dataIndex: "RecomProducts",
-    width: "600px"
-  },
-
-  {
-    title: "有意向",
-    key: "intention",
-    // dataIndex: "intention",
-    scopedSlots: { customRender: "intention" }
-  },
-  {
-    title: "无意向",
-    key: "noIntention",
-    // dataIndex: "noIntention",
-    scopedSlots: { customRender: "noIntention" }
-  }
-];
-const data = [
-  {
-    key: 1,
-    RecomProducts: "'安心得利'理财",
-    intention: false,
-    noIntention: false
-  },
-  {
-    key: 2,
-    RecomProducts: "网易云联名卡",
-    intention: false,
-    noIntention: false
-  },
-  {
-    key: 3,
-    RecomProducts: "个人汽车贷款",
-    intention: false,
-    noIntention: false
-  }
-];
 export default {
-  data() {
-    return {
-      columns,
-      data
-    };
+  props: {
+    data: Array
+  },
+  mounted() {
+    console.log(this.data);
   },
   methods: {
     reset() {

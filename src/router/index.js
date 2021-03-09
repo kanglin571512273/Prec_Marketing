@@ -100,6 +100,17 @@ const router = new Router({
             import(
               /* webpackChunkName: 'analysisHistory' */ "@/components/HelloWorld"
             )
+        },
+        {
+          path: "Panorama",
+          name: "Panorama",
+          meta: {
+            name: "Panorama"
+          },
+          component: () =>
+            import(
+              /* webpackChunkName: 'analysisHistory' */ "@/components/Panorama"
+            )
         }
       ]
     },
