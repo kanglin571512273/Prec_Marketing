@@ -170,12 +170,12 @@ export default {
       }
     }
     &:nth-child(3n + 2) {
-      margin: 0 17px;
       .activeName {
         color: #ffa400;
       }
     }
     &:nth-child(3n) {
+      margin: 0 17px;
       .activeName {
         color: #18b979;
       }

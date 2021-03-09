@@ -46,7 +46,7 @@ export default {
     return {
       name: "admin",
       ruleForm: {
-        userName: "li",
+        userName: "admin1",
         password: ""
       },
       rules: {

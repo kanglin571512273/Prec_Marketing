@@ -25,7 +25,7 @@
     <el-table ref="filterTable" border :data="tableData" style="width: 100%" height="470">
       <el-table-column type="index" label="序号"></el-table-column>
       <el-table-column show-overflow-tooltip prop="custNo" label="客户号"></el-table-column>
-      <el-table-column show-overflow-tooltip prop="custName" label="客户姓名">
+      <el-table-column prop="custName" label="客户姓名">
         <template slot-scope="scope">
           <div class="customName" @click="customDetail(scope.row)">
             <span>{{scope.row.custName}}</span>
@@ -221,7 +221,17 @@ export default {
         console.log(error);
       }
     },
-
+    // 点击客户姓名
+    customDetail(row) {
+      console.log(row);
+      this.$router.push({
+        name: "Panorama",
+        params: {
+          id: row.custId,
+          custNo: row.custNo,
+        },
+      });
+    },
     // 关闭dialog
     resetForm() {
       this.status = 0;

@@ -30,7 +30,7 @@
     >
       <el-table-column type="index" label="序号"></el-table-column>
       <el-table-column show-overflow-tooltip prop="custNo" label="客户号"></el-table-column>
-      <el-table-column show-overflow-tooltip prop="custName" label="客户姓名">
+      <el-table-column prop="custName" label="客户姓名">
         <template slot-scope="scope">
           <div class="customName" @click="customDetail(scope.row)">
             <span>{{scope.row.custName}}</span>
@@ -233,7 +233,13 @@ export default {
     },
     // 点击客户姓名
     customDetail(row) {
-      console.log(row);
+      this.$router.push({
+        name: "Panorama",
+        params: {
+          id: row.id,
+          custNo: row.custNo,
+        },
+      });
     },
     // 编辑
     async edit(row) {

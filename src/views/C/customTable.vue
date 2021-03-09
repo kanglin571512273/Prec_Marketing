@@ -14,7 +14,7 @@
     <el-table-column v-if="checkAble == 2" type="selection" width="35"></el-table-column>
     <el-table-column type="index" label="序号"></el-table-column>
     <el-table-column show-overflow-tooltip prop="custNo" label="客户号"></el-table-column>
-    <el-table-column show-overflow-tooltip prop="custName" label="客户姓名" width="90">
+    <el-table-column prop="custName" label="客户姓名" width="90">
       <template slot-scope="scope">
         <div class="customName" @click="customDetail(scope.row)">
           <span>{{scope.row.custName}}</span>
@@ -57,7 +57,6 @@ export default {
     },
     // 点击客户姓名
     customDetail(row) {
-      console.log(row);
       this.$emit("customDetail", row);
     },
     //多选

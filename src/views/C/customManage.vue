@@ -73,7 +73,6 @@ import customTable from "./customTable";
 import loading from "@/components/loading";
 import dialogForm from "./dialogForm";
 import { Message } from "@/utils/importFile";
-import { Loading } from "element-ui";
 import {
   getCustomList,
   getCustomDetail,
@@ -321,7 +320,13 @@ export default {
     },
     // 点击客户姓名
     customDetail(row) {
-      console.log(row);
+      this.$router.push({
+        name: "Panorama",
+        params: {
+          id: row.id,
+          custNo: row.custNo,
+        },
+      });
     },
     resetForm() {
       this.$refs.childRef.resetForm();
