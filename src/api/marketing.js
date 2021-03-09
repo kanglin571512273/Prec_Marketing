@@ -41,7 +41,7 @@ export const getDictList = params => {
 };
 
 // 获取客户列表
-export const getCustomList = params => {
+export const getCustomList = params => {getCustomDetail
   return axios.request({
     url: "/v1/app/customer/getCustomers",
     method: "get",
