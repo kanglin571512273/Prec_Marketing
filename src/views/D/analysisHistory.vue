@@ -40,7 +40,7 @@
       </el-table-column>
       <el-table-column show-overflow-tooltip prop="telNo" label="联系电话"></el-table-column>
       <el-table-column show-overflow-tooltip prop="custProductRecordList" label="推荐产品" width="200"></el-table-column>
-      <el-table-column show-overflow-tooltip prop="custType" label="客户类别">
+      <el-table-column show-overflow-tooltip prop="custType" label="客户类别" width="">
         <template slot-scope="scope">
           <div>
             <span>{{scope.row.custType == '0' ? '分配客户' : scope.row.custType == '1' ? '私有客户' : scope.row.custType == '2' ? '共有客户' :'所有客户' }}</span>

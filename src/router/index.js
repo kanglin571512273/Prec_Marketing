@@ -57,28 +57,28 @@ const router = new Router({
               /* webpackChunkName: 'customManage' */ "@/views/C/customManage"
             )
         },
-        {
-          path: "customAnalysis",
-          name: "customAnalysis",
-          meta: {
-            name: "客户管理" //客户分析
-          },
-          component: () =>
-            import(
-              /* webpackChunkName: 'customAnalysis' */ "@/views/C/customAnalysis"
-            )
-        },
-        {
-          path: "analysisResoult",
-          name: "analysisResoult",
-          meta: {
-            name: "客户管理" //客户分析结果
-          },
-          component: () =>
-            import(
-              /* webpackChunkName: 'analysisResoult' */ "@/views/C/analysisResoult"
-            )
-        },
+        // {
+        //   path: "customAnalysis",
+        //   name: "customAnalysis",
+        //   meta: {
+        //     name: "客户管理" //客户分析
+        //   },
+        //   component: () =>
+        //     import(
+        //       /* webpackChunkName: 'customAnalysis' */ "@/views/C/customAnalysis"
+        //     )
+        // },
+        // {
+        //   path: "analysisResoult",
+        //   name: "analysisResoult",
+        //   meta: {
+        //     name: "客户管理" //客户分析结果
+        //   },
+        //   component: () =>
+        //     import(
+        //       /* webpackChunkName: 'analysisResoult' */ "@/views/C/analysisResoult"
+        //     )
+        // },
         {
           path: "analysisHistory",
           name: "analysisHistory",
