@@ -113,7 +113,7 @@ export default {
         { id: 999, name: "所有客户" },
         { id: 0, name: "分配客户" },
         { id: 1, name: "私有客户" },
-        { id: 2, name: "公有客户" },
+        { id: 2, name: "共有客户" },
       ],
       tableData: [],
       dialogFormVisible: false,

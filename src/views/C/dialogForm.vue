@@ -174,6 +174,7 @@
 </template>
 
 <script>
+import { Message } from "@/utils/importFile";
 export default {
   props: {
     data: { type: Object, default: () => {} },
@@ -257,6 +258,7 @@ export default {
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
           // alert("submit!");
+          Message.error("submit");
           this.$emit("addCustom");
         } else {
           console.log("error submit!!");
