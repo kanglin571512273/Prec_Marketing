@@ -14,6 +14,7 @@
           @change="getList(null,true)"
           @clear="getList(null,true)"
         ></el-input>
+        <div class="sureBtn" @click="getList(null,true)">搜索</div>
         <div
           v-for="item in customTypeBtn"
           :key="item.id"

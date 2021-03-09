@@ -16,6 +16,7 @@
           @change="getList(true)"
           @clear="getList(true)"
         ></el-input>
+        <div class="sureBtn" @click="getList(null,true)">搜索</div>
         <div
           v-for="item in customTypeBtn"
           :key="item.id"
@@ -35,6 +36,8 @@
           @change="getList(true)"
           @clear="getList(true)"
         ></el-input>
+        <div class="sureBtn" @click="getList(null,true)">搜索</div>
+
         <div class="sureBtn" @click="toAnalysisResoult">确认</div>
         <div class="cancelBtn" @click="checkAble = 1">取消</div>
       </div>
