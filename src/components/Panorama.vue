@@ -218,7 +218,6 @@
               :row-style="{ height: '10px' }"
               :cell-style="{ padding: '10px 0' }"
               :style="{ width: '100%' }"
-              :header-cell-style="{ background: '#E8E8E8', opacity: 0.5 }"
               height="400"
             >
               <el-table-column type="index" label="序号"></el-table-column>
@@ -303,6 +302,7 @@ export default {
   mounted() {
     this.id = this.$route.params.id;
     this.custNo = this.$route.params.custNo;
+    console.log(this.$route.params.id);
     this.getDictList();
   },
   methods: {
@@ -402,6 +402,7 @@ export default {
         const res = await getCustomDetail(this.id);
         if (res.code == 200) {
           this.detail = res.data;
+          console.log(res.data);
           this.sex = this.selectDictLabel(
             this.status.sys_user_sex,
             this.detail.sex
@@ -636,7 +637,7 @@ export default {
   font-size: 14px;
 }
 .gridtablse tr td {
-  width: 140px;
+  width: 120px;
   text-align: left;
   padding-left: 10px;
 }
@@ -648,7 +649,7 @@ export default {
   display: flex;
   align-items: center;
   .pone-span {
-    width: 90px;
+    width: 75px;
   }
 }
 .close {

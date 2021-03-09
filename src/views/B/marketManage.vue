@@ -507,6 +507,7 @@ export default {
     },
     // 点击客户姓名
     customDetail(row) {
+      console.log(row);
       this.$router.push({
         name: "Panorama",
         params: {
