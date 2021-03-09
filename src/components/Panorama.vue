@@ -296,13 +296,13 @@ export default {
       individual_loan: "",
       time_deposit: "",
       credit_situation: "",
-      cust_purpose_status: ""
+      cust_purpose_status: "",
+      flag: false
     };
   },
   mounted() {
     this.id = this.$route.params.id;
     this.custNo = this.$route.params.custNo;
-    console.log(this.$route.params.id);
     this.getDictList();
   },
   methods: {
@@ -375,8 +375,6 @@ export default {
             newArray[i].status = aaa;
           }
           this.activities = newArray;
-
-          console.log(newArray);
         }
       } catch (error) {
         console.log(error);
@@ -388,6 +386,7 @@ export default {
         const res = await getTagRecord(this.custNo);
         if (res.code == 200) {
           this.getlabel = res.data;
+          console.log(this.getlabel);
           this.getlabels = res.data.slice(0, 5);
 
           console.log();
@@ -402,7 +401,6 @@ export default {
         const res = await getCustomDetail(this.id);
         if (res.code == 200) {
           this.detail = res.data;
-          console.log(res.data);
           this.sex = this.selectDictLabel(
             this.status.sys_user_sex,
             this.detail.sex
@@ -442,6 +440,8 @@ export default {
     // 增加标签
     showDrawer() {
       this.visible = true;
+      this.labelDatas = [];
+      this.addlabel = [];
       this.tagList();
     },
     // 查询标签
@@ -449,8 +449,14 @@ export default {
       try {
         const res = await tagList();
         if (res.code == 200) {
-          console.log(res);
           this.labelData = res.data;
+          this.getlabel.map(key => {
+            this.labelDatas.push(key.tagId);
+            var { tagId, tagName, tagTypeId } = key;
+            var obj = { id: tagId, tagName: tagName, tagTypeId: tagTypeId };
+            this.addlabel.push(obj);
+            console.log(this.getlabel);
+          });
         }
       } catch (error) {
         console.log(error);
@@ -525,6 +531,7 @@ export default {
       this.visible = false;
     },
     active(item, index) {
+      this.flag = false;
       this.addlabel.map(key => {
         if (key.tagTypeId == item.tagTypeId) {
           this.addlabel.splice(
@@ -535,14 +542,19 @@ export default {
             this.labelDatas.findIndex(item => item === key.id),
             1
           );
+          if (key.id == item.id) {
+            this.flag = true;
+          }
         }
       });
       let arrIndex = this.labelDatas.indexOf(item.id);
       if (arrIndex > -1) {
         this.labelDatas.splice(arrIndex, 1);
       } else {
-        this.labelDatas.push(item.id);
-        this.addlabel.push(item);
+        if (!this.flag) {
+          this.labelDatas.push(item.id);
+          this.addlabel.push(item);
+        }
       }
       // console.log(item.tagTypeId);
       console.log(this.labelDatas);
