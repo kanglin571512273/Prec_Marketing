@@ -36,7 +36,7 @@
           @change="getList(true)"
           @clear="getList(true)"
         ></el-input>
-        <div class="sureBtn" @click="getList(null,true)">搜索</div>
+        <div class="sureBtn" @click="getList(true)">搜索</div>
 
         <div class="sureBtn" @click="toAnalysisResoult">确认</div>
         <div class="cancelBtn" @click="cancle">取消</div>
