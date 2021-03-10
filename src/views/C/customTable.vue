@@ -27,7 +27,7 @@
     <el-table-column show-overflow-tooltip prop="custType" label="客户类别" width="70">
       <template slot-scope="scope">
         <div>
-          <span>{{scope.row.custType == '0' ? '分配客户' : scope.row.custType == '1' ? '私有客户' : scope.row.custType == '2' ? '共有客户' :'所有客户' }}</span>
+          <span>{{scope.row.custType == '0' ? '分配客户' : scope.row.custType == '1' ? '私有客户' : scope.row.custType == '2' ? '共有客户' :'' }}</span>
         </div>
       </template>
     </el-table-column>
