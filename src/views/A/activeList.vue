@@ -61,7 +61,12 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog class="smallDia" title="aaas" :visible.sync="dialogFormVisible" @close="resetForm">
+    <el-dialog
+      class="smallDia"
+      :title="diaTitle"
+      :visible.sync="dialogFormVisible"
+      @close="resetForm"
+    >
       <div class="selectContainer">
         <div class="header">
           <div class="item">办理成功</div>
@@ -105,6 +110,7 @@ export default {
   components: { loading },
   data() {
     return {
+      diaTitle: null,
       pages: {
         pageNum: 1,
         pageSize: 20,
@@ -199,12 +205,14 @@ export default {
     followUp(row) {
       this.currentId = row.id;
       this.dialogFormVisible = true;
+      this.diaTitle = row.custName;
     },
     // 继续跟进
     async continueFollowUp(row) {
       this.currentId = row.id;
       this.status = this.customTypeId;
       this.dialogFormVisible = true;
+      this.diaTitle = row.custName;
     },
     async submit() {
       try {
