@@ -239,7 +239,7 @@ export default {
         eduLevel: [
           { required: true, message: "请选择教育情况", trigger: "blur" },
         ],
-        custType: [
+        isPrivate: [
           { required: true, message: "客户是否为私有客户", trigger: "blur" },
         ],
         address: [
@@ -258,7 +258,7 @@ export default {
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
           // alert("submit!");
-          Message.error("submit");
+          // Message.error("submit");
           this.$emit("addCustom");
         } else {
           console.log("error submit!!");

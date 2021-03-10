@@ -243,12 +243,20 @@ export default {
           this.ruleForm.custType = isPrivate;
           const res = await addCustom(this.ruleForm);
           if (res.code !== 200) return Message.error(res.msg);
+          this.dialogFormVisible = false;
           Message.success("添加成功");
         } else {
           // 编辑
-          this.ruleForm.custType = isPrivate == "1" ? "1" : custType;
+          if (isPrivate !== "1" && custType !== '1') {
+            this.ruleForm.custType = custType;
+          } else if (isPrivate !== "1" && custType == '1') {
+            this.ruleForm.custType = "2";
+          } else {
+            this.ruleForm.custType = "1";
+          }
           const res = await editCustom(this.ruleForm);
           if (res.code !== 200) return Message.error(res.msg);
+          this.dialogFormVisible = false;
           Message.success("修改成功");
           if (this.checkAble === 3) {
             this.dialogFormVisible = false;
@@ -257,7 +265,6 @@ export default {
             return false;
           }
         }
-        this.dialogFormVisible = false;
         this.ruleForm = {};
         this.getList(true);
       } catch (error) {

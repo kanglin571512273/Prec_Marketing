@@ -12,7 +12,13 @@ module.exports = {
     proxyTable: {
       // 配置跨域
       "/api": {
+<<<<<<< HEAD
         target: "http://192.168.1.244:8080/",
+=======
+        // target: "http://192.168.2.180:8090/",
+        target: "http://192.168.1.244:8090/",
+        // target: "http://192.168.1.22:8182/",
+>>>>>>> 09a5de415a2bbec1ac4ee1df983057e213c0ba2e
         // ws: true,
         changOrigin: true,
         pathRewrite: {
