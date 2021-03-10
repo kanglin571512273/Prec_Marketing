@@ -1,6 +1,10 @@
 <template>
   <div class="background-box">
-    <el-dialog class="bigDia" :visible.sync="dialogFormVisible">
+    <el-dialog
+      class="bigDia"
+      :visible.sync="dialogFormVisible"
+      :close-on-click-modal="false"
+    >
       <div class="close" @click="close"></div>
       <div class="background">
         <div class="bubbles">
