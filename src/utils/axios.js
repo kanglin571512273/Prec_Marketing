@@ -31,7 +31,7 @@ class HttpRequest {
       config => {
         //只针对get方式进行序列化
         if (config.method === "get") {
-          config.paramsSerializer = function (params) {
+          config.paramsSerializer = function(params) {
             return qs.stringify(params, { arrayFormat: "repeat" });
           };
         }
@@ -62,7 +62,6 @@ class HttpRequest {
           Message.error("用户信息已过期，请重新登录~");
           localStorage.removeItem("token");
           window.location.reload();
-        } else {
         }
         return data;
       },
