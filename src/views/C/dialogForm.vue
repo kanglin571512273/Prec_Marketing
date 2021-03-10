@@ -174,6 +174,7 @@
 </template>
 
 <script>
+import { Message } from "@/utils/importFile";
 export default {
   props: {
     data: { type: Object, default: () => {} },
@@ -211,8 +212,8 @@ export default {
           { required: true, message: "请输入客户姓名", trigger: "blur" },
           {
             min: 1,
-            max: 10,
-            message: "长度在 1 到 10 个字符",
+            max: 30,
+            message: "长度在 1 到 30 个字符",
             trigger: "blur",
           },
         ],
@@ -257,6 +258,7 @@ export default {
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
           // alert("submit!");
+          Message.error("submit");
           this.$emit("addCustom");
         } else {
           console.log("error submit!!");

@@ -8,7 +8,7 @@
             src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
           ></el-avatar>
         </div>
-        <span class="userInfo-font">工号：567898768576890</span>
+        <span class="userInfo-font">工号：{{adminNo}}</span>
       </div>
       <div class="title">{{ $route.meta.name }}</div>
       <div class="logout">
@@ -22,12 +22,7 @@
       <router-view />
     </div>
     <div class="footer">
-      <div
-        v-for="item in navMenu"
-        :key="item.id"
-        class="menuItem"
-        @click="navClick(item.path)"
-      >
+      <div v-for="item in navMenu" :key="item.id" class="menuItem" @click="navClick(item.path)">
         <div
           :class="{
             menu_item: true,
@@ -51,6 +46,7 @@ import { MessageBox, Message } from "@/utils/importFile";
 export default {
   data() {
     return {
+      adminNo: null,
       navMenu: [
         {
           id: 1,
@@ -74,11 +70,14 @@ export default {
           id: 4,
           icon: "iconbiaoqianguanli",
           path: "/analysisHistory",
-          name: "分析历史"
-        }
+          name: "分析历史",
+        },
       ],
-      currentMenu: "/marketActive"
+      currentMenu: "/marketActive",
     };
+  },
+  mounted() {
+    this.adminNo = localStorage.getItem("token").split("&&")[0];
   },
   methods: {
     navClick(path) {
