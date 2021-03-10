@@ -311,7 +311,6 @@ export default {
       try {
         const res = await getTodayHappen({ productType: productType });
         if (res.code == 200) {
-          console.log(res);
           this.customers = res.data;
         }
       } catch (error) {

@@ -3,15 +3,11 @@
     <div class="header">
       <div class="avatar">
         <div class="block">
-          <!-- <el-avatar :size="25" :src="avatar"></el-avatar> -->
-          <el-avatar
-            :size="25"
-            src="http://192.168.2.126:8090/prod-api/profile/avatar/2021/03/10/9c860794-1abf-4017-8bc8-bf46b2d44915.jpeg"
-          ></el-avatar>
+          <el-avatar :size="25" :src="avatar"></el-avatar>
         </div>
         <span class="userInfo-font">工号：{{adminNo}}</span>
       </div>
-      <div class="title">{{ $route.meta.name }}</div>
+      <div class="title">{{ $route.meta.name, }}</div>
       <div class="logout">
         <a @click="logout">
           退出

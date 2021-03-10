@@ -82,7 +82,6 @@ export default {
             password: password,
           }).then((res) => {
             if (res.code == 200) {
-              console.log(res);
               localStorage.setItem("token", res.token);
               localStorage.setItem(
                 "userInfo",
