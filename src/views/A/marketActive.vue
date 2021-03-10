@@ -65,6 +65,8 @@ export default {
         this.tableList.push(...res.rows);
         this.pages.total = res.total;
       } catch (error) {
+        // this.loading = false;
+        // Message.error(error);
         console.log(error);
       }
     },
