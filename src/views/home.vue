@@ -3,10 +3,7 @@
     <div class="header">
       <div class="avatar">
         <div class="block">
-          <el-avatar
-            :size="25"
-            src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
-          ></el-avatar>
+          <el-avatar :size="25" :src="avatar"></el-avatar>
         </div>
         <span class="userInfo-font">工号：{{adminNo}}</span>
       </div>
@@ -47,6 +44,7 @@ export default {
   data() {
     return {
       adminNo: null,
+      avatar: null,
       navMenu: [
         {
           id: 1,
@@ -77,7 +75,8 @@ export default {
     };
   },
   mounted() {
-    this.adminNo = localStorage.getItem("token").split("&&")[0];
+    this.adminNo = JSON.parse(localStorage.getItem("userInfo")).userName;
+    this.avatar = JSON.parse(localStorage.getItem("userInfo")).avatar;
   },
   methods: {
     navClick(path) {
@@ -93,6 +92,7 @@ export default {
       })
         .then(() => {
           localStorage.removeItem("token");
+          localStorage.removeItem("userInfo");
           this.$router.push("/login");
           Message({
             type: "success",

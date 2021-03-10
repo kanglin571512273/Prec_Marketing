@@ -24,9 +24,7 @@
             </el-form-item>
 
             <el-form-item>
-              <el-button type="primary" @click="submitForm('ruleForm')"
-                >登录</el-button
-              >
+              <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
               <el-button @click="resetForm('ruleForm')">重置</el-button>
             </el-form-item>
           </el-form>
@@ -47,18 +45,28 @@ export default {
       name: "admin",
       ruleForm: {
         userName: "admin1",
-        password: ""
+        password: "",
       },
       rules: {
         userName: [
           { required: true, message: "请输入用户名", trigger: "blur" },
-          { min: 2, max: 15, message: "长度在 2 到 15 个字符", trigger: "blur" }
+          {
+            min: 2,
+            max: 15,
+            message: "长度在 2 到 15 个字符",
+            trigger: "blur",
+          },
         ],
         password: [
           { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 3, max: 15, message: "长度在 3 到 15 个字符", trigger: "blur" }
-        ]
-      }
+          {
+            min: 3,
+            max: 15,
+            message: "长度在 3 到 15 个字符",
+            trigger: "blur",
+          },
+        ],
+      },
     };
   },
   mounted() {
@@ -66,16 +74,23 @@ export default {
   },
   methods: {
     submitForm(formName) {
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           var password = encrypt(this.ruleForm.password);
           addLogin({
             userName: this.ruleForm.userName,
-            password: password
-          }).then(res => {
+            password: password,
+          }).then((res) => {
             if (res.code == 200) {
-              localStorage.setItem("token", res.data);
-              // localStorage.setItem("effectToken", true);
+              console.log(res);
+              localStorage.setItem("token", res.token);
+              localStorage.setItem(
+                "userInfo",
+                JSON.stringify({
+                  userName: res.userName,
+                  avatar: res.avatar,
+                })
+              );
               Message.success("登录成功~");
               this.$router.push("/");
             } else if (res.code == 500) {
@@ -106,11 +121,11 @@ export default {
           localStorage.setItem("labelData", JSON.stringify(label));
 
           this.$router.push({
-            path: "/marketingManage"
+            path: "/marketingManage",
           });
         }
       });
-    }
+    },
 
     // encryptedData(data) {
     //   //私钥 和后端沟通写死了
@@ -124,7 +139,7 @@ export default {
     //   // 加密数据
     //   return encryptor.encrypt(data);
     // }
-  }
+  },
 };
 </script>
 
