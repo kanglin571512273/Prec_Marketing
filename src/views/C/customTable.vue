@@ -96,6 +96,10 @@ export default {
         }
       });
     },
+    // 取消
+    cancle() {
+      this.$refs.filterTable.clearSelection();
+    },
   },
 };
 </script>

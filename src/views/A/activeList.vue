@@ -171,6 +171,7 @@ export default {
         }
         this.pages.total = res.total;
       } catch (error) {
+        // this.loading = false;
         console.log(error);
       }
     },

@@ -39,7 +39,7 @@
         <div class="sureBtn" @click="getList(null,true)">搜索</div>
 
         <div class="sureBtn" @click="toAnalysisResoult">确认</div>
-        <div class="cancelBtn" @click="checkAble = 1">取消</div>
+        <div class="cancelBtn" @click="cancle">取消</div>
       </div>
     </div>
     <div class="btnContainer" v-show="checkAble == 3">
@@ -247,9 +247,9 @@ export default {
           Message.success("添加成功");
         } else {
           // 编辑
-          if (isPrivate !== "1" && custType !== '1') {
+          if (isPrivate !== "1" && custType !== "1") {
             this.ruleForm.custType = custType;
-          } else if (isPrivate !== "1" && custType == '1') {
+          } else if (isPrivate !== "1" && custType == "1") {
             this.ruleForm.custType = "2";
           } else {
             this.ruleForm.custType = "1";
@@ -311,6 +311,11 @@ export default {
       //   name: "analysisResoult",
       //   params: { nos: this.multipleSelection },
       // });
+    },
+    // 取消
+    cancle() {
+      this.$refs.fatherTable.cancle();
+      this.checkAble = 1;
     },
     // 返回
     reback() {
