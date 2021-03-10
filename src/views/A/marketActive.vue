@@ -3,7 +3,7 @@
     <loading :loading="loading"></loading>
     <div class="activeItem" v-for="item in tableList" :key="item.id" @click="goOther(item.id)">
       <div :class="{activeName:true,grey:item.status == '1'}">{{item.actName}}</div>
-      <div class="time">{{item.beginTime + ' ' + item.endTime}}</div>
+      <div class="time">{{item.beginTime + ' - ' + item.endTime}}</div>
       <div class="progressBar">
         <el-progress
           :text-inside="true"
@@ -56,6 +56,11 @@ export default {
           this.loading = false;
           return Message.error(res.msg);
         }
+        res.rows.map((item) => {
+          item.beginTime = item.beginTime.replace(/\-/g, ".");
+          item.endTime = item.endTime.replace(/\-/g, ".");
+          return item;
+        });
         this.loading = false;
         this.tableList.push(...res.rows);
         this.pages.total = res.total;
