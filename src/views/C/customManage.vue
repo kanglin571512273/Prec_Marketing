@@ -248,13 +248,10 @@ export default {
         } else {
           // 编辑
           if (isPrivate !== "1" && custType !== '1') {
-            console.log(1);
             this.ruleForm.custType = custType;
           } else if (isPrivate !== "1" && custType == '1') {
-            console.log(2);
             this.ruleForm.custType = "2";
           } else {
-            console.log(3);
             this.ruleForm.custType = "1";
           }
           const res = await editCustom(this.ruleForm);
