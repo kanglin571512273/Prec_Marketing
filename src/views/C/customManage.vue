@@ -110,7 +110,9 @@ export default {
       options: {},
       tableData: [],
       dialogFormVisible: false,
-      ruleForm: {},
+      ruleForm: {
+        isPrivate: '1',
+      },
     };
   },
   mounted() {

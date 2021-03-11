@@ -192,7 +192,9 @@ export default {
     };
     var checkEmail = (rule, value, callback) => {
       var reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-      if (!reg.test(value)) {
+      if (!value) {
+        callback();
+      }else if (!reg.test(value)) {
         callback(new Error("电子邮箱格式不正确"));
       } else {
         callback();
@@ -230,10 +232,7 @@ export default {
           },
         ],
         sex: [{ required: true, message: "请选择客户性别", trigger: "blur" }],
-        email: [
-          { required: true, message: "请输入电子邮箱", trigger: "blur" },
-          { validator: checkEmail, trigger: "blur" },
-        ],
+        email: [{ validator: checkEmail, trigger: "blur" }],
         idCardType: [
           { required: true, message: "请证件类型", trigger: "blur" },
         ],
@@ -245,23 +244,23 @@ export default {
           { required: true, message: "请输入手机号码", trigger: "blur" },
           { validator: checkTel, trigger: "blur" },
         ],
-        marriage: [
-          { required: true, message: "请选择婚姻状况", trigger: "blur" },
-        ],
-        eduLevel: [
-          { required: true, message: "请选择教育情况", trigger: "blur" },
-        ],
-        isPrivate: [
-          { required: true, message: "客户是否为私有客户", trigger: "blur" },
-        ],
-        address: [
-          { required: true, message: "请输入联系地址", trigger: "blur" },
-          { min: 1, max: 120, message: "字符长度不得超过120", trigger: "blur" },
-        ],
-        workUnit: [
-          { required: true, message: "请输入公司单位", trigger: "blur" },
-          { min: 1, max: 120, message: "字符长度不得超过120", trigger: "blur" },
-        ],
+        // marriage: [
+        //   { required: true, message: "请选择婚姻状况", trigger: "blur" },
+        // ],
+        // eduLevel: [
+        //   { required: true, message: "请选择教育情况", trigger: "blur" },
+        // ],
+        // isPrivate: [
+        //   { required: true, message: "客户是否为私有客户", trigger: "blur" },
+        // ],
+        // address: [
+        //   { required: true, message: "请输入联系地址", trigger: "blur" },
+        //   { min: 1, max: 120, message: "字符长度不得超过120", trigger: "blur" },
+        // ],
+        // workUnit: [
+        //   { required: true, message: "请输入公司单位", trigger: "blur" },
+        //   { min: 1, max: 120, message: "字符长度不得超过120", trigger: "blur" },
+        // ],
       },
     };
   },
