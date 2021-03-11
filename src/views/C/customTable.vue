@@ -10,8 +10,9 @@
     @selection-change="handleSelectionChange"
     :fit="true"
   >
+    <!-- [2].includes(checkAble) -->
     <!-- <el-table-column v-if="$route.name == 'customAnalysis'" type="selection" width="35"></el-table-column> -->
-    <el-table-column v-if="checkAble === 2" type="selection" width="35"></el-table-column>
+    <el-table-column v-if="checkAble == 2" type="selection" width="35"></el-table-column>
     <el-table-column type="index" label="序号"></el-table-column>
     <el-table-column show-overflow-tooltip prop="custNo" label="客户号"></el-table-column>
     <el-table-column prop="custName" label="客户姓名" width="90">
@@ -32,7 +33,10 @@
       </template>
     </el-table-column>
     <el-table-column show-overflow-tooltip prop="custManagerName" label="客户经理"></el-table-column>
+    <el-table-column v-if="checkAble == 3" show-overflow-tooltip prop="analysisTime" label="分析时间"></el-table-column>
     <el-table-column label="操作" v-if="checkAble !== 3">
+      <!-- v-if="checkAble !== 3" -->
+      <!-- v-if="[1,2].includes(checkAble)" -->
       <template slot-scope="scope">
         <el-button type="warning" icon="el-icon-edit" round size="mini" @click="edit(scope.row)">编辑</el-button>
       </template>

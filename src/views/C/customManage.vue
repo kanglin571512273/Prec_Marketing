@@ -54,6 +54,7 @@
       :data="tableData"
       :checkAble="checkAble"
       :pages="pages"
+      :key="checkAble == 3 ? 2 : 1"
       @edit="edit"
       @customDetail="customDetail"
       @handleSelectionChange="handleSelectionChange"
