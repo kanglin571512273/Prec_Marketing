@@ -21,12 +21,20 @@ module.exports = {
         pathRewrite: {
           "^/api": ""
         }
-      }
+      },
+      // "/dev-api": {
+      //   // target: "http://192.168.2.180:8090/",//刘永坤
+      //   // target: "http://192.168.1.244:8090/",//伟伟
+      //   // target: "http://192.168.1.22:8182/",//服务器
+      //   // target: "http://192.168.2.126:8090/",//天亮
+      //   // ws: true,
+      //   changOrigin: true,
+      // }
     },
 
     // Various Dev Server settings
-    host: "localhost", // can be overwritten by process.env.HOST
-    // host: "192.168.2.106", // can be overwritten by process.env.HOST
+    // host: "localhost", // can be overwritten by process.env.HOST
+    host: "192.168.2.106", // can be overwritten by process.env.HOST
     // host: "192.168.2.93", // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,

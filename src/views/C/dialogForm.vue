@@ -199,9 +199,21 @@ export default {
       }
     };
     var checkIdCard = (rule, value, callback) => {
-      var reg = /^[1-9]\d{5}(18|19|20|(3\d))\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
+      const { idCardType, idCard } = this.data;
+      var reg;
+      var message;
+      if (this.data.idCardType && this.data.idCardType == 2) {
+        reg = /^([a-zA-z]|[0-9]){5,17}$/;
+        message = "护照号码填写不正确";
+      } else if (this.data.idCardType && this.data.idCardType == 3) {
+        reg = /^[\u4E00-\u9FA5](字第)([0-9a-zA-Z]{4,8})(号?)$/;
+        message = "军官证号码填写不正确";
+      } else {
+        reg = /^(([1][1-5])|([2][1-3])|([3][1-7])|([4][1-6])|([5][0-4])|([6][1-5])|([7][1])|([8][1-2]))\d{4}(([1][9]\d{2})|([2]\d{3}))(([0][1-9])|([1][0-2]))(([0][1-9])|([1-2][0-9])|([3][0-1]))\d{3}[0-9xX]$/;
+        message = "身份证号码填写不正确";
+      }
       if (!reg.test(value)) {
-        callback(new Error("证件号码格式不正确"));
+        callback(new Error(message));
       } else {
         callback();
       }
@@ -212,8 +224,8 @@ export default {
           { required: true, message: "请输入客户姓名", trigger: "blur" },
           {
             min: 1,
-            max: 30,
-            message: "长度在 1 到 30 个字符",
+            max: 20,
+            message: "长度在 1 到 20 个字符",
             trigger: "blur",
           },
         ],

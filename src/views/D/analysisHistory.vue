@@ -41,7 +41,7 @@
       </el-table-column>
       <el-table-column show-overflow-tooltip prop="telNo" label="联系电话"></el-table-column>
       <el-table-column show-overflow-tooltip prop="custProductRecordList" label="推荐产品" width="200"></el-table-column>
-      <el-table-column show-overflow-tooltip prop="custType" label="客户类别" width="">
+      <el-table-column show-overflow-tooltip prop="custType" label="客户类别"  width="70">
         <template slot-scope="scope">
           <div>
             <span>{{scope.row.custType == '0' ? '分配客户' : scope.row.custType == '1' ? '私有客户' : scope.row.custType == '2' ? '共有客户' :'' }}</span>
@@ -91,12 +91,10 @@
 <script>
 import customTable from "../C/customTable";
 import loading from "@/components/loading";
-import { Message, MessageBox } from "@/utils/importFile";
+import { Message } from "@/utils/importFile";
 import {
   getCustomList,
   getOneAnalyHistory,
-  isUpdata,
-  getNewHisList,
 } from "@/api/customApi";
 export default {
   components: { customTable, loading },
@@ -184,43 +182,6 @@ export default {
         }
       });
     },
-    // 判断是否更新
-    // async isUpdata() {
-    //   try {
-    //     const res = await isUpdata();
-    //     if (res.code !== 200) return Message.error(res.msg);
-    //     console.log(res);
-    //     if (res.data > 0) {
-    //       // 弹框
-    //       MessageBox.confirm("列表已更新，是否刷新列表", "提示", {
-    //         confirmButtonText: "确定",
-    //         cancelButtonText: "取消",
-    //         type: "warning",
-    //       })
-    //         .then(() => {
-    //           // Message.success("刷新成功");
-    //           this.getNewHisList();
-    //         })
-    //         .catch(() => {
-    //           Message.info("已取消刷新");
-    //         });
-    //     }
-    //     console.log(res);
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // },
-    // // 客户点了更新之后调用的接口
-    // async getNewHisList() {
-    //   try {
-    //     const res = await getNewHisList();
-    //     if (res.code !== 200) return Message.error(res.msg);
-    //     this.getList();
-    //     // console.log(res);
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // },
     // 切换客户类型
     customType(ind) {
       this.tableData = [];
@@ -324,8 +285,8 @@ export default {
       padding: 10px 0;
       .time {
         text-align: left;
-        line-height: 40px;
-        font-size: 23px;
+        line-height: 30px;
+        font-size: 14px;
         color: #666666;
         .label {
           display: inline-block;

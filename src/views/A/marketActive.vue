@@ -13,7 +13,8 @@
         ></el-progress>
         <span v-if="item.status == '1'">未开始</span>
       </div>
-      <div class="mark" v-if="item.status == '3'" @click="over">
+      <div class="mark" v-if="item.status == '3'">
+         <!-- @click="over" -->
         <span>已结束</span>
       </div>
     </div>
