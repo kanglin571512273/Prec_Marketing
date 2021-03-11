@@ -163,8 +163,8 @@
                   <td>{{ housing_loan }}</td>
                 </tr>
                 <tr>
-                  <th>账户余额：</th>
-                  <td>599</td>
+                  <th>信用情况：</th>
+                  <td>{{ credit_situation }}</td>
                 </tr>
               </table>
 
@@ -180,10 +180,6 @@
                 <tr>
                   <th>个人贷款：</th>
                   <td>{{ individual_loan }}</td>
-                </tr>
-                <tr>
-                  <th>信用情况：</th>
-                  <td>{{ credit_situation }}</td>
                 </tr>
               </table>
 
@@ -239,16 +235,19 @@
             </el-table>
           </div>
           <div class="contentarea" v-show="num == 3">
-            <div class="time-cont">
-              <el-timeline :reverse="reverse">
-                <el-timeline-item
-                  v-for="(activity, index) in activities"
-                  :key="index"
-                  :timestamp="activity.createTime"
-                >
-                  {{ activity.status }}
-                </el-timeline-item>
-              </el-timeline>
+            <div class="contenta">
+              <div class="time-cont">
+                <el-timeline :reverse="reverse">
+                  <el-timeline-item
+                    v-for="(activity, index) in activities"
+                    :key="index"
+                    :timestamp="activity.createTime"
+                  >
+                    沟通内容： {{ activity.productName }}
+                    <div>办理情况：{{ activity.status }}</div>
+                  </el-timeline-item>
+                </el-timeline>
+              </div>
             </div>
           </div>
         </div>
@@ -625,7 +624,11 @@ export default {
 }
 .contentarea {
   margin: 10px 0 0 11px;
-  opacity: 0.8;
+  opacity: 1;
+  .contenta {
+    height: 600px;
+    overflow: auto;
+  }
 }
 .label-cont {
   margin-top: 20px;
@@ -641,7 +644,7 @@ export default {
 }
 .time-cont {
   padding-left: 10%;
-  width: 28%;
+  width: 36%;
   height: 200px;
   margin-top: 40px;
 }
