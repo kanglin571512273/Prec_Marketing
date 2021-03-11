@@ -8,7 +8,8 @@
           :class="{ fatBtn_primary: active == index }"
           v-for="(item, index) in barr"
           :key="index"
-        >{{ item }}</a>
+          >{{ item }}</a
+        >
       </div>
     </div>
     <div class="right">
@@ -67,7 +68,9 @@
               :key="index"
               :class="currentBtn == index ? 'activeBtn' : ''"
               @click="filterDataBtn(index)"
-            >{{ item }}</div>
+            >
+              {{ item }}
+            </div>
           </div>
         </div>
         <div class="labelManage">
@@ -80,8 +83,16 @@
             height="290"
           >
             <!-- <el-table-column type="selection" width="30"></el-table-column> -->
-            <el-table-column type="index" label="序号" width="70"></el-table-column>
-            <el-table-column show-overflow-tooltip prop="custNo" label="客户号"></el-table-column>
+            <el-table-column
+              type="index"
+              label="序号"
+              width="70"
+            ></el-table-column>
+            <el-table-column
+              show-overflow-tooltip
+              prop="custNo"
+              label="客户号"
+            ></el-table-column>
             <el-table-column prop="custName" label="客户姓名">
               <template slot-scope="scope">
                 <div class="customName" @click="customDetail(scope.row)">
@@ -90,20 +101,32 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column show-overflow-tooltip prop="telNo" label="联系电话"></el-table-column>
-            <el-table-column show-overflow-tooltip prop="custProductRecordList" label="推荐产品"></el-table-column>
-            <el-table-column show-overflow-tooltip prop="custType" label="客户类别">
+            <el-table-column
+              show-overflow-tooltip
+              prop="telNo"
+              label="联系电话"
+            ></el-table-column>
+            <el-table-column
+              show-overflow-tooltip
+              prop="custProductRecordList"
+              label="推荐产品"
+            ></el-table-column>
+            <el-table-column
+              show-overflow-tooltip
+              prop="custType"
+              label="客户类别"
+            >
               <template slot-scope="scope">
                 <div>
                   <span>
                     {{
-                    scope.row.custType == "0"
-                    ? "分配客户"
-                    : scope.row.custType == "1"
-                    ? "私有客户"
-                    : scope.row.custType == "2"
-                    ? "共有客户"
-                    : "所有客户"
+                      scope.row.custType == "0"
+                        ? "分配客户"
+                        : scope.row.custType == "1"
+                        ? "私有客户"
+                        : scope.row.custType == "2"
+                        ? "共有客户"
+                        : "所有客户"
                     }}
                   </span>
                 </div>
@@ -125,13 +148,17 @@
                   class="sureBtn"
                   v-show="scope.row.followUpTimes == 0"
                   @click="followUp(scope.row)"
-                >跟进</div>
+                >
+                  跟进
+                </div>
                 <div
                   @click="followUp(scope.row)"
                   v-show="scope.row.followUpTimes != 0"
                   class="myBtn myBtn_warning"
-                >继续跟进</div>
-              </template>a
+                >
+                  继续跟进
+                </div> </template
+              >a
             </el-table-column>
           </el-table>
         </div>
@@ -140,9 +167,23 @@
           <div class="close" @click="close1"></div>
           <div class="followUpFeedback">
             <div class="filtertable">
-              <el-table ref="filterTable" height="400" v-loading="loadings" border :data="follow">
-                <el-table-column prop="productName" label="推荐产品" width="370"></el-table-column>
-                <el-table-column show-overflow-tooltip prop="intention" label="有意向">
+              <el-table
+                ref="filterTable"
+                height="400"
+                v-loading="loadings"
+                border
+                :data="follow"
+              >
+                <el-table-column
+                  prop="productName"
+                  label="推荐产品"
+                  width="370"
+                ></el-table-column>
+                <el-table-column
+                  show-overflow-tooltip
+                  prop="intention"
+                  label="有意向"
+                >
                   <template slot-scope="scope">
                     <div class="customName" @click="edit(scope.row, 0)">
                       <!-- <i class="el-icon-circle-check check "></i> -->
@@ -155,7 +196,11 @@
                     </div>
                   </template>
                 </el-table-column>
-                <el-table-column show-overflow-tooltip prop="noIntention" label="无意向">
+                <el-table-column
+                  show-overflow-tooltip
+                  prop="noIntention"
+                  label="无意向"
+                >
                   <template slot-scope="scope">
                     <div class="customName" @click="edit(scope.row, 1)">
                       <i
@@ -216,7 +261,7 @@ import {
   TitleComponent,
   TooltipComponent,
   GridComponent,
-  LegendComponent,
+  LegendComponent
 } from "echarts/components";
 // 引入 Canvas 渲染器，注意引入 CanvasRenderer 或者 SVGRenderer 是必须的一步
 import { CanvasRenderer } from "echarts/renderers";
@@ -230,7 +275,7 @@ echarts.use([
   BarChart,
   CanvasRenderer,
   LineChart,
-  PieChart,
+  PieChart
 ]);
 import {
   getDictList,
@@ -239,7 +284,7 @@ import {
   getDailyOverview,
   getProductDistribution,
   getAnalysisDetail,
-  addCustomStatus,
+  addCustomStatus
 } from "@/api/marketing";
 export default {
   data() {
@@ -257,13 +302,13 @@ export default {
       name: {},
       customers: {},
       barr: ["信用卡", "贷款", "理财"],
-      btnArr: ["所有客户", "分配客户", "私有客户"],
+      btnArr: ["所有客户", "私有客户", "分配客户"],
       tableData: [],
       overview: {},
       loading: true,
       loadings: true,
       rowdata: [],
-      status: true,
+      status: true
     };
   },
   mounted() {
@@ -275,17 +320,22 @@ export default {
   },
   methods: {
     async getList() {
-      let type = this.customTypeId === 0 ? {} : { type: this.customTypeId };
+      let type =
+        this.customTypeId === 0
+          ? {}
+          : this.customTypeId === 1
+          ? { type: this.customTypeId }
+          : { type: 0 };
       let param = this.username ? { param: this.username } : {};
       try {
         const res = await getCustomList(Object.assign(type, param));
         if (res.code !== 200) return Message.error(res.msg);
         this.loading = false;
-        res.rows.map((item) => {
+        res.rows.map(item => {
           let arr = [];
           const { custProductRecordList } = item;
           if (!custProductRecordList) return "";
-          custProductRecordList.map((child) => {
+          custProductRecordList.map(child => {
             arr.push(child.productName);
           });
           item.custProductRecordList = arr.toString().replace(/\,/g, " / ");
@@ -301,7 +351,7 @@ export default {
       for (let i = 0; i < optionKeys.length; i++) {
         let res = await getDictList(optionKeys[i]);
         if (res.code !== 200) return Message.error(res.msg);
-        this.options[optionKeys[i]] = res.data.map((item) => {
+        this.options[optionKeys[i]] = res.data.map(item => {
           return { dictLabel: item.dictLabel, dictValue: item.dictValue };
         });
       }
@@ -368,7 +418,7 @@ export default {
       myChart.setOption({
         title: {},
         tooltip: {
-          trigger: "axis",
+          trigger: "axis"
         },
         // legend: {
         //   x:"center",
@@ -380,12 +430,12 @@ export default {
           left: "0%",
           right: "3%",
           bottom: "20%",
-          containLabel: true,
+          containLabel: true
         },
         toolbox: {
           feature: {
-            saveAsImage: {},
-          },
+            saveAsImage: {}
+          }
         },
         xAxis: {
           type: "category",
@@ -394,43 +444,43 @@ export default {
           axisLabel: {
             show: true,
             textStyle: {
-              fontSize: 8, //更改坐标轴文字大小
-            },
-          },
+              fontSize: 8 //更改坐标轴文字大小
+            }
+          }
         },
         yAxis: {
           type: "value",
           axisLabel: {
             show: true,
             textStyle: {
-              fontSize: 8, //更改坐标轴文字大小
-            },
-          },
+              fontSize: 8 //更改坐标轴文字大小
+            }
+          }
         },
         series: [
           {
             name: "总客户数",
             type: "line",
             stack: "人",
-            data: overview.allValue,
+            data: overview.allValue
           },
           {
             name: "新增客户数",
             type: "line",
             stack: "人",
-            data: overview.addValue,
-          },
-        ],
+            data: overview.addValue
+          }
+        ]
       });
     },
     productsCharts(distribution) {
       var myChart = echarts.init(this.$refs.productscharts);
-      var newArray = distribution.map(function (i) {
+      var newArray = distribution.map(function(i) {
         return i.name;
       });
       myChart.setOption({
         tooltip: {
-          trigger: "item",
+          trigger: "item"
         },
 
         legend: {
@@ -442,9 +492,9 @@ export default {
           itemHeight: 10,
           itemGap: 10, // 设置间距,
           right: "right",
-          formatter: function (name) {
+          formatter: function(name) {
             return name.length > 5 ? name.substr(0, 5) + "..." : name;
-          },
+          }
         },
         series: [
           {
@@ -455,21 +505,21 @@ export default {
             avoidLabelOverlap: false,
             label: {
               show: false,
-              position: "center",
+              position: "center"
             },
             emphasis: {
               label: {
                 show: true,
                 fontSize: "10",
-                fontWeight: "bold",
-              },
+                fontWeight: "bold"
+              }
             },
             labelLine: {
-              show: true,
+              show: true
             },
-            data: distribution,
-          },
-        ],
+            data: distribution
+          }
+        ]
       });
     },
     botactive(index) {
@@ -507,13 +557,12 @@ export default {
     },
     // 点击客户姓名
     customDetail(row) {
-      console.log(row);
       this.$router.push({
         name: "Panorama",
         params: {
           id: row.id,
-          custNo: row.custNo,
-        },
+          custNo: row.custNo
+        }
       });
     },
     resetDateFilter() {
@@ -529,7 +578,6 @@ export default {
       this.dialogFormVisible1 = false;
     },
     followUp(row) {
-      console.log(row);
       this.getAnalysisDetail(row.custNo);
       this.loadings = true;
       this.dialogFormVisible1 = true;
@@ -571,8 +619,8 @@ export default {
     },
     cancle() {
       this.dialogFormVisible1 = false;
-    },
-  },
+    }
+  }
 };
 </script>
 
