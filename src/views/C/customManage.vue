@@ -11,7 +11,7 @@
         <el-input
           placeholder="请输入客户姓名"
           size="mini"
-          v-model="keyWord"
+          v-model.trim="keyWord"
           clearable
           @change="getList(true)"
           @clear="getList(true)"
@@ -31,7 +31,7 @@
         <el-input
           placeholder="请输入客户姓名"
           size="mini"
-          v-model="keyWord"
+          v-model.trim="keyWord"
           clearable
           @change="getList(true)"
           @clear="getList(true)"

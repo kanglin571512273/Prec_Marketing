@@ -9,7 +9,7 @@
         <el-input
           placeholder="请输入客户姓名"
           size="mini"
-          v-model="keyWord"
+          v-model.trim="keyWord"
           clearable
           @change="getList(null,true)"
           @clear="getList(null,true)"
@@ -233,7 +233,6 @@ export default {
     },
     // 点击客户姓名
     customDetail(row) {
-      console.log(row);
       this.$router.push({
         name: "Panorama",
         params: {
