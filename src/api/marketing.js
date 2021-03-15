@@ -96,8 +96,8 @@ export const tagList = params => {
 // 添加标签
 export const setCustTags = data => {
   return axios.request({
-    url: `/v1/app/customer/setCustTags`,
-    method: "put",
+    url: `/v1/app/customer/setCustTags/update`,
+    method: "post",
     data
   });
 };

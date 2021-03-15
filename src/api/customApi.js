@@ -35,8 +35,8 @@ export const addCustom = (data) => {
 // 编辑客户信息
 export const editCustom = (data) => {
     return axios.request({
-        url: `/v1/app/customer`,
-        method: 'put',
+        url: `/v1/app/customer/update`,
+        method: 'post',
         data
     })
 }
