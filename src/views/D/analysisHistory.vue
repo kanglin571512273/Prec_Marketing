@@ -7,7 +7,7 @@
         <el-input
           placeholder="请输入客户姓名"
           size="mini"
-          v-model="keyWord"
+          v-model.trim="keyWord"
           clearable
           @change="getList(true)"
           @clear="getList(true)"
@@ -41,7 +41,7 @@
       </el-table-column>
       <el-table-column show-overflow-tooltip prop="telNo" label="联系电话"></el-table-column>
       <el-table-column show-overflow-tooltip prop="custProductRecordList" label="推荐产品" width="200"></el-table-column>
-      <el-table-column show-overflow-tooltip prop="custType" label="客户类别"  width="70">
+      <el-table-column show-overflow-tooltip prop="custType" label="客户类别" width="70">
         <template slot-scope="scope">
           <div>
             <span>{{scope.row.custType == '0' ? '分配客户' : scope.row.custType == '1' ? '私有客户' : scope.row.custType == '2' ? '公有客户' :'' }}</span>
@@ -92,10 +92,7 @@
 import customTable from "../C/customTable";
 import loading from "@/components/loading";
 import { Message } from "@/utils/importFile";
-import {
-  getCustomList,
-  getOneAnalyHistory,
-} from "@/api/customApi";
+import { getCustomList, getOneAnalyHistory } from "@/api/customApi";
 export default {
   components: { customTable, loading },
   data() {

@@ -11,7 +11,7 @@
         <el-input
           placeholder="请输入客户姓名"
           size="mini"
-          v-model="keyWord"
+          v-model.trim="keyWord"
           clearable
           @change="getList(true)"
           @clear="getList(true)"
@@ -31,7 +31,7 @@
         <el-input
           placeholder="请输入客户姓名"
           size="mini"
-          v-model="keyWord"
+          v-model.trim="keyWord"
           clearable
           @change="getList(true)"
           @clear="getList(true)"
@@ -111,7 +111,7 @@ export default {
       tableData: [],
       dialogFormVisible: false,
       ruleForm: {
-        isPrivate: '1',
+        isPrivate: "1",
       },
     };
   },
@@ -243,7 +243,7 @@ export default {
         const { isPrivate, custType } = this.ruleForm;
         if (this.addOrEdit == "add") {
           //添加
-          this.ruleForm.custType = isPrivate;
+          this.ruleForm.custType = isPrivate; //是否私有客户
           const res = await addCustom(this.ruleForm);
           if (res.code !== 200) return Message.error(res.msg);
           this.dialogFormVisible = false;
@@ -262,7 +262,6 @@ export default {
           this.dialogFormVisible = false;
           Message.success("修改成功");
           if (this.checkAble === 3) {
-            this.dialogFormVisible = false;
             this.ruleForm = {};
             this.analysisCustom();
             return false;

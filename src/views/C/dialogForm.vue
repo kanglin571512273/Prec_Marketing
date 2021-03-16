@@ -194,7 +194,7 @@ export default {
       var reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
       if (!value) {
         callback();
-      }else if (!reg.test(value)) {
+      } else if (!reg.test(value)) {
         callback(new Error("电子邮箱格式不正确"));
       } else {
         callback();
@@ -206,10 +206,10 @@ export default {
       var message;
       if (this.data.idCardType && this.data.idCardType == 2) {
         reg = /^([a-zA-z]|[0-9]){5,17}$/;
-        message = "护照号码填写不正确";
+        message = "护照号码填写不正确，请输入类似于‘’";
       } else if (this.data.idCardType && this.data.idCardType == 3) {
         reg = /^[\u4E00-\u9FA5](字第)([0-9a-zA-Z]{4,8})(号?)$/;
-        message = "军官证号码填写不正确";
+        message = "字符类似于 '兰字第000000号'";
       } else {
         reg = /^(([1][1-5])|([2][1-3])|([3][1-7])|([4][1-6])|([5][0-4])|([6][1-5])|([7][1])|([8][1-2]))\d{4}(([1][9]\d{2})|([2]\d{3}))(([0][1-9])|([1][0-2]))(([0][1-9])|([1-2][0-9])|([3][0-1]))\d{3}[0-9xX]$/;
         message = "身份证号码填写不正确";
@@ -268,8 +268,6 @@ export default {
     submit() {
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
-          // alert("submit!");
-          // Message.error("submit");
           this.$emit("addCustom");
         } else {
           console.log("error submit!!");

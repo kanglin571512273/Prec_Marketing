@@ -1,10 +1,6 @@
 <template>
   <div class="background-box">
-    <el-dialog
-      class="bigDia"
-      :visible.sync="dialogFormVisible"
-      :close-on-click-modal="false"
-    >
+    <el-dialog class="bigDia" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
       <div class="close" @click="close"></div>
       <div class="background">
         <div class="bubbles">
@@ -48,9 +44,7 @@
                             :class="{
                               'labelson-active': labelDatas.indexOf(i.id) > -1
                             }"
-                          >
-                            {{ i.tagName }}
-                          </li>
+                          >{{ i.tagName }}</li>
                         </div>
                       </ul>
                     </div>
@@ -67,9 +61,7 @@
                 <div class="big">
                   <div class="medium">
                     <div class="small">
-                      <span>
-                        {{ item.tagName }}
-                      </span>
+                      <span>{{ item.tagName }}</span>
                     </div>
                   </div>
                 </div>
@@ -81,34 +73,14 @@
         <div class="Panorama-right">
           <div class="label-cont">
             <ul>
-              <li
-                class="bot-label"
-                @click="num = 0"
-                :class="{ 'bot-label-active': num == 0 }"
-              >
-                推荐产品
-              </li>
-              <li
-                class="bot-label"
-                @click="num = 1"
-                :class="{ 'bot-label-active': num == 1 }"
-              >
-                客户资料
-              </li>
+              <li class="bot-label" @click="num = 0" :class="{ 'bot-label-active': num == 0 }">推荐产品</li>
+              <li class="bot-label" @click="num = 1" :class="{ 'bot-label-active': num == 1 }">客户资料</li>
               <li
                 class="bot-label"
                 @click="num = 2"
                 :class="{ 'bot-label-active': num == 2 }"
-              >
-                本行业务办理
-              </li>
-              <li
-                class="bot-label"
-                @click="num = 3"
-                :class="{ 'bot-label-active': num == 3 }"
-              >
-                跟进结果
-              </li>
+              >本行业务办理</li>
+              <li class="bot-label" @click="num = 3" :class="{ 'bot-label-active': num == 3 }">跟进结果</li>
             </ul>
           </div>
           <div class="contentarea" v-show="num == 0">
@@ -129,16 +101,8 @@
                 label="产品类型"
                 :formatter="statusFormat"
               ></el-table-column>
-              <el-table-column
-                show-overflow-tooltip
-                prop="productName"
-                label="产品名称"
-              ></el-table-column>
-              <el-table-column
-                show-overflow-tooltip
-                prop="updateTime"
-                label="最近跟进时间"
-              ></el-table-column>
+              <el-table-column show-overflow-tooltip prop="productName" label="产品名称"></el-table-column>
+              <el-table-column show-overflow-tooltip prop="updateTime" label="最近跟进时间"></el-table-column>
               <el-table-column
                 show-overflow-tooltip
                 prop="status"
@@ -205,8 +169,7 @@
                   class="label-info"
                   v-for="(item, index) in this.getlabel"
                   :key="index"
-                  >{{ item.tagName }}</span
-                >
+                >{{ item.tagName }}</span>
               </div>
             </div>
           </div>
@@ -221,11 +184,7 @@
               height="400"
             >
               <el-table-column type="index" label="序号"></el-table-column>
-              <el-table-column
-                show-overflow-tooltip
-                prop="productName"
-                label="产品名称"
-              ></el-table-column>
+              <el-table-column show-overflow-tooltip prop="productName" label="产品名称"></el-table-column>
               <el-table-column
                 show-overflow-tooltip
                 prop="isHandled"
@@ -267,7 +226,7 @@ import {
   getCustomStatusHistory,
   tagList,
   setCustTags,
-  getTagRecord
+  getTagRecord,
 } from "@/api/marketing";
 export default {
   data() {
@@ -301,7 +260,7 @@ export default {
       time_deposit: "",
       credit_situation: "",
       cust_purpose_status: "",
-      flag: false
+      flag: false,
     };
   },
   mounted() {
@@ -365,10 +324,10 @@ export default {
     async getCustomStatusHistory() {
       try {
         const res = await getCustomStatusHistory({
-          id: this.id
+          id: this.id,
         });
         if (res.code == 200) {
-          var newArray = res.data.map(function(item, i) {
+          var newArray = res.data.map(function (item, i) {
             return item;
           });
           for (var i = 0; i < newArray.length; i++) {
@@ -456,7 +415,7 @@ export default {
         const res = await tagList();
         if (res.code == 200) {
           this.labelData = res.data;
-          this.getlabel.map(key => {
+          this.getlabel.map((key) => {
             this.labelDatas.push(key.tagId);
             var { tagId, tagName, tagTypeId } = key;
             var obj = { id: tagId, tagName: tagName, tagTypeId: tagTypeId };
@@ -472,7 +431,7 @@ export default {
       try {
         const res = await setCustTags({
           custNo: this.custNo,
-          tags: this.labelDatas
+          tags: this.labelDatas,
         });
         if (res.code == 200) {
           this.getTagRecord();
@@ -500,14 +459,14 @@ export default {
     },
     active(item, index) {
       this.flag = false;
-      this.addlabel.map(key => {
+      this.addlabel.map((key) => {
         if (key.tagTypeId == item.tagTypeId) {
           this.addlabel.splice(
-            this.addlabel.findIndex(item => item.id === key.id),
+            this.addlabel.findIndex((item) => item.id === key.id),
             1
           );
           this.labelDatas.splice(
-            this.labelDatas.findIndex(item => item === key.id),
+            this.labelDatas.findIndex((item) => item === key.id),
             1
           );
           if (key.id == item.id) {
@@ -533,9 +492,10 @@ export default {
       done();
     },
     close() {
-      this.$router.go(-1);
-    }
-  }
+      this.$router.back();
+      // console.log(this.$router);
+    },
+  },
 };
 </script>
 
