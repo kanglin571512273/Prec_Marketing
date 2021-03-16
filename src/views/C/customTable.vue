@@ -32,7 +32,7 @@
         </div>
       </template>
     </el-table-column>
-    <el-table-column show-overflow-tooltip prop="custManagerName" label="客户经理"></el-table-column>
+    <el-table-column show-overflow-tooltip prop="custManagerNo" label="客户经理"></el-table-column>
     <el-table-column v-if="checkAble == 3" show-overflow-tooltip prop="analysisTime" label="分析时间"></el-table-column>
     <el-table-column label="操作" v-if="checkAble !== 3">
       <!-- v-if="checkAble !== 3" -->

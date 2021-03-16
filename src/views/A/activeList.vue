@@ -42,7 +42,7 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column show-overflow-tooltip prop="custManagerName" label="客户经理"></el-table-column>
+      <el-table-column show-overflow-tooltip prop="custManagerNo" label="客户经理"></el-table-column>
       <el-table-column show-overflow-tooltip prop="status" label="状态" v-if="customTypeId !== 0">
         <template slot-scope="scope">
           <div>
