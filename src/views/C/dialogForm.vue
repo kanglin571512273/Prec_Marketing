@@ -95,14 +95,26 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="联系地址:" prop="address">
-              <el-input v-model="data.address" size="mini" type="textarea" placeholder="请输入联系地址"></el-input>
+              <el-input
+                v-model="data.address"
+                size="mini"
+                type="textarea"
+                :maxlength="120"
+                placeholder="请输入联系地址"
+              ></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="公司单位:" prop="workUnit">
-              <el-input v-model="data.workUnit" size="mini" type="textarea" placeholder="请输入公司单位"></el-input>
+              <el-input
+                v-model="data.workUnit"
+                size="mini"
+                type="textarea"
+                :maxlength="120"
+                placeholder="请输入公司单位"
+              ></el-input>
             </el-form-item>
           </el-col>
         </el-row>
