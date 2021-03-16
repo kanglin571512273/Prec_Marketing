@@ -126,7 +126,7 @@
                         ? "私有客户"
                         : scope.row.custType == "2"
                         ? "共有客户"
-                        : "所有客户"
+                        : " "
                     }}
                   </span>
                 </div>
@@ -284,7 +284,7 @@ import {
   getDailyOverview,
   getProductDistribution,
   getAnalysisDetail,
-  addCustomStatus
+  addCustomStatus,
 } from "@/api/marketing";
 export default {
   data() {
@@ -319,6 +319,7 @@ export default {
     this.getProductDistribution(this.productType);
   },
   methods: {
+   
     async getList() {
       let type =
         this.customTypeId === 0
@@ -509,7 +510,7 @@ export default {
             },
             emphasis: {
               label: {
-                show: true,
+                show: false,
                 fontSize: "10",
                 fontWeight: "bold"
               }

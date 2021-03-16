@@ -149,7 +149,7 @@
 
               <table class="gridtablse">
                 <tr>
-                  <th>身份证号：</th>
+                  <th>证件号：</th>
                   <td>{{ detail.idCard }}</td>
                 </tr>
                 <tr>
@@ -201,6 +201,7 @@
                     v-for="(activity, index) in activities"
                     :key="index"
                     :timestamp="activity.createTime"
+                    placement="top"
                   >
                     沟通内容： {{ activity.productName }}
                     <div>办理情况：{{ activity.status }}</div>
@@ -348,7 +349,6 @@ export default {
         const res = await getTagRecord(this.custNo);
         if (res.code == 200) {
           this.getlabel = res.data;
-          console.log(this.getlabel);
           this.getlabels = res.data.slice(0, 5);
 
           console.log();
@@ -406,6 +406,9 @@ export default {
       this.addlabel = [];
       this.tagList();
     },
+    showtay() {
+      this.setCustTags();
+    },
     // 查询标签
     async tagList() {
       try {
@@ -417,7 +420,6 @@ export default {
             var { tagId, tagName, tagTypeId } = key;
             var obj = { id: tagId, tagName: tagName, tagTypeId: tagTypeId };
             this.addlabel.push(obj);
-            console.log(this.getlabel);
           });
         }
       } catch (error) {
@@ -436,58 +438,21 @@ export default {
           Message.success(res.msg);
         }
       } catch (error) {
+        Message.success(res.code);
+        Message.success(error);
         console.log(error);
       }
     },
     onClose() {
       this.visible = false;
-      this.setCustTags();
-      // this.key = !this.key;
-      // console.log(this.key);
-      // if (this.key == true) {
-      //   this.fitstData = [];
-      //   this.fitstData.push(
-      //     {
-      //       key: "1",
-      //       productType: "理财",
-      //       productName: "'安心得利'理财",
-      //       updateTime: "2020/11/30 13:20",
-      //       resoult: "有意向"
-      //     },
-      //     {
-      //       key: "2",
-      //       productType: "信用卡",
-      //       productName: "网易云音乐联名卡",
-      //       updateTime: "2020/10/15 12:20",
-      //       resoult: "有意向"
-      //     }
-      //   );
-      // } else {
-      //   this.fitstData = [];
-      //   this.fitstData.push(
-      //     {
-      //       key: "3",
-      //       productType: "理财",
-      //       productName: "'安心得利'理财",
-      //       updateTime: "2020/11/30 13:20",
-      //       resoult: "有意向"
-      //     },
-      //     {
-      //       key: "4",
-      //       productType: "信用卡",
-      //       productName: "音乐联名卡",
-      //       updateTime: "2020/10/15 13:20",
-      //       resoult: "有意向"
-      //     },
-      //     {
-      //       key: "5",
-      //       productType: "贷款",
-      //       productName: "个人汽车贷款",
-      //       updateTime: "2020/11/12  8:20:00",
-      //       resoult: "无意向"
-      //     }
-      //   );
-      // }
+      setCustTags({ custNo: this.custNo, tags: this.labelDatas }).then(res => {
+        if (res.code == 200) {
+          this.getTagRecord();
+          Message.success(res.msg);
+        } else {
+          Message.success(res.msg);
+        }
+      });
     },
     onClose1() {
       this.visible = false;
