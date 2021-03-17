@@ -64,7 +64,6 @@
     <el-dialog class="bigDia" :visible.sync="dialogFormVisible" @close="analysisList = [] ">
       <div class="dialogContainer">
         <img src="@/assets/image/close.png" alt @click="dialogFormVisible = false " />
-        <div class="title">{{customName}}</div>
         <div class="container" v-if="analysisList.length">
           <div class="analysisItem" v-for="(item,index) in analysisList" :key="index">
             <div class="time">
@@ -115,7 +114,6 @@ export default {
       dialogFormVisible: false,
       analysisList: [],
       loading: false,
-      customName: null,
     };
   },
   mounted() {
@@ -204,7 +202,6 @@ export default {
     },
     // 编辑
     async edit(row) {
-      this.customName = row.custName;
       this.dialogFormVisible = true;
       try {
         const res = await getOneAnalyHistory(row.custNo);
@@ -272,19 +269,13 @@ export default {
   .dialogContainer {
     height: 100%;
     overflow: auto;
-    position: relative;
-    .title {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-    }
+    // position: relative;
     img {
       width: 25px;
       height: 25px;
-      position: fixed;
-      top: 13px;
-      right: 60px;
+      position: absolute;
+      top: 10px;
+      right: 10px;
     }
     .analysisItem {
       border-bottom: 1px solid #979797;

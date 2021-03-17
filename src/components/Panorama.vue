@@ -1,6 +1,10 @@
 <template>
   <div class="background-box">
-    <el-dialog class="bigDia" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
+    <el-dialog
+      class="bigDia"
+      :visible.sync="dialogFormVisible"
+      :close-on-click-modal="false"
+    >
       <div class="close" @click="close"></div>
       <div class="background">
         <div class="bubbles">
@@ -42,9 +46,11 @@
                             :key="i.id"
                             @click="active(i, index)"
                             :class="{
-                              'labelson-active': labelDatas.indexOf(i.id) > -1
+                              'labelson-active': labelDatas.indexOf(i.id) > -1,
                             }"
-                          >{{ i.tagName }}</li>
+                          >
+                            {{ i.tagName }}
+                          </li>
                         </div>
                       </ul>
                     </div>
@@ -73,14 +79,34 @@
         <div class="Panorama-right">
           <div class="label-cont">
             <ul>
-              <li class="bot-label" @click="num = 0" :class="{ 'bot-label-active': num == 0 }">推荐产品</li>
-              <li class="bot-label" @click="num = 1" :class="{ 'bot-label-active': num == 1 }">客户资料</li>
+              <li
+                class="bot-label"
+                @click="num = 0"
+                :class="{ 'bot-label-active': num == 0 }"
+              >
+                推荐产品
+              </li>
+              <li
+                class="bot-label"
+                @click="num = 1"
+                :class="{ 'bot-label-active': num == 1 }"
+              >
+                客户资料
+              </li>
               <li
                 class="bot-label"
                 @click="num = 2"
                 :class="{ 'bot-label-active': num == 2 }"
-              >本行业务办理</li>
-              <li class="bot-label" @click="num = 3" :class="{ 'bot-label-active': num == 3 }">跟进结果</li>
+              >
+                本行业务办理
+              </li>
+              <li
+                class="bot-label"
+                @click="num = 3"
+                :class="{ 'bot-label-active': num == 3 }"
+              >
+                跟进结果
+              </li>
             </ul>
           </div>
           <div class="contentarea" v-show="num == 0">
@@ -101,8 +127,16 @@
                 label="产品类型"
                 :formatter="statusFormat"
               ></el-table-column>
-              <el-table-column show-overflow-tooltip prop="productName" label="产品名称"></el-table-column>
-              <el-table-column show-overflow-tooltip prop="updateTime" label="最近跟进时间"></el-table-column>
+              <el-table-column
+                show-overflow-tooltip
+                prop="productName"
+                label="产品名称"
+              ></el-table-column>
+              <el-table-column
+                show-overflow-tooltip
+                prop="updateTime"
+                label="最近跟进时间"
+              ></el-table-column>
               <el-table-column
                 show-overflow-tooltip
                 prop="status"
@@ -125,10 +159,6 @@
                 <tr>
                   <th>住房贷款：</th>
                   <td>{{ housing_loan }}</td>
-                </tr>
-                <tr>
-                  <th>信用情况：</th>
-                  <td>{{ credit_situation }}</td>
                 </tr>
               </table>
 
@@ -153,14 +183,20 @@
                   <td>{{ detail.idCard }}</td>
                 </tr>
                 <tr>
-                  <th>工作单位：</th>
-                  <td>{{ detail.workUnit }}</td>
+                  <th>信用情况：</th>
+                  <td>{{ credit_situation }}</td>
                 </tr>
                 <tr>
                   <th>定期存款：</th>
                   <td>{{ time_deposit }}</td>
                 </tr>
               </table>
+            </div>
+            <div>
+              <tr>
+                <th>工作单位：</th>
+                <td>{{ detail.workUnit }}</td>
+              </tr>
             </div>
             <div class="pone-label">
               <span class="pone-span">个人标签：</span>
@@ -169,7 +205,8 @@
                   class="label-info"
                   v-for="(item, index) in this.getlabel"
                   :key="index"
-                >{{ item.tagName }}</span>
+                  >{{ item.tagName }}</span
+                >
               </div>
             </div>
           </div>
@@ -184,7 +221,11 @@
               height="400"
             >
               <el-table-column type="index" label="序号"></el-table-column>
-              <el-table-column show-overflow-tooltip prop="productName" label="产品名称"></el-table-column>
+              <el-table-column
+                show-overflow-tooltip
+                prop="productName"
+                label="产品名称"
+              ></el-table-column>
               <el-table-column
                 show-overflow-tooltip
                 prop="isHandled"
@@ -445,14 +486,16 @@ export default {
     },
     onClose() {
       this.visible = false;
-      setCustTags({ custNo: this.custNo, tags: this.labelDatas }).then(res => {
-        if (res.code == 200) {
-          this.getTagRecord();
-          Message.success(res.msg);
-        } else {
-          Message.success(res.msg);
+      setCustTags({ custNo: this.custNo, tags: this.labelDatas }).then(
+        (res) => {
+          if (res.code == 200) {
+            this.getTagRecord();
+            Message.success(res.msg);
+          } else {
+            Message.success(res.msg);
+          }
         }
-      });
+      );
     },
     onClose1() {
       this.visible = false;
