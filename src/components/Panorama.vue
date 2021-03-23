@@ -722,6 +722,9 @@ export default {
     border: 1px solid #ced0d7;
     background: #ffffff;
     margin: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .labelson-active {
     border: 1px solid #0060ff;

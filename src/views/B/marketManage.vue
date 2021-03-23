@@ -80,7 +80,7 @@
             border
             :data="tableData"
             style="width: 100%"
-            height="290"
+            height="400"
           >
             <!-- <el-table-column type="selection" width="30"></el-table-column> -->
             <el-table-column
@@ -670,7 +670,7 @@ export default {
   box-shadow: 0px 2px 4px 0px rgba(0, 96, 255, 0.05);
   border-radius: 10px;
   padding: 0 10px;
-  height: 410px;
+  height: 460px;
 }
 .round {
   display: block;
