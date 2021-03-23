@@ -212,6 +212,14 @@ export default {
         callback();
       }
     };
+    var checkAddress = (rule, value, callback) => {
+      var reg = /[^\u0020-\u007E\u00A0-\u00BE\u2E80-\uA4CF\uF900-\uFAFF\uFE30-\uFE4F\uFF00-\uFFEF\u0080-\u009F\u2000-\u201f\u2026\u2022\u20ac\r\n]/g;
+      if (reg.test(value)) {
+        callback(new Error("不允许输入表情符号，请正确输入！"));
+      } else {
+        callback();
+      }
+    };
     var checkIdCard = (rule, value, callback) => {
       const { idCardType, idCard } = this.data;
       var reg;
@@ -265,14 +273,8 @@ export default {
         // isPrivate: [
         //   { required: true, message: "客户是否为私有客户", trigger: "blur" },
         // ],
-        // address: [
-        //   { required: true, message: "请输入联系地址", trigger: "blur" },
-        //   { min: 1, max: 120, message: "字符长度不得超过120", trigger: "blur" },
-        // ],
-        // workUnit: [
-        //   { required: true, message: "请输入公司单位", trigger: "blur" },
-        //   { min: 1, max: 120, message: "字符长度不得超过120", trigger: "blur" },
-        // ],
+        address: [{ validator: checkAddress, trigger: "blur" }],
+        workUnit: [{ validator: checkAddress, trigger: "blur" }],
       },
     };
   },
