@@ -35,12 +35,12 @@ new Vue({
   template: "<App/>"
 });
 
-router.beforeEach((to, from, next) => {
-  if (to.path == '/login') {
-    next()
-  } else if (localStorage.getItem('token')) {
-    next('/login')
-  } else {
-    next()
-  }
-})
+// router.beforeEach((to, from, next) => {
+//   if (to.path == '/login') {
+//     next()
+//   } else if (localStorage.getItem('token')) {
+//     next('/login')
+//   } else {
+//     next()
+//   }
+// })
