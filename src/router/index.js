@@ -122,15 +122,15 @@ const router = new Router({
   ]
 });
 
-router.beforeEach((to, from, next) => {
-  if (to.name == "Login") {
-    next();
-  } else if (localStorage.getItem("token")) {
-    next();
-  } else {
-    console.log("token 失效");
-    next("/login");
-  }
-});
+// router.beforeEach((to, from, next) => {
+//   if (to.name == "Login") {
+//     next();
+//   } else if (localStorage.getItem("token")) {
+//     next();
+//   } else {
+//     console.log("token 失效");
+//     next("/login");
+//   }
+// });
 
 export default router;
